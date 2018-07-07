@@ -1,3 +1,4 @@
+/*我的收藏页面，包括各收藏集*/
 // pages/mine/my_coll/my_coll.js
 Page({
 

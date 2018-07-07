@@ -1,3 +1,4 @@
+/*添加到我的收藏页面*/
 // pages/collection/add_collection.js
 Page({
 

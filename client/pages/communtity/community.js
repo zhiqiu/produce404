@@ -1,3 +1,4 @@
+/*发现页面*/
 // pages/communtity/community.js
 Page({
 
