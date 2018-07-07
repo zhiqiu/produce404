@@ -2,6 +2,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 from createTables import createAllTable, Tables
+from config import DEBUG
 
 __all__ = ["StatusCode", "API"]
 
@@ -21,7 +22,7 @@ class API():
         try:
             user = self.session.query(Tables.User).filter_by(uuid=uuid).first()
         except Exception as e:
-            return {"status": StatusCode.INTERNAL_ERROR, "error": str(e)}
+            return {"status": StatusCode.INTERNAL_ERROR, "error": str(e) if DEBUG else "Internal error occured."}
         else:
             if user:
                 return {"status": StatusCode.SUCCESS, "content": user.toDict()}
@@ -34,6 +35,6 @@ class API():
             newUser = Tables.User(**kwargs)
             newUser.create(self.session)
         except Exception as e:
-            return {"status": StatusCode.INTERNAL_ERROR, "error": str(e)}
+            return {"status": StatusCode.INTERNAL_ERROR, "error": str(e) if DEBUG else "Internal error occured."}
         else:
             return {"status": StatusCode.SUCCESS}
