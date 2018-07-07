@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+        <meta charset="utf-8" />
+        <title>debug page</title>
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+            }
+            form {
+                width: 500px;
+                margin: 20px auto;
+                font-size: 24px;
+            }
+            #submit, .line {
+                width: 100%;
+                margin: 10px 0;
+            }
+            .line {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            .line div {
+                width: 20%;
+                float:left;
+                text-align: center;
+            }
+            .line input {
+                width: 80%;
+                height: 40px;
+                font-size: inherit;
+                font-family: inherit;
+                text-align: center;
+            }
+            #submit {
+                width: 80%;
+                margin: 20px auto;
+                height: 40px;
+                display: block;
+                font-size: inherit;
+                font-family: inherit;
+            }
+            #display{
+                width: 100%;
+            }
+        </style>
+    </head>
+    <body>
+        <form>
+            <div class="line">Table: {{ tableName }}</div>
+            {% for f in fields %}
+            <div class="line">
+                <div>{{ f }}</div><input type="text" name="{{ f }}" />
+            </div>
+            {% endfor %}
+            <input id="submit" type="button" value="提交" />
+            <div id="display"></div>
+        </form>
+        <script>
+            document.getElementById("submit").onclick=function() {
+                postData = {
+                    {% for f in fields %}
+                        {{ f }}: document.querySelector(".line input[name={{ f }}]").value,
+                    {% endfor %}
+                }
+                $.ajax({
+                    method: "post",
+                    url: "/api/" + "{{ tableName }}".toLowerCase(),
+                    data: postData,
+                    dataType: "json",
+                    success: function(data) {
+                        console.log(data);
+                        document.getElementById("display").textContent = JSON.stringify(data);
+                    }
+                })
+            }
+        </script>
+    </body>
+</html>
