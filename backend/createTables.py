@@ -1,15 +1,18 @@
 from sqlalchemy import Column, String, Integer, CHAR, Date, BigInteger, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
 
-__all__ = ["createAllTable", "User", "Sound", "SoundTag", "Medal", "Comment", "Forward", "R_User_Sound",
-           "R_Sound_SoundTag", "R_User_Medal", "R_Follow", "R_Favorite_Sound", "R_Interested_Soundtag"]
+# __all__ = ["createAllTable", "User", "Sound", "SoundTag", "Medal", "Comment", "Forward", "R_User_Sound",
+        #    "R_Sound_SoundTag", "R_User_Medal", "R_Follow", "R_Favorite_Sound", "R_Interested_Soundtag"]
+
+__all__ = ["createAllTable", "Tables"]
 
 Base = declarative_base()
+
 
 def createAllTable(engine):
     Base.metadata.create_all(engine)
     return Base
-    
+
 
 # entity tables:
 
@@ -17,14 +20,17 @@ class User(Base):
     __tablename__ = "user"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
+    uuid = Column(String)
     name = Column(String)
     age = Column(Integer)
     gender = Column(CHAR(1), default="U")  # M: male, F: female, U: unset
     address = Column(String)
     birthday = Column(Date)
 
-    def __repr__(self):
-        return "<User(id=%d,name=%s),...>" % (self.id, self.name)
+    fields = ["id","uuid","name","age","gender","address","birthday"]
+
+    def create(self, session):
+        
 
 
 class Sound(Base):
@@ -48,7 +54,7 @@ class Medal(Base):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(10))
-    pictureURI = Column(String) # oss uri
+    pictureURI = Column(String)  # oss uri
     condition = Column(Integer)
 
 
@@ -125,8 +131,24 @@ class R_Interested_Soundtag(Base):
     soundtagid = Column(Integer, ForeignKey("soundtag.id"))
 
 
+class Tables():
+    User = User
+    Sound = Sound
+    SoundTag = SoundTag
+    Medal = Medal
+    Comment = Comment
+    Forward = Forward
+    R_User_Sound = R_User_Sound
+    R_Sound_SoundTag = R_Sound_SoundTag
+    R_User_Medal = R_User_Medal
+    R_Follow = R_Follow
+    R_Favorite_Sound = R_Favorite_Sound
+    R_Interested_Soundtag = R_Interested_Soundtag
+
+
+
 if __name__ == "__main__":
     from sqlalchemy import create_engine
     # use sqlite database to debug locally
-    engine = create_engine('sqlite:///foo.db', echo=False)
+    engine = create_engine('sqlite:///foo.db', echo=True)
     Base = createAllTable(engine)
