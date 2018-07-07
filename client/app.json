@@ -10,15 +10,32 @@
     "pages/mine/mine",
     "pages/mine/my_msg/my_msg",
     "pages/mine/my_agreement/my_agreement",
-    "pages/mine/my_coll/my_coll"
+    "pages/mine/my_coll/my_coll",
     "pages/player_test/player",
     "pages/comments/comments",
-    "pages/collection/add_collection"
+    "pages/collection/add_collection",
+    "pages/record_test/record_test"
   ],
   "window": {
     "backgroundTextStyle": "light",
     "navigationBarBackgroundColor": "#fff",
     "navigationBarTitleText": "WeChat",
     "navigationBarTextStyle": "black"
+  },
+  "tabBar": {
+    "color": "#a9b7b7", 
+    "selectedColor": "#11cd6e",  
+    "borderStyle": "black" ,
+    "list": [{
+     "pagePath": "pages/index/index",  
+     "text": "觅声"
+    }, {
+     "pagePath": "pages/logs/logs",  
+     "text": "发现"
+    },{
+     "pagePath": "pages/mine/mine",  
+     "text": "我的"
+    }
+    ]
   }
 }
