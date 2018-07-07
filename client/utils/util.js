@@ -1,3 +1,5 @@
+'use strict'
+
 const formatTime = date => {
   const year = date.getFullYear()
   const month = date.getMonth() + 1
@@ -14,7 +16,15 @@ const formatNumber = n => {
   return n[1] ? n : '0' + n
 }
 
+const i18n_print = function(s){
+  return {
+    nameCN : '声觅',
+
+  }[s];
+}
+
 module.exports = {
   formatTime: formatTime,
-  formatNumber: formatNumber
+  formatNumber: formatNumber,
+  p: i18n_print
 }
