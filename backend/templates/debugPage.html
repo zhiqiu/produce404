@@ -3,6 +3,7 @@
     <head>
         <meta charset="utf-8" />
         <title>debug page</title>
+        <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
         <style>
             * {
                 margin: 0;
@@ -42,6 +43,9 @@
                 font-size: inherit;
                 font-family: inherit;
             }
+            #display{
+                width: 100%;
+            }
         </style>
     </head>
     <body>
@@ -52,7 +56,27 @@
                 <div>{{ f }}</div><input type="text" name="{{ f }}" />
             </div>
             {% endfor %}
-            <input id="submit" type="submit" value="提交" />
+            <input id="submit" type="button" value="提交" />
+            <div id="display"></div>
         </form>
+        <script>
+            document.getElementById("submit").onclick=function() {
+                postData = {
+                    {% for f in fields %}
+                        {{ f }}: document.querySelector(".line input[name={{ f }}]").value,
+                    {% endfor %}
+                }
+                $.ajax({
+                    method: "post",
+                    url: "/api/" + "{{ tableName }}".toLowerCase(),
+                    data: postData,
+                    dataType: "json",
+                    success: function(data) {
+                        console.log(data);
+                        document.getElementById("display").textContent = JSON.stringify(data);
+                    }
+                })
+            }
+        </script>
     </body>
 </html>

@@ -1,7 +1,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
-from createTables import createAllTable, Tables
+from createTables import createAllTable, Tables, DataFormatException
 from config import DEBUG
 
 __all__ = ["StatusCode", "API"]
@@ -33,6 +33,8 @@ def commonAddAPI(self, table, **kwargs):
     try:
         newContent = table(**kwargs)
         newContent.create(self.session)
+    except DataFormatException as e:
+        return {"status": StatusCode.INTERNAL_ERROR, "error": str(e)}
     except Exception as e:
         return {"status": StatusCode.INTERNAL_ERROR, "error": str(e) if DEBUG else "Internal error occured."}
     else:

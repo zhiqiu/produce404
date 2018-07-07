@@ -3,13 +3,15 @@ from sqlalchemy.ext.declarative import declarative_base
 from datetime import date
 import re
 
-__all__ = ["createAllTable", "Tables"]
+__all__ = ["createAllTable", "Tables", "DataFormatException"]
 
 
 def createAllTable(engine):
     Base.metadata.create_all(engine)
     return Base
 
+class DataFormatException(Exception):
+    pass
 
 # common super class
 
@@ -42,7 +44,7 @@ def commonInitClass(self, **kwargs):
         else:
             setattr(self, rf, kwargs[rf])
     if missedFields:
-        raise Exception("Missing fields. (%s) are required." % (",".join(missedFields)))
+        raise DataFormatException("Missing fields. (%s) are required." % (",".join(missedFields)))
 
 dateRexp = re.compile(r"([\d]{4})-([\d]{1,2})-([\d]{1,2})")
 
@@ -66,12 +68,12 @@ class User(Base, Creatable):
         try:
             self.age = int(self.age)
         except:
-            raise Exception("Age must be an integer.")
+            raise DataFormatException("Age must be an integer.")
         if self.gender not in ["M", "F", "U"]:
-            raise Exception("Gender must be one of M/F/U.")
+            raise DataFormatException("Gender must be one of M/F/U.")
         m = dateRexp.match(self.birthday)
         if not m:
-            raise Exception("Date format error.")
+            raise DataFormatException("Date format error.")
         year = int(m.group(1))
         month = int(m.group(2))
         day = int(m.group(3))
@@ -114,7 +116,7 @@ class Medal(Base, Creatable):
         try:
             self.condition = int(self.condition)
         except:
-            raise Exception("Condition must be an integer.")
+            raise DataFormatException("Condition must be an integer.")
 
 
 class Comment(Base, Creatable):
@@ -133,7 +135,7 @@ class Comment(Base, Creatable):
         try:
             self.timestrap = int(self.timestrap)
         except:
-            raise Exception("Timestrap must be an integer.")
+            raise DataFormatException("Timestrap must be an integer.")
 
 class Forward(Base, Creatable):
     __tablename__ = "forward"
@@ -149,7 +151,7 @@ class Forward(Base, Creatable):
         try:
             self.timestrap = int(self.timestrap)
         except:
-            raise Exception("Timestrap must be an integer.")
+            raise DataFormatException("Timestrap must be an integer.")
 
 # relationship tables:
 

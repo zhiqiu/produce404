@@ -9,7 +9,7 @@ api = API(engine)
 app = Flask("debugServer")
 
 
-@app.route("/user", methods=["GET", "POST"])
+@app.route("/api/user", methods=["GET", "POST"])
 def queryUser():
     if request.method == "GET":
         uuid = request.args.get("uuid")
@@ -24,6 +24,7 @@ def echo():
 if DEBUG:
     @app.route("/debug/<table>")
     def debugPage(table):
+        table = table.lower()
         tableName = table[0].upper() + table[1::]
         if tableName not in dir(Tables):
             return "Table %s not found." % tableName
