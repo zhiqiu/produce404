@@ -1,3 +1,4 @@
+/*我的赞页面，点击具体赞之后，进入内容详情页*/
 // pages/mine/my_agreement/my_agreement.js
 Page({
 

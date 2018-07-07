@@ -1,3 +1,4 @@
+/*我的消息页面，点击系统消息，跳转到系统消息页面*/
 // pages/mine/my_msg/my_msg.js
 Page({
 

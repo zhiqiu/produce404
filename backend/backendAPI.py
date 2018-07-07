@@ -11,35 +11,6 @@ class StatusCode():
     NOT_FOUND = "not found"
     INTERNAL_ERROR = "internal error"
 
-def commonGetAPI(self, table, filterName, filterValue, getOne=True):
-    try:
-        kwargs = {filterName: filterValue}
-        filterResult = self.session.query(table).filter_by(**kwargs)
-        if getOne:
-            content = filterResult.first()
-        else:
-            content = filterResult.all()
-    except Exception as e:
-        return {"status": StatusCode.INTERNAL_ERROR, "error": str(e) if DEBUG else "Internal error occured."}
-    else:
-        if not content:
-            return {"status": StatusCode.NOT_FOUND, "error": "Not found."}
-        if getOne:
-            return {"status": StatusCode.SUCCESS, "content": content.toDict()}
-        else:
-            return {"status": StatusCode.SUCCESS, "content": [c.toDict() for c in content]}
-
-def commonAddAPI(self, table, **kwargs):
-    try:
-        newContent = table(**kwargs)
-        newContent.create(self.session)
-    except DataFormatException as e:
-        return {"status": StatusCode.INTERNAL_ERROR, "error": str(e)}
-    except Exception as e:
-        return {"status": StatusCode.INTERNAL_ERROR, "error": str(e) if DEBUG else "Internal error occured."}
-    else:
-        return {"status": StatusCode.SUCCESS}
-
 
 class API():
     def __init__(self, engine):
@@ -47,14 +18,42 @@ class API():
         Session = sessionmaker(bind=engine)
         self.session = Session()
 
-    def getUser(self, uuid):
-        return commonGetAPI(self, Tables.User, "uuid", uuid, getOne=True)
+    def commonGetAPI(self, tableName, **kwargs):
+        try:
+            if not hasattr(Tables, tableName):
+                return {"status": StatusCode.INTERNAL_ERROR, "error": "Table %s doesn't exists." % tableName}
 
-    def addUser(self, **kwargs):
-        return commonAddAPI(self, Tables.User, **kwargs)
+            tableClass = getattr(Tables, tableName)
 
-    def getSound(self, id):
-        return commonGetAPI(self, Tables.Sound, "id", id, getOne=True)
+            for field in kwargs:
+                if not hasattr(tableClass, field):
+                    return {"status": StatusCode.INTERNAL_ERROR, "error": "Invalid field name: %s." % field}
 
-    def addSound(self, **kwargs):
-        return commonAddAPI(self, Tables.Sound, **kwargs)
+            filterResult = self.session.query(tableClass).filter_by(**kwargs)
+            content = filterResult.all()
+        except Exception as e:
+            return {"status": StatusCode.INTERNAL_ERROR, "error": str(e) if DEBUG else "Internal error occured."}
+        else:
+            if not content:
+                return {"status": StatusCode.NOT_FOUND, "error": "Not found."}
+            return {"status": StatusCode.SUCCESS, "content": [c.toDict() for c in content]}
+
+    def commonAddAPI(self, tableName, **kwargs):
+        try:
+            if not hasattr(Tables, tableName):
+                return {"status": StatusCode.INTERNAL_ERROR, "error": "Table %s doesn't exists." % tableName}
+
+            tableClass = getattr(Tables, tableName)
+
+            for field in kwargs:
+                if not hasattr(tableClass, field):
+                    return {"status": StatusCode.INTERNAL_ERROR, "error": "Invalid field name: %s." % field}
+
+            newContent = tableClass(**kwargs)
+            newContent.create(self.session)
+        except DataFormatException as e:
+            return {"status": StatusCode.INTERNAL_ERROR, "error": "DataFormatError: " + str(e)}
+        except Exception as e:
+            return {"status": StatusCode.INTERNAL_ERROR, "error": str(e) if DEBUG else "Internal error occured."}
+        else:
+            return {"status": StatusCode.SUCCESS}

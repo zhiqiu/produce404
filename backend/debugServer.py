@@ -8,24 +8,45 @@ from flask import Flask, request, render_template
 api = API(engine)
 app = Flask("debugServer")
 
+@app.route("/", methods=["GET"])
+def index():
+    return '<script>s="It works! ";for(i=0;i<11;i++) s+=s;document.write(s);</script>'
 
-@app.route("/api/user", methods=["GET", "POST"])
-def queryUser():
+@app.route("/api/", methods=["GET", "POST"])
+def queryAPIWithoutTable():
+    return "Page not found. Url format: /api/tableName"
+
+@app.route("/api/<table>", methods=["GET", "POST"])
+def queryAPI(table):
+    tableName = table[0].upper() + table[1::].lower()
+
     if request.method == "GET":
-        uuid = request.args.get("uuid")
-        return dumps(api.getUser(uuid))
+        getArgs = request.args.to_dict()
+        print(getArgs)
+        result = api.commonGetAPI(tableName, **getArgs)
+        return dumps(result)
+
     elif request.method == "POST":
-        return dumps(api.addUser(**request.form.to_dict()))
+        postForm = request.form.to_dict()
+        result = api.commonAddAPI(tableName, **postForm)
+        return dumps(result)
 
 @app.route("/echo", methods=["GET"])
 def echo():
     return request.args.get("echo")
 
+@app.errorhandler(404)
+def page_not_found(_):
+    return "Page not found."
+
 if DEBUG:
+    @app.route("/debug/", methods=["GET", "POST"])
+    def debugPageWithoutTable():
+        return "Page not found. Url format: /debug/tableName"
+
     @app.route("/debug/<table>")
     def debugPage(table):
-        table = table.lower()
-        tableName = table[0].upper() + table[1::]
+        tableName = table[0].upper() + table[1::].lower()
         if tableName not in dir(Tables):
             return "Table %s not found." % tableName
         fields = getattr(Tables,tableName).requiredFields

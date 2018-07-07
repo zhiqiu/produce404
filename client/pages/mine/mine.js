@@ -1,3 +1,4 @@
+/*“我的”页面*/
 // pages/mine/mine.js
 Page({
 
