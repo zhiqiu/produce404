@@ -1,2 +1,116 @@
 <!--pages/communtity/community.wxml-->
-<text>pages/communtity/community.wxml</text>
+
+<view class="timeline">
+	<view class="info">
+		<view	class="audio">
+			声音条
+		</view>
+		<view class="tags">
+			<view class="tag">
+				<text>#tag1</text>
+			</view>
+			<view class="tag">
+				<text>#tag2</text>
+			</view>
+
+		</view>
+		<view class="description">
+			<text>文本描述</text>
+		</view>
+		<view class="author">
+			<text>Author</text>
+		</view>
+
+		<view class="btns">
+			<icon>btns</icon>
+			<icon>btns</icon>
+			<icon>btns</icon>
+		</view>
+
+	</view>
+
+	<view class="info">
+		<view	class="audio">
+			声音条
+		</view>
+		<view class="tags">
+			<view class="tag">
+				<text>#tag1</text>
+			</view>
+			<view class="tag">
+				<text>#tag2</text>
+			</view>
+
+		</view>
+		<view class="description">
+			<text>文本描述</text>
+		</view>
+		<view class="author">
+			<text>Author</text>
+		</view>
+
+		<view class="btns">
+			<icon>btns</icon>
+			<icon>btns</icon>
+			<icon>btns</icon>
+		</view>
+
+	</view>
+
+	<view class="info">
+		<view	class="audio">
+			声音条
+		</view>
+		<view class="tags">
+			<view class="tag">
+				<text>#tag1</text>
+			</view>
+			<view class="tag">
+				<text>#tag2</text>
+			</view>
+
+		</view>
+		<view class="description">
+			<text>文本描述</text>
+		</view>
+		<view class="author">
+			<text>Author</text>
+		</view>
+
+		<view class="btns">
+			<icon>btns</icon>
+			<icon>btns</icon>
+			<icon>btns</icon>
+		</view>
+
+	</view>
+
+	<view class="info">
+		<view	class="audio">
+			声音条
+		</view>
+		<view class="tags">
+			<view class="tag">
+				<text>#tag1</text>
+			</view>
+			<view class="tag">
+				<text>#tag2</text>
+			</view>
+
+		</view>
+		<view class="description">
+			<text>文本描述</text>
+		</view>
+		<view class="author">
+			<text>Author</text>
+		</view>
+
+		<view class="btns">
+			<icon>btns</icon>
+			<icon>btns</icon>
+			<icon>btns</icon>
+		</view>
+
+	</view>
+</view>
+

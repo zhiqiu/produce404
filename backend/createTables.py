@@ -3,13 +3,15 @@ from sqlalchemy.ext.declarative import declarative_base
 from datetime import date
 import re
 
-__all__ = ["createAllTable", "Tables"]
+__all__ = ["createAllTable", "Tables", "DataFormatException"]
 
 
 def createAllTable(engine):
     Base.metadata.create_all(engine)
     return Base
 
+class DataFormatException(Exception):
+    pass
 
 # common super class
 
@@ -42,7 +44,7 @@ def commonInitClass(self, **kwargs):
         else:
             setattr(self, rf, kwargs[rf])
     if missedFields:
-        raise Exception("Missing fields. (%s) are required." % (",".join(missedFields)))
+        raise DataFormatException("Missing fields. (%s) are required." % (",".join(missedFields)))
 
 dateRexp = re.compile(r"([\d]{4})-([\d]{1,2})-([\d]{1,2})")
 
@@ -63,16 +65,18 @@ class User(Base, Creatable):
 
     def __init__(self, **kwargs):
         commonInitClass(self, **kwargs)
-        print(kwargs)
-        self.age = int(self.age)
+        try:
+            self.age = int(self.age)
+        except:
+            raise DataFormatException("Age must be an integer.")
+        if self.gender not in ["M", "F", "U"]:
+            raise DataFormatException("Gender must be one of M/F/U.")
         m = dateRexp.match(self.birthday)
         if not m:
-            raise Exception("Date format error.")
-        print(self.birthday)
+            raise DataFormatException("Date format error.")
         year = int(m.group(1))
         month = int(m.group(2))
         day = int(m.group(3))
-        print(year, month, day)
         self.birthday = date(year, month, day)
 
 
@@ -95,6 +99,8 @@ class SoundTag(Base, Creatable):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     tagname = Column(String(5))
+    
+    requiredFields = ["tagname"]
 
     def __init__(self, **kwargs):
         commonInitClass(self, **kwargs)
@@ -109,7 +115,10 @@ class Medal(Base, Creatable):
 
     def __init__(self, **kwargs):
         commonInitClass(self, **kwargs)
-        self.condition = int(self.condition)
+        try:
+            self.condition = int(self.condition)
+        except:
+            raise DataFormatException("Condition must be an integer.")
 
 
 class Comment(Base, Creatable):
@@ -120,25 +129,35 @@ class Comment(Base, Creatable):
     soundid = Column(Integer, ForeignKey("sound.id"))
     timestrap = Column(BigInteger)
     # user1 reply to user2, or user1 reply the sound (when user2 == user1)
-    user1 = Column(Integer, ForeignKey("user.id"))
-    user2 = Column(Integer, ForeignKey("user.id"))
+    user1 = Column(Integer, ForeignKey("user.uuid"))
+    user2 = Column(Integer, ForeignKey("user.uuid"))
+    
+    requiredFields = ["text", "soundid", "timestrap", "user1", "user2"]
 
     def __init__(self, **kwargs):
         commonInitClass(self, **kwargs)
-        self.timestrap = int(self.timestrap)
+        try:
+            self.timestrap = int(self.timestrap)
+        except:
+            raise DataFormatException("Timestrap must be an integer.")
 
 class Forward(Base, Creatable):
     __tablename__ = "forward"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    userid = Column(Integer, ForeignKey("user.id"))
+    useruuid = Column(Integer, ForeignKey("user.uuid"))
     soundid = Column(Integer, ForeignKey("sound.id"))
     destination = Column(String)
     timestrap = Column(BigInteger)
 
+    requiredFields = ["useruuid", "soundid", "destination", "timestrap"]
+
     def __init__(self, **kwargs):
         commonInitClass(self, **kwargs)
-        self.timestrap = int(self.timestrap)
+        try:
+            self.timestrap = int(self.timestrap)
+        except:
+            raise DataFormatException("Timestrap must be an integer.")
 
 # relationship tables:
 
@@ -146,8 +165,10 @@ class R_User_Sound(Base, Creatable):
     __tablename__ = "r_user_sound"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    userid = Column(Integer, ForeignKey("user.id"))
+    useruuid = Column(Integer, ForeignKey("user.uuid"))
     soundid = Column(Integer, ForeignKey("sound.id"))
+
+    requiredFields = ["useruuid", "soundid"]
 
     def __init__(self, **kwargs):
         commonInitClass(self, **kwargs)
@@ -159,6 +180,8 @@ class R_Sound_SoundTag(Base, Creatable):
     soundid = Column(Integer, ForeignKey("sound.id"))
     soundtagid = Column(Integer, ForeignKey("soundtag.id"))
 
+    requiredFields = ["soundid", "soundtagid"]
+
     def __init__(self, **kwargs):
         commonInitClass(self, **kwargs)
 
@@ -166,8 +189,10 @@ class R_User_Medal(Base, Creatable):
     __tablename__ = "r_user_medal"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    userid = Column(Integer, ForeignKey("user.id"))
+    useruuid = Column(Integer, ForeignKey("user.uuid"))
     medalid = (Integer, ForeignKey("medal.id"))
+
+    requiredFields = ["useruuid", "medalid"]
 
     def __init__(self, **kwargs):
         commonInitClass(self, **kwargs)
@@ -177,8 +202,10 @@ class R_Follow(Base, Creatable):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     # user1 follows user2
-    user1 = Column(Integer, ForeignKey("user.id"))
-    user2 = Column(Integer, ForeignKey("user.id"))
+    user1 = Column(Integer, ForeignKey("user.uuid"))
+    user2 = Column(Integer, ForeignKey("user.uuid"))
+
+    requiredFields = ["user1", "user2"]
 
     def __init__(self, **kwargs):
         commonInitClass(self, **kwargs)
@@ -187,8 +214,10 @@ class R_Favorite_Sound(Base, Creatable):
     __tablename__ = "r_favorite_sound"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    userid = Column(Integer, ForeignKey("user.id"))
+    useruuid = Column(Integer, ForeignKey("user.uuid"))
     soundid = Column(Integer, ForeignKey("sound.id"))
+
+    requiredFields = ["useruuid", "soundid"]
 
     def __init__(self, **kwargs):
         commonInitClass(self, **kwargs)
@@ -197,8 +226,10 @@ class R_Interested_Soundtag(Base, Creatable):
     __tablename__ = "r_interested_soundtag"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    userid = Column(Integer, ForeignKey("user.id"))
+    useruuid = Column(Integer, ForeignKey("user.uuid"))
     soundtagid = Column(Integer, ForeignKey("soundtag.id"))
+
+    requiredFields = ["useruuid", "soundtagid"]
 
     def __init__(self, **kwargs):
         commonInitClass(self, **kwargs)
