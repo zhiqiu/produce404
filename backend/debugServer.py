@@ -12,13 +12,20 @@ app = Flask("debugServer")
 def index():
     return '<script>s="It works! ";for(i=0;i<11;i++) s+=s;document.write(s);</script>'
 
-@app.route("/api/user", methods=["GET", "POST"])
-def queryUser():
+@app.route("/api/<table>", methods=["GET", "POST"])
+def queryAPI(table):
+    tableName = table[0].upper() + table[1::].lower()
+
     if request.method == "GET":
-        uuid = request.args.get("uuid")
-        return dumps(api.getUser(uuid))
+        getArgs = request.args.to_dict()
+        print(getArgs)
+        result = api.commonGetAPI(tableName, **getArgs)
+        return dumps(result)
+
     elif request.method == "POST":
-        return dumps(api.addUser(**request.form.to_dict()))
+        postForm = request.form.to_dict()
+        result = api.commonAddAPI(tableName, **postForm)
+        return dumps(result)
 
 @app.route("/echo", methods=["GET"])
 def echo():
@@ -28,7 +35,7 @@ if DEBUG:
     @app.route("/debug/<table>")
     def debugPage(table):
         table = table.lower()
-        tableName = table[0].upper() + table[1::]
+        tableName = table[0].upper() + table[1::].lower()
         if tableName not in dir(Tables):
             return "Table %s not found." % tableName
         fields = getattr(Tables,tableName).requiredFields

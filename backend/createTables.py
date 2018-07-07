@@ -99,6 +99,8 @@ class SoundTag(Base, Creatable):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     tagname = Column(String(5))
+    
+    requiredFields = ["tagname"]
 
     def __init__(self, **kwargs):
         commonInitClass(self, **kwargs)
@@ -127,8 +129,10 @@ class Comment(Base, Creatable):
     soundid = Column(Integer, ForeignKey("sound.id"))
     timestrap = Column(BigInteger)
     # user1 reply to user2, or user1 reply the sound (when user2 == user1)
-    user1 = Column(Integer, ForeignKey("user.id"))
-    user2 = Column(Integer, ForeignKey("user.id"))
+    user1 = Column(Integer, ForeignKey("user.uuid"))
+    user2 = Column(Integer, ForeignKey("user.uuid"))
+    
+    requiredFields = ["text", "soundid", "timestrap", "user1", "user2"]
 
     def __init__(self, **kwargs):
         commonInitClass(self, **kwargs)
@@ -141,10 +145,12 @@ class Forward(Base, Creatable):
     __tablename__ = "forward"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    userid = Column(Integer, ForeignKey("user.id"))
+    useruuid = Column(Integer, ForeignKey("user.uuid"))
     soundid = Column(Integer, ForeignKey("sound.id"))
     destination = Column(String)
     timestrap = Column(BigInteger)
+
+    requiredFields = ["useruuid", "soundid", "destination", "timestrap"]
 
     def __init__(self, **kwargs):
         commonInitClass(self, **kwargs)
@@ -159,8 +165,10 @@ class R_User_Sound(Base, Creatable):
     __tablename__ = "r_user_sound"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    userid = Column(Integer, ForeignKey("user.id"))
+    useruuid = Column(Integer, ForeignKey("user.uuid"))
     soundid = Column(Integer, ForeignKey("sound.id"))
+
+    requiredFields = ["useruuid", "soundid"]
 
     def __init__(self, **kwargs):
         commonInitClass(self, **kwargs)
@@ -172,6 +180,8 @@ class R_Sound_SoundTag(Base, Creatable):
     soundid = Column(Integer, ForeignKey("sound.id"))
     soundtagid = Column(Integer, ForeignKey("soundtag.id"))
 
+    requiredFields = ["soundid", "soundtagid"]
+
     def __init__(self, **kwargs):
         commonInitClass(self, **kwargs)
 
@@ -179,8 +189,10 @@ class R_User_Medal(Base, Creatable):
     __tablename__ = "r_user_medal"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    userid = Column(Integer, ForeignKey("user.id"))
+    useruuid = Column(Integer, ForeignKey("user.uuid"))
     medalid = (Integer, ForeignKey("medal.id"))
+
+    requiredFields = ["useruuid", "medalid"]
 
     def __init__(self, **kwargs):
         commonInitClass(self, **kwargs)
@@ -190,8 +202,10 @@ class R_Follow(Base, Creatable):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     # user1 follows user2
-    user1 = Column(Integer, ForeignKey("user.id"))
-    user2 = Column(Integer, ForeignKey("user.id"))
+    user1 = Column(Integer, ForeignKey("user.uuid"))
+    user2 = Column(Integer, ForeignKey("user.uuid"))
+
+    requiredFields = ["user1", "user2"]
 
     def __init__(self, **kwargs):
         commonInitClass(self, **kwargs)
@@ -200,8 +214,10 @@ class R_Favorite_Sound(Base, Creatable):
     __tablename__ = "r_favorite_sound"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    userid = Column(Integer, ForeignKey("user.id"))
+    useruuid = Column(Integer, ForeignKey("user.uuid"))
     soundid = Column(Integer, ForeignKey("sound.id"))
+
+    requiredFields = ["useruuid", "soundid"]
 
     def __init__(self, **kwargs):
         commonInitClass(self, **kwargs)
@@ -210,8 +226,10 @@ class R_Interested_Soundtag(Base, Creatable):
     __tablename__ = "r_interested_soundtag"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    userid = Column(Integer, ForeignKey("user.id"))
+    useruuid = Column(Integer, ForeignKey("user.uuid"))
     soundtagid = Column(Integer, ForeignKey("soundtag.id"))
+
+    requiredFields = ["useruuid", "soundtagid"]
 
     def __init__(self, **kwargs):
         commonInitClass(self, **kwargs)
