@@ -12,6 +12,10 @@ app = Flask("debugServer")
 def index():
     return '<script>s="It works! ";for(i=0;i<11;i++) s+=s;document.write(s);</script>'
 
+@app.route("/api/", methods=["GET", "POST"])
+def queryAPIWithoutTable():
+    return "Page not found. Url format: /api/tableName"
+
 @app.route("/api/<table>", methods=["GET", "POST"])
 def queryAPI(table):
     tableName = table[0].upper() + table[1::].lower()
@@ -31,10 +35,17 @@ def queryAPI(table):
 def echo():
     return request.args.get("echo")
 
+@app.errorhandler(404)
+def page_not_found(_):
+    return "Page not found."
+
 if DEBUG:
+    @app.route("/debug/", methods=["GET", "POST"])
+    def debugPageWithoutTable():
+        return "Page not found. Url format: /debug/tableName"
+
     @app.route("/debug/<table>")
     def debugPage(table):
-        table = table.lower()
         tableName = table[0].upper() + table[1::].lower()
         if tableName not in dir(Tables):
             return "Table %s not found." % tableName

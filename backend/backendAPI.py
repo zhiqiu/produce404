@@ -52,7 +52,7 @@ class API():
             newContent = tableClass(**kwargs)
             newContent.create(self.session)
         except DataFormatException as e:
-            return {"status": StatusCode.INTERNAL_ERROR, "error": str(e)}
+            return {"status": StatusCode.INTERNAL_ERROR, "error": "DataFormatError: " + str(e)}
         except Exception as e:
             return {"status": StatusCode.INTERNAL_ERROR, "error": str(e) if DEBUG else "Internal error occured."}
         else:

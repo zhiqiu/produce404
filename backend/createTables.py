@@ -77,7 +77,10 @@ class User(Base, Creatable):
         year = int(m.group(1))
         month = int(m.group(2))
         day = int(m.group(3))
-        self.birthday = date(year, month, day)
+        try:
+            self.birthday = date(year, month, day)
+        except Exception as e:
+            raise DataFormatException(e)
 
 
 class Sound(Base, Creatable):
