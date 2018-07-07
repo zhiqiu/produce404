@@ -3,8 +3,6 @@
     "pages/index/index",
     "pages/logs/logs",
     "pages/index_page/index_page",
-    "pages/single_record/single_record",
-    "pages/add_coll/add_coll",
     "pages/communtity/community",
     "pages/record/record",
     "pages/mine/mine",
@@ -15,6 +13,7 @@
     "pages/comments/comments",
     "pages/collection/add_collection",
     "pages/record_test/record_test"
+    "pages/add_collection/add_collection"
   ],
   "window": {
     "backgroundTextStyle": "light",
