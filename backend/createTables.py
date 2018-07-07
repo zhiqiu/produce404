@@ -1,6 +1,7 @@
-from sqlalchemy import Column, String, Integer, CHAR, Date, BigInteger, ForeignKey
+from sqlalchemy import Column, String, Integer, CHAR, BigInteger, Date, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
-
+from datetime import date
+import re
 
 __all__ = ["createAllTable", "Tables"]
 
@@ -34,11 +35,16 @@ class Creatable():
 
 
 def commonInitClass(self, **kwargs):
+    missedFields = []
     for rf in self.requiredFields:
         if rf not in kwargs:
-            raise Exception("Error! \"%s\" field is required." % rf)
-        setattr(self, rf, kwargs[rf])
+            missedFields.append(rf)
+        else:
+            setattr(self, rf, kwargs[rf])
+    if missedFields:
+        raise Exception("Missing fields. (%s) are required." % (",".join(missedFields)))
 
+dateRexp = re.compile(r"([\d]{4})-([\d]{1,2})-([\d]{1,2})")
 
 # entity tables:
 
@@ -57,6 +63,17 @@ class User(Base, Creatable):
 
     def __init__(self, **kwargs):
         commonInitClass(self, **kwargs)
+        print(kwargs)
+        self.age = int(self.age)
+        m = dateRexp.match(self.birthday)
+        if not m:
+            raise Exception("Date format error.")
+        print(self.birthday)
+        year = int(m.group(1))
+        month = int(m.group(2))
+        day = int(m.group(3))
+        print(year, month, day)
+        self.birthday = date(year, month, day)
 
 
 class Sound(Base, Creatable):
@@ -92,6 +109,7 @@ class Medal(Base, Creatable):
 
     def __init__(self, **kwargs):
         commonInitClass(self, **kwargs)
+        self.condition = int(self.condition)
 
 
 class Comment(Base, Creatable):
@@ -107,6 +125,7 @@ class Comment(Base, Creatable):
 
     def __init__(self, **kwargs):
         commonInitClass(self, **kwargs)
+        self.timestrap = int(self.timestrap)
 
 class Forward(Base, Creatable):
     __tablename__ = "forward"
@@ -119,6 +138,7 @@ class Forward(Base, Creatable):
 
     def __init__(self, **kwargs):
         commonInitClass(self, **kwargs)
+        self.timestrap = int(self.timestrap)
 
 # relationship tables:
 

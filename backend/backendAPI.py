@@ -3,14 +3,13 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 from createTables import createAllTable, Tables
 
-class StatusCode():
-    SUCCESS = 0
-    NOT_FOUND = -1
-    INTERNAL_ERROR = -2
+__all__ = ["StatusCode", "API"]
 
-class NotFound():
-    def toDict():
-        return {}
+class StatusCode():
+    SUCCESS = "success"
+    NOT_FOUND = "not found"
+    INTERNAL_ERROR = "internal error"
+
 
 class API():
     def __init__(self, engine):
@@ -18,9 +17,9 @@ class API():
         Session = sessionmaker(bind=engine)
         self.session = Session()
 
-    def getUser(self, id):
+    def getUser(self, uuid):
         try:
-            user = self.session.query(Tables.User).filter_by(id=id).first()
+            user = self.session.query(Tables.User).filter_by(uuid=uuid).first()
         except Exception as e:
             return {"status": StatusCode.INTERNAL_ERROR, "error": str(e)}
         else:
@@ -30,6 +29,7 @@ class API():
                 return {"status": StatusCode.NOT_FOUND, "error": "Not found."}
 
     def addUser(self, **kwargs):
+        print(kwargs)
         try:
             newUser = Tables.User(**kwargs)
             newUser.create(self.session)
