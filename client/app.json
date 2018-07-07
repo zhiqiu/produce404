@@ -1,9 +1,9 @@
 {
   "pages": [
+    "pages/communtity/community",
     "pages/index_page/index_page",
     "pages/index/index",
     "pages/logs/logs",
-    "pages/communtity/community",
     "pages/record/record",
     "pages/mine/mine",
     "pages/mine/my_msg/my_msg",
@@ -26,14 +26,20 @@
     "selectedColor": "#11cd6e",  
     "borderStyle": "black" ,
     "list": [{
-     "pagePath": "pages/index_page/index_page",  
-     "text": "觅声"
+      "iconPath": "image/bar-misheng.png",
+      "selectedIconPath": "image/bar-misheng-active.png",
+      "pagePath": "pages/index_page/index_page",  
+      "text": "觅声"
     }, {
-     "pagePath": "pages/communtity/community",  
-     "text": "发现"
+      "iconPath": "image/bar-faxian.png",
+      "selectedIconPath": "image/bar-faxian-active.png",
+      "pagePath": "pages/communtity/community",  
+      "text": "发现"
     },{
-     "pagePath": "pages/mine/mine",  
-     "text": "我的"
+      "iconPath": "image/bar-wode.png",
+      "selectedIconPath": "image/bar-wode.png",
+      "pagePath": "pages/mine/mine",  
+      "text": "我的"
     }
     ]
   }
