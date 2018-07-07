@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+        <meta charset="utf-8" />
+        <title>debug page</title>
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+            }
+            form {
+                width: 500px;
+                margin: 20px auto;
+                font-size: 24px;
+            }
+            #submit, .line {
+                width: 100%;
+                margin: 10px 0;
+            }
+            .line {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+            .line div {
+                width: 20%;
+                float:left;
+                text-align: center;
+            }
+            .line input {
+                width: 80%;
+                height: 40px;
+                font-size: inherit;
+                font-family: inherit;
+                text-align: center;
+            }
+            #submit {
+                width: 80%;
+                margin: 20px auto;
+                height: 40px;
+                display: block;
+                font-size: inherit;
+                font-family: inherit;
+            }
+        </style>
+    </head>
+    <body>
+        <form>
+            <div class="line">Table: {{ tableName }}</div>
+            {% for f in fields %}
+            <div class="line">
+                <div>{{ f }}</div><input type="text" name="{{ f }}" />
+            </div>
+            {% endfor %}
+            <input id="submit" type="submit" value="提交" />
+        </form>
+    </body>
+</html>

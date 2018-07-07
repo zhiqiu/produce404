@@ -1,7 +1,8 @@
 from backendAPI import API
-from config import engine
+from createTables import Tables
+from config import engine, DEBUG
 from json import dumps
-from flask import Flask, request
+from flask import Flask, request, render_template
 
 
 api = API(engine)
@@ -20,5 +21,14 @@ def queryUser():
 def echo():
     return request.args.get("echo")
 
+if DEBUG:
+    @app.route("/debug/<table>")
+    def debugPage(table):
+        tableName = table[0].upper() + table[1::]
+        if tableName not in dir(Tables):
+            return "Table %s not found." % tableName
+        fields = getattr(Tables,tableName).requiredFields
+        return render_template("debugPage.html", fields=fields, tableName=tableName)
 
-app.run(host="0.0.0.0", port=24135)
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=24135)

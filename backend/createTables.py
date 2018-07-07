@@ -63,16 +63,18 @@ class User(Base, Creatable):
 
     def __init__(self, **kwargs):
         commonInitClass(self, **kwargs)
-        print(kwargs)
-        self.age = int(self.age)
+        try:
+            self.age = int(self.age)
+        except:
+            raise Exception("Age must be an integer.")
+        if self.gender not in ["M", "F", "U"]:
+            raise Exception("Gender must be one of M/F/U.")
         m = dateRexp.match(self.birthday)
         if not m:
             raise Exception("Date format error.")
-        print(self.birthday)
         year = int(m.group(1))
         month = int(m.group(2))
         day = int(m.group(3))
-        print(year, month, day)
         self.birthday = date(year, month, day)
 
 
@@ -109,7 +111,10 @@ class Medal(Base, Creatable):
 
     def __init__(self, **kwargs):
         commonInitClass(self, **kwargs)
-        self.condition = int(self.condition)
+        try:
+            self.condition = int(self.condition)
+        except:
+            raise Exception("Condition must be an integer.")
 
 
 class Comment(Base, Creatable):
@@ -125,7 +130,10 @@ class Comment(Base, Creatable):
 
     def __init__(self, **kwargs):
         commonInitClass(self, **kwargs)
-        self.timestrap = int(self.timestrap)
+        try:
+            self.timestrap = int(self.timestrap)
+        except:
+            raise Exception("Timestrap must be an integer.")
 
 class Forward(Base, Creatable):
     __tablename__ = "forward"
@@ -138,7 +146,10 @@ class Forward(Base, Creatable):
 
     def __init__(self, **kwargs):
         commonInitClass(self, **kwargs)
-        self.timestrap = int(self.timestrap)
+        try:
+            self.timestrap = int(self.timestrap)
+        except:
+            raise Exception("Timestrap must be an integer.")
 
 # relationship tables:
 
