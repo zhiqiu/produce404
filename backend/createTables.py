@@ -26,11 +26,19 @@ class User(Base):
     gender = Column(CHAR(1), default="U")  # M: male, F: female, U: unset
     address = Column(String)
     birthday = Column(Date)
+    requiredFields = ["uuid","name","age","gender","address","birthday"]
 
-    fields = ["id","uuid","name","age","gender","address","birthday"]
+    def __init__(self, **kwargs):
+        for rf in User.requiredFields:
+            if rf not in kwargs:
+                raise Exception("Error! \"%s\" field is required." % rf)
+            setattr(self, rf, kwargs[rf])
 
     def create(self, session):
-        
+        session.add(self)
+        session.commit()
+        return {"status": 0}
+
 
 
 class Sound(Base):
