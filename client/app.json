@@ -2,7 +2,15 @@
   "pages": [
     "pages/index/index",
     "pages/logs/logs",
-    "pages/index_page/index_page"
+    "pages/index_page/index_page",
+    "pages/single_record/single_record",
+    "pages/add_coll/add_coll",
+    "pages/communtity/community",
+    "pages/record/record",
+    "pages/mine/mine",
+    "pages/mine/my_msg/my_msg",
+    "pages/mine/my_agreement/my_agreement",
+    "pages/mine/my_coll/my_coll"
   ],
   "window": {
     "backgroundTextStyle": "light",
