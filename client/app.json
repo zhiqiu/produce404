@@ -1,8 +1,8 @@
 {
   "pages": [
     "pages/index/index",
-    "pages/logs/logs",
     "pages/index_page/index_page",
+    "pages/logs/logs",
     "pages/communtity/community",
     "pages/record/record",
     "pages/mine/mine",
@@ -13,9 +13,7 @@
     "pages/comments/comments",
     "pages/add_collection/add_collection",
     "pages/mine/sys_msg/sys_msg",
-    "pages/collection/add_collection",
-    "pages/record_test/record_test",
-    "pages/add_collection/add_collection"
+    "pages/record_test/record_test"
   ],
   "window": {
     "backgroundTextStyle": "light",
@@ -31,7 +29,7 @@
      "pagePath": "pages/index/index",  
      "text": "觅声"
     }, {
-     "pagePath": "pages/logs/logs",  
+     "pagePath": "pages/communtity/community",  
      "text": "发现"
     },{
      "pagePath": "pages/mine/mine",  

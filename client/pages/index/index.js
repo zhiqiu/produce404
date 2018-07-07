@@ -4,7 +4,7 @@ const app = getApp()
 
 Page({
   data: {
-    jumpPath : ''
+    jumpPath : '/pages/index_page/index_page'
   },
   //事件处理函数
   onLoad: function(){

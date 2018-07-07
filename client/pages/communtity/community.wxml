@@ -1,2 +1,13 @@
 <!--pages/communtity/community.wxml-->
 <text>pages/communtity/community.wxml</text>
+
+<view class="timeline">
+	<view class="info">
+		<view	class="">
+			
+		</view>
+
+	</view>
+
+</view>
+
