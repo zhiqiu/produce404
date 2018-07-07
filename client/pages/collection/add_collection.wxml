@@ -1,0 +1,17 @@
+<!--pages/collection/add_collection.wxml-->
+<view>
+audio info
+</view>
+
+<view class="collections">
+	<view class="collection">
+		<text>收藏列表名称</text>
+	</view>
+	<view class="collection">
+		<text>收藏列表名称</text>
+	</view>
+	<view class="collection">
+		<text>收藏列表名称</text>
+	</view>
+
+</view>
