@@ -11,7 +11,8 @@
     "pages/mine/my_coll/my_coll",
     "pages/player_test/player",
     "pages/comments/comments",
-    "pages/add_collection/add_collection"
+    "pages/add_collection/add_collection",
+    "pages/mine/sys_msg/sys_msg"
   ],
   "window": {
     "backgroundTextStyle": "light",

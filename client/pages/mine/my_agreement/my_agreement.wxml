@@ -1,2 +1,11 @@
 <!--pages/mine/my_agreement/my_agreement.wxml-->
-<text>pages/mine/my_agreement/my_agreement.wxml</text>
+<view class="headbar">
+  <view class="agree-1">
+    <image >头像</image>
+    <text>导师赞了你的动态</text>
+  </view>
+  <view class="agree-2">
+    <image >头像</image>
+    <text>总监赞了你的动态</text>
+  </view>
+</view>

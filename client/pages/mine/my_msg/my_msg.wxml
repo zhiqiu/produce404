@@ -1,2 +1,19 @@
 <!--pages/mine/my_msg/my_msg.wxml-->
-<text>pages/mine/my_msg/my_msg.wxml</text>
+<view class="sys_msg">
+  <text>系统消息</text>
+  <icon></icon>
+  <view class="1st_msg">
+    <button ontap="gotoSysMsg">我是最新系统消息</button>
+  </view>
+</view>
+
+<view class="my_msg">
+  <view class="1st_msg">
+    <image>头像</image>
+    <button>第一条评论</button>
+  </view>
+  <view class="1st_msg">
+    <image>头像</image>
+    <button>第二条评论</button>
+  </view>
+</view>

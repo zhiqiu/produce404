@@ -1,7 +1,7 @@
 <!--pages/mine/mine.wxml-->
 <view class="headbar">
   <view class="btn-1">
-    <button>我的消息</button>
+    <button ontap="gotoMyMsg">我的消息</button>
   </view>
 </view>
 
@@ -16,10 +16,10 @@
 
 <view class="mine-1">
   <view class="btn-2">
-    <button>我的赞</button>
+    <button ontap="gotoMyAgreement">我的赞</button>
   </view>
   <view class="btn-3">
-    <button>我的收藏</button>
+    <button ontap="gotoMyColl">我的收藏</button>
   </view>
 </view>
 

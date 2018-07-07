@@ -1,4 +1,4 @@
-// pages/mine/mine.js
+// pages/mine/sys_msg/sys_msg.js
 Page({
 
   /**
@@ -62,26 +62,5 @@ Page({
    */
   onShareAppMessage: function () {
   
-  },
-
-  gotoMyMsg: function () {
-    var audioInfo = ''
-    wx.navigateTo({
-      url: '/pages/mine/my_msg/my_msg?' + audioInfo
-    })
-  },
-
-  gotoMyColl: function () {
-    var audioInfo = ''
-    wx.navigateTo({
-      url: '/pages/mine/my_coll/my_coll?' + audioInfo
-    })
-  },
-
-  gotoMyAgreement: function () {
-    var audioInfo = ''
-    wx.navigateTo({
-      url: '/pages/mine/my_agreement/my_agreement?' + audioInfo
-    })
   }
 })

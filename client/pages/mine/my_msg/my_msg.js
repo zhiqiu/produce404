@@ -62,5 +62,12 @@ Page({
    */
   onShareAppMessage: function () {
   
+  },
+
+  gotoSysMsg: function () {
+    var audioInfo = ''
+    wx.navigateTo({
+      url: '/pages/mine/sys_msg/sys_msg?' + audioInfo
+    })
   }
 })

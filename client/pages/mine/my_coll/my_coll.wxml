@@ -1,2 +1,21 @@
 <!--pages/mine/my_coll/my_coll.wxml-->
-<text>pages/mine/my_coll/my_coll.wxml</text>
+<view class="my_coll">
+  <view class="coll_1">
+    <image>头像</image>
+    <view class="msg">
+      <button>第一条收藏</button>
+    </view>
+  </view>
+  <view class="coll_2">
+    <image>头像</image>
+    <view class="msg">
+      <button>第二条收藏</button>
+    </view>
+  </view>
+  <view class="coll_3">
+    <image>头像</image>
+    <view class="msg">
+      <button>第三条收藏</button>
+    </view>
+  </view>
+</view>
