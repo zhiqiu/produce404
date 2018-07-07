@@ -1,3 +1,4 @@
+/*录音页面*/
 // pages/record/record.js
 Page({
 

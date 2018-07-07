@@ -1,5 +1,5 @@
-/*内容详情页*/
-// pages/comments/comments.js
+/*我的收藏详情页，点击具体收藏后，跳转到内容详情页*/
+// pages/mine/my_coll/single_coll/single_coll.js
 Page({
 
   /**

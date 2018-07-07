@@ -1,3 +1,4 @@
+/*声觅主页面*/
 // pages/index_page/index_page.js
 Page({
 
