@@ -1,7 +1,7 @@
 {
   "pages": [
-    "pages/index/index",
     "pages/index_page/index_page",
+    "pages/index/index",
     "pages/logs/logs",
     "pages/communtity/community",
     "pages/record/record",
@@ -26,7 +26,7 @@
     "selectedColor": "#11cd6e",  
     "borderStyle": "black" ,
     "list": [{
-     "pagePath": "pages/index/index",  
+     "pagePath": "pages/index_page/index_page",  
      "text": "觅声"
     }, {
      "pagePath": "pages/communtity/community",  
