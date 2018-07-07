@@ -8,6 +8,9 @@ from flask import Flask, request, render_template
 api = API(engine)
 app = Flask("debugServer")
 
+@app.route("/", methods=["GET"])
+def index():
+    return '<script>s="It works! ";for(i=0;i<11;i++) s+=s;document.write(s);</script>'
 
 @app.route("/api/user", methods=["GET", "POST"])
 def queryUser():
