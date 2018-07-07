@@ -2,7 +2,10 @@
   "pages": [
     "pages/index/index",
     "pages/logs/logs",
-    "pages/index_page/index_page"
+    "pages/index_page/index_page",
+    "pages/player_test/player",
+    "pages/comments/comments",
+    "pages/collection/add_collection"
   ],
   "window": {
     "backgroundTextStyle": "light",
