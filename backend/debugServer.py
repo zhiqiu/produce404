@@ -16,5 +16,9 @@ def queryUser():
     elif request.method == "POST":
         return dumps(api.addUser(**request.form.to_dict()))
 
+@app.route("/echo", methods=["GET"])
+def echo():
+    return request.args.get("echo")
+
 
 app.run(host="0.0.0.0", port=24135)
