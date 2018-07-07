@@ -1,0 +1,68 @@
+<!--pages/mine/mine.wxml-->
+<view class="headbar">
+  <view class="btn-1">
+    <button>我的消息</button>
+  </view>
+</view>
+
+<view class="personal_msg">
+  <view class="my_img">
+    <image>头像</image>
+  </view>
+  <view class="name">
+    <text>创造404</text>
+  </view>
+</view>
+
+<view class="mine-1">
+  <view class="btn-2">
+    <button>我的赞</button>
+  </view>
+  <view class="btn-3">
+    <button>我的收藏</button>
+  </view>
+</view>
+
+<view class="mine-2">
+  <view class="my_record">
+    <text>我的声音日记</text>
+  </view>
+  <view class="my_honors">
+    <text>我的勋章</text>
+  </view>
+</view>
+
+<view class="single_record">
+  <view class="my_record_img">
+    <image>头像</image>
+  </view>
+  <view class="my_record_text">
+    <text>声音描述</text>
+  </view>
+  <view class="my_record_radio">
+    <text>录音占位</text>
+  </view>
+  <view class="control">
+    <view class="btn-4">
+      <button>点赞</button>
+    </view>
+    <view class="btn-5">
+      <button>评论</button>
+    </view>
+    <view class="btn-6">
+      <button>分享</button>
+    </view>
+  </view>
+</view>
+
+<view class="honors">
+  <view class="single_honor">
+    <image>勋章A</image>
+  </view>
+  <view class="single_honor">
+    <image>勋章B</image>
+  </view>
+  <view class="single_honor">
+    <image>勋章B</image>
+  </view>
+</view>

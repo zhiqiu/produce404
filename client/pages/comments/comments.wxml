@@ -1,0 +1,25 @@
+<!--pages/comments/comments.wxml-->
+<view class="audioInfo">
+	<image>图片</image>
+	<text>标题</text>
+	<text>文字简介</text>
+</view>
+
+<view class="comment-list">
+	<view class="comment">
+		<text>评论者id:</text>
+		<text>评论内容</text>
+	</view>
+	<view class="comment">
+		<text>评论者id:</text>
+		<text>评论内容</text>
+	</view>
+	<view class="comment">
+		<text>评论者id:</text>
+		<text>评论内容</text>
+	</view>
+	<view class="comment">
+		<text>评论者id:</text>
+		<text>评论内容</text>
+	</view>
+</view>

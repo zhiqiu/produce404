@@ -1,4 +1,4 @@
-// comments.js
+// pages/mine/my_agreement/my_agreement.js
 Page({
 
   /**
