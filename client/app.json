@@ -12,7 +12,7 @@
     "pages/player_test/player",
     "pages/comments/comments",
     "pages/collection/add_collection",
-    "pages/record_test/record_test"
+    "pages/record_test/record_test",
     "pages/add_collection/add_collection"
   ],
   "window": {
