@@ -19,7 +19,7 @@ xshell登录方法：http://km.oa.com/group/18092/articles/show/342003
 
 字符集：UTF8MB4  
 表名大小写敏感  
-内网地址：172.16.0.7  
+内网地址：172.16.16.7 
 端口：3306  
 root账号密码：create404mysql  
 
