@@ -1,5 +1,4 @@
-/*发现页面*/
-// pages/communtity/community.js
+// pages/communtity/detail.js
 Page({
 
   /**
@@ -63,11 +62,5 @@ Page({
    */
   onShareAppMessage: function () {
   
-  },
-  gotoDetail: function(e){
-    var dID = e.currentTarget.id;
-    wx.navigateTo({
-      url: '/pages/communtity/detail?dID='+dID
-    })
   }
 })
