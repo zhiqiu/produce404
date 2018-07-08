@@ -1,19 +1,32 @@
 /*发现页面*/
 // pages/communtity/community.js
+
+const c = require('../../utils/c.js')
+const r = c.r;
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-  
+    feeds : []
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-  
+    r({
+      data:{
+        action: 'get_explore',
+        last_audio_id: ''
+      },
+      success: function(res){
+        console.log(res);
+        feeds = res.data.feeds
+
+      }
+    })
   },
 
   /**

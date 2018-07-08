@@ -55,4 +55,5 @@ const login = function(){
 
 module.exports = {
   login: login,
+  r:r
 }
