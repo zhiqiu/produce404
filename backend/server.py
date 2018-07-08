@@ -17,9 +17,14 @@ def page_not_found(_):
 def getIndex():
     return '<script>s="It works! ";for(i=0;i<11;i++) s+=s;document.write(s);</script>'
 
-@app.route("/api", methods=["POST"])
+apiMethod = "GET" if DEBUG else "POST"
+
+@app.route("/api", methods=[apiMethod])
 def dealRequests():
-    form = request.form.to_dict()
+    if DEBUG:
+        form = request.form.to_dict()
+    else:
+        form = request.args.to_dict()
     action = form["action"]
     result = getattr(api, API.allAPI[action])(form)
     return dumps(result)
