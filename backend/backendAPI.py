@@ -152,6 +152,12 @@ class API():
         }
         '''
 
+        if DEBUG_COMMUNITATION:
+            return Status.success({
+                "token": "I am token.",
+                "first_time": True
+            })
+
         jsCode = form["code"]
 
         url = "https://api.weixin.qq.com/sns/jscode2session"
@@ -167,17 +173,11 @@ class API():
             resJson = json.loads(res.text)
             openID = resJson["openid"]
             sessionKey = resJson["session_key"]
-            if DEBUG_COMMUNITATION:
-                return {
-                    "token": openID,
-                    "first_time": True
-                }
-            else:
-                # Fix me
-                token = openID
-                return Status.success({
-                    "token": token,
-                    "first_time": True
-                })
+            # Fix me
+            token = openID
+            return Status.success({
+                "token": token,
+                "first_time": True
+            })
         except Exception as e:
             return Status.internalError("invalid code")
