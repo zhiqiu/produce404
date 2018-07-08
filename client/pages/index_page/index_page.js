@@ -17,6 +17,24 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    if(! wx.getStorageSync('userInfo')){
+      wx.redirectTo({
+        url : '/pages/login_page/login_page',
+        complete: function(e  ){
+          console.log(e)
+        }
+      })
+      return;
+    }
+    if(wx.getStorageSync('server_first_time')){
+      wx.setStorageSync('server_first_time',false);
+      r({
+        data:{
+          action: 'post_userinfo',
+          data: userInfo
+        }
+      })
+    }
     const player = wx.getBackgroundAudioManager()
     player.title = '此时此刻'
     player.epname = '此时此刻'

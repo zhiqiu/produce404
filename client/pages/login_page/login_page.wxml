@@ -1,0 +1,4 @@
+<!--pages/login_page/login_page.wxml-->
+<text>pages/login_page/login_page.wxml</text>
+
+<button open-type="getUserInfo" bindgetuserinfo="clickLogin">Login!</button>
