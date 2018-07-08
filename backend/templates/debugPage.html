@@ -36,9 +36,12 @@
                 text-align: center;
             }
             #submit {
+                text-align: center;
+                background: #F0F0F0;
                 width: 80%;
                 margin: 20px auto;
                 height: 40px;
+                line-height: 40px;
                 display: block;
                 font-size: inherit;
                 font-family: inherit;
@@ -56,7 +59,7 @@
                 <div>{{ f }}</div><input type="text" name="{{ f }}" />
             </div>
             {% endfor %}
-            <input id="submit" type="button" value="提交" />
+            <div id="submit">提交</div>
             <div id="display"></div>
         </form>
         <script>
