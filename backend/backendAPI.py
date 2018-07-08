@@ -336,7 +336,7 @@ class API():
         '''
         if DEBUG_COMMUNITATION:
             return Status.success({
-                feeds:[
+                "feeds":[
                     "feed1"
                 ]
             })
@@ -354,7 +354,7 @@ class API():
         '''
         if DEBUG_COMMUNITATION:
             return Status.success({
-                feeds:[
+                "feeds":[
                     "feed1"
                 ]
             })
@@ -372,7 +372,7 @@ class API():
         '''
         if DEBUG_COMMUNITATION:
             return Status.success({
-                feeds:[
+                "feeds":[
                     "feed1"
                 ]
             })
