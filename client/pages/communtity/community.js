@@ -23,8 +23,7 @@ Page({
       },
       success: function(res){
         console.log(res);
-        feeds = res.data.feeds
-
+        
       }
     })
   },

@@ -16,6 +16,19 @@ const r = function(option,api){
 	wx.request(option);
 }
 
+const check = function(){
+	if(!wx.getStorageSync('userInfo')){
+    wx.redirectTo({
+      url : '/pages/login_page/login_page',
+      complete: function(e  ){
+        console.log(e)
+      }
+    })
+    return false;
+  }
+  return true;
+}
+
 
 const login = function(){
 	var code = wx.login({
@@ -55,5 +68,6 @@ const login = function(){
 
 module.exports = {
   login: login,
-  r:r
+  r:r,
+  check:check
 }
