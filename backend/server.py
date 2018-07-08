@@ -3,44 +3,52 @@ from createTables import Tables
 from config import engine, DEBUG
 from json import dumps
 from flask import Flask, request, render_template
+import requests
 
 __all__ = ["app"]
 
 api = API(engine)
 app = Flask("debugServer")
 
-@app.route("/", methods=["GET"])
-def index():
-    return '<script>s="It works! ";for(i=0;i<11;i++) s+=s;document.write(s);</script>'
-
-@app.route("/api/", methods=["GET", "POST"])
-def queryAPIWithoutTable():
-    return "Page not found. Url format: /api/tableName"
-
-@app.route("/api/<table>", methods=["GET", "POST"])
-def queryAPI(table):
-    tableName = table[0].upper() + table[1::].lower()
-
-    if request.method == "GET":
-        getArgs = request.args.to_dict()
-        print(getArgs)
-        result = api.commonGetAPI(tableName, **getArgs)
-        return dumps(result)
-
-    elif request.method == "POST":
-        postForm = request.form.to_dict()
-        result = api.commonAddAPI(tableName, **postForm)
-        return dumps(result)
-
-@app.route("/echo", methods=["GET"])
-def echo():
-    return request.args.get("echo")
-
 @app.errorhandler(404)
 def page_not_found(_):
     return "Page not found."
 
+@app.route("/", methods=["GET"])
+def getIndex():
+    return '<script>s="It works! ";for(i=0;i<11;i++) s+=s;document.write(s);</script>'
+
+@app.route("/", methods=["POST"])
+def dealRequests():
+    form = request.form.to_dict()
+    action = form["action"]
+    return getattr(api, API.allAPI[action])(form)
+
 if DEBUG:
+    # all debug interface
+    @app.route("/api/", methods=["GET", "POST"])
+    def queryAPIWithoutTable():
+        return "Page not found. Url format: /api/tableName"
+
+    @app.route("/api/<table>", methods=["GET", "POST"])
+    def queryAPI(table):
+        tableName = table[0].upper() + table[1::].lower()
+
+        if request.method == "GET":
+            getArgs = request.args.to_dict()
+            print(getArgs)
+            result = api.commonGetAPI(tableName, **getArgs)
+            return dumps(result)
+
+        elif request.method == "POST":
+            postForm = request.form.to_dict()
+            result = api.commonAddAPI(tableName, **postForm)
+            return dumps(result)
+
+    @app.route("/echo", methods=["GET"])
+    def echo():
+        return request.args.get("echo")
+
     @app.route("/debug/", methods=["GET", "POST"])
     def debugPageWithoutTable():
         return "Page not found. Url format: /debug/tableName"
