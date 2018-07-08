@@ -21,10 +21,10 @@ apiMethod = "GET" if DEBUG else "POST"
 
 @app.route("/api", methods=[apiMethod])
 def dealRequests():
-    if DEBUG:
-        form = request.form.to_dict()
-    else:
+    if apiMethod == "GET":
         form = request.args.to_dict()
+    else:
+        form = request.form.to_dict()
     action = form["action"]
     result = getattr(api, API.allAPI[action])(form)
     return dumps(result)
