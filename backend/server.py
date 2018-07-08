@@ -1,6 +1,6 @@
 from backendAPI import API
 from createTables import Tables
-from config import engine, DEBUG
+from config import engine, DEBUG, PORT
 from json import dumps
 from flask import Flask, request, render_template
 import requests
@@ -62,4 +62,4 @@ if DEBUG:
         return render_template("debugPage.html", fields=fields, tableName=tableName)
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=24135)
+    app.run(host="0.0.0.0", port=PORT)
