@@ -9,12 +9,9 @@ Page({
    * 页面的初始数据
    */
   data: {
-<<<<<<< HEAD
-    playing_preFeedId : -1  //当前播放的feed Id
+    playing_preFeedId : -1,  //当前播放的feed Id
 
-=======
     feeds : []
->>>>>>> 8c34bf30b198fca95a01aebe38596e9f7236985d
   },
 
   /**

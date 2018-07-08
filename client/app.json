@@ -1,12 +1,8 @@
 {
   "pages": [
-<<<<<<< HEAD
     "pages/mine/mine",
     "pages/communtity/community",
-=======
->>>>>>> 8c34bf30b198fca95a01aebe38596e9f7236985d
     "pages/index_page/index_page",
-    "pages/communtity/community",
     "pages/login_page/login_page",
     "pages/index/index",
     "pages/logs/logs",
