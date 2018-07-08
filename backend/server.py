@@ -3,7 +3,6 @@ from createTables import Tables
 from config import engine, DEBUG, PORT
 from json import dumps
 from flask import Flask, request, render_template
-import requests
 
 __all__ = ["app"]
 
