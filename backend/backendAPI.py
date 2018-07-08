@@ -5,9 +5,6 @@ from createTables import createAllTable, Tables, DataFormatException
 from config import DEBUG, appID, appSecret
 import json
 import requests
-from Crypto.Cipher import AES
-import base64
-from binascii import b2a_hex, a2b_hex
 
 __all__ = ["API"]
 
@@ -40,40 +37,13 @@ class Status():
             "err": "DataFormatError: " + str(exception)
         }
 
-class Pycrypto():
-    def __init__(self, key):
-        self.mode = AES.MODE_CBC
-        self.key = (key * 16)[0:16]
-        self.cryptor = AES.new(self.key, self.mode, self.key)
-
-    #加密函数，如果text不是16的倍数【加密文本text必须为16的倍数！】，那就补足为16的倍数
+class Encrypt():
     def encrypt(self, text):
-        #这里密钥key 长度必须为16（AES-128）、24（AES-192）、或32（AES-256）Bytes 长度.目前AES-128足够用
-        print(text)
-        length = 16
-        textBytes = text.encode("utf-8")
-        count = len(textBytes)
-        add = length - (count % length)
-        textBytes = textBytes + (b'\0' * add)
-        print(textBytes)
-
-        cipherBytes = self.cryptor.encrypt(textBytes)
-        print(cipherBytes)
-        #因为AES加密时候得到的字符串不一定是ascii字符集的，输出到终端或者保存时候可能存在问题
-        #所以这里统一把加密后的字符串转化为16进制字符串
-        cipherText = base64.b64encode(cipherBytes).decode("utf-8")
-        print(cipherText)
+        cipherText = text
         return cipherText
-     
-    #解密后，去掉补足的空格用strip() 去掉
+
     def decrypt(self, cipherText):
-        print(cipherText)
-        cipherBytes = base64.b64decode(cipherText.encode("utf-8"))
-        print(cipherBytes)
-        textBytes = self.cryptor.decrypt(cipherBytes)
-        print(textBytes)
-        text = textBytes.rstrip(b'\0').decode("utf-8")
-        print(text)
+        text = cipherText
         return text
 
 class API():
@@ -83,6 +53,7 @@ class API():
         self.session = Session()
 
     allAPI = {
+        "login": "login",
         "get_index": "getIndex",
         "like_audio": "likeAudio",
         "get_comments": "getComments",
@@ -137,6 +108,24 @@ class API():
         else:
             return Status.success()
     
+    def postCallAPI(self, form):
+        if not form:
+            return Status.internalError("Missing form data")
+        try:
+            action = form["action"]
+            if action != "login":
+                encryptor = Encrypt()
+                origialText = encryptor.decrypt(form["token"])
+                tokenObject = json.loads(originalText)
+                form["openid"] = tokenObject["openid"]
+                form["sessionKey"] = tokenObject["session_key"]
+            return getattr(self, API.allAPI[action])(form)
+        except Exception as e:
+            return Status.internalError(e)
+
+
+    #############################   API   #############################
+
     def login(self, form):
         '''
         觅声_登录
@@ -193,10 +182,14 @@ class API():
             resJson = json.loads(res.text)
             openID = resJson["openid"]
             sessionKey = resJson["session_key"]
-            # Fix me
+            
+            # 加密 openid 和 session_key 获得token
+            encryptor = Encrypt()
             token = {"openid": openID, "session_key": sessionKey}
+            token = encryptor.encrypt(json.dumps(token))
+
             return Status.success({
-                "token": json.dumps(token),
+                "token": token,
                 "first_time": True
             })
         except Exception as e:
@@ -371,9 +364,10 @@ class API():
         按用户获取feeds
         {
             action: 'get_my_feed',
+            last_audio_id: ''
         }
         {
-            feed: feed{}
+            feed: [feed{}]
         }
         '''
         if DEBUG_COMMUNITATION:
@@ -423,7 +417,9 @@ class API():
 
 
 if __name__ == "__main__":
-    Py = Pycrypto("ASddsaas")
-    t = "asdfghjkl呵呵哒"
-    e = Py.encrypt(t)
-    Py.decrypt(e)
+    for f in dir(API):
+        print(getattr(API, f).__doc__)
+    # Py = Pycrypto("ASddsaas")
+    # t = "asdfghjkl呵呵哒"
+    # e = Py.encrypt(t)
+    # Py.decrypt(e)

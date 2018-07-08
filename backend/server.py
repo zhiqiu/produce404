@@ -25,8 +25,7 @@ def dealRequests():
         form = request.args.to_dict()
     else:
         form = request.form.to_dict()
-    action = form["action"]
-    result = getattr(api, API.allAPI[action])(form)
+    result = api.postCallAPI(form)
     return dumps(result)
 
 if DEBUG:
