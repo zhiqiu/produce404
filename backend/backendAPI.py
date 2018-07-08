@@ -113,7 +113,7 @@ class API():
             return Status.internalError("Missing form data")
         try:
             action = form["action"]
-            if action != "login" and not DEBUG:
+            if action != "login" and not DEBUG_COMMUNITATION:
                 encryptor = Encrypt()
                 origialText = encryptor.decrypt(form["token"])
                 tokenObject = json.loads(originalText)
