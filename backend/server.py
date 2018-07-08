@@ -8,7 +8,7 @@ import requests
 __all__ = ["app"]
 
 api = API(engine)
-app = Flask("debugServer")
+app = Flask("create404", template_folder='backend/templates')
 
 @app.errorhandler(404)
 def page_not_found(_):
@@ -18,19 +18,20 @@ def page_not_found(_):
 def getIndex():
     return '<script>s="It works! ";for(i=0;i<11;i++) s+=s;document.write(s);</script>'
 
-@app.route("/", methods=["POST"])
+@app.route("/api", methods=["POST"])
 def dealRequests():
     form = request.form.to_dict()
     action = form["action"]
-    return getattr(api, API.allAPI[action])(form)
+    result = getattr(api, API.allAPI[action])(form)
+    return dumps(result)
 
 if DEBUG:
     # all debug interface
-    @app.route("/api/", methods=["GET", "POST"])
+    @app.route("/debugapi/", methods=["GET", "POST"])
     def queryAPIWithoutTable():
         return "Page not found. Url format: /api/tableName"
 
-    @app.route("/api/<table>", methods=["GET", "POST"])
+    @app.route("/debugapi/<table>", methods=["GET", "POST"])
     def queryAPI(table):
         tableName = table[0].upper() + table[1::].lower()
 
