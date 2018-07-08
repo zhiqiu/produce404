@@ -20,15 +20,7 @@ Page({
    */
   onLoad: function (options) {
     if(!c.check()) return;
-    if(wx.getStorageSync('server_first_time')){
-      wx.setStorageSync('server_first_time',false);
-      r({
-        data:{
-          action: 'post_userinfo',
-          data: wx.getStorageSync('userInfo')
-        }
-      })
-    }
+    
     const player = wx.getBackgroundAudioManager()
     player.title = '此时此刻'
     player.epname = '此时此刻'

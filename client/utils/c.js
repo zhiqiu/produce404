@@ -12,7 +12,15 @@ const r = function(option,api){
 	option.method = 'GET';
 	option.dataType = 'json';
 	option.data.token = token;
-
+if(wx.getStorageSync('server_first_time')){
+      wx.setStorageSync('server_first_time',false);
+      r({
+        data:{
+          action: 'post_userinfo',
+          data: wx.getStorageSync('userInfo')
+        }
+      })
+    }
 	wx.request(option);
 }
 
@@ -25,6 +33,15 @@ const check = function(){
       }
     })
     return false;
+  }
+  if(wx.getStorageSync('server_first_time')){
+    wx.setStorageSync('server_first_time',false);
+    r({
+      data:{
+        action: 'post_userinfo',
+        data: wx.getStorageSync('userInfo')
+      }
+    })
   }
   return true;
 }

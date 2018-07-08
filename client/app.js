@@ -6,6 +6,6 @@ App({
     c.login();
   },
   globalData: {
-
+    checkAPI: require('/utils/api_test.js')
   }
 })

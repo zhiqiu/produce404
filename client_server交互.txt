@@ -182,7 +182,7 @@ medal:
 
 
 {
-	action: 'get_all_feed',
+	action: 'get_one_feed',
 	audio_id: ''
 }
 {
