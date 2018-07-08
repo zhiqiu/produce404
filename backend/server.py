@@ -4,6 +4,7 @@ from config import engine, DEBUG
 from json import dumps
 from flask import Flask, request, render_template
 
+__all__ = ["app"]
 
 api = API(engine)
 app = Flask("debugServer")

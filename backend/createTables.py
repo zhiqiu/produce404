@@ -132,10 +132,10 @@ class Comment(Base, Creatable):
     soundid = Column(Integer, ForeignKey("sound.id"))
     timestrap = Column(BigInteger)
     # user1 reply to user2, or user1 reply the sound (when user2 == user1)
-    user1 = Column(Integer, ForeignKey("user.uuid"))
-    user2 = Column(Integer, ForeignKey("user.uuid"))
+    useruuids = Column(Integer, ForeignKey("user.uuid"))
+    replyto = Column(Integer, ForeignKey("user.uuid"))
     
-    requiredFields = ["text", "soundid", "timestrap", "user1", "user2"]
+    requiredFields = ["text", "soundid", "timestrap", "useruuids", "replyto"]
 
     def __init__(self, **kwargs):
         commonInitClass(self, **kwargs)
