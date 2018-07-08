@@ -1,7 +1,7 @@
 <!--pages/communtity/community.wxml-->
 
 <view class="timeline">
-	<view class="info">
+	<view class="info" ontap="gotoDetail" id="detail-id">
 		<view class="holder">
 			<view class="time">
 				45"

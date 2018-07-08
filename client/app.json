@@ -14,7 +14,8 @@
     "pages/add_collection/add_collection",
     "pages/mine/sys_msg/sys_msg",
     "pages/record_test/record_test",
-    "pages/mine/my_coll/single_coll/single_coll"
+    "pages/mine/my_coll/single_coll/single_coll",
+    "pages/communtity/detail"
   ],
   "window": {
     "backgroundTextStyle": "light",
@@ -28,36 +29,23 @@
     "borderStyle": "black",
     "list": [
       {
-        "pagePath": "pages/index/index",
+        "iconPath": "image/bar-misheng.png",
+        "selectedIconPath": "image/bar-misheng-active.png",
+        "pagePath": "pages/index_page/index_page",
         "text": "觅声"
       },
       {
-        "pagePath": "pages/logs/logs",
+        "iconPath": "image/bar-faxian.png",
+        "selectedIconPath": "image/bar-faxian-active.png",
+        "pagePath": "pages/communtity/community",
         "text": "发现"
       },
       {
+        "iconPath": "image/bar-wode.png",
+        "selectedIconPath": "image/bar-wode.png",
         "pagePath": "pages/mine/mine",
         "text": "我的"
-      }],
-    "color": "#a9b7b7", 
-    "selectedColor": "#11cd6e",  
-    "borderStyle": "black" ,
-    "list": [{
-      "iconPath": "image/bar-misheng.png",
-      "selectedIconPath": "image/bar-misheng-active.png",
-      "pagePath": "pages/index_page/index_page",  
-      "text": "觅声"
-    }, {
-      "iconPath": "image/bar-faxian.png",
-      "selectedIconPath": "image/bar-faxian-active.png",
-      "pagePath": "pages/communtity/community",  
-      "text": "发现"
-    },{
-      "iconPath": "image/bar-wode.png",
-      "selectedIconPath": "image/bar-wode.png",
-      "pagePath": "pages/mine/mine",  
-      "text": "我的"
-    }
+      }
     ]
   }
 }
