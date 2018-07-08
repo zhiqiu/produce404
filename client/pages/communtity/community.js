@@ -6,7 +6,8 @@ Page({
    * 页面的初始数据
    */
   data: {
-  
+    playing_preFeedId : -1  //当前播放的feed Id
+
   },
 
   /**
@@ -64,7 +65,9 @@ Page({
   onShareAppMessage: function () {
   
   },
+  
   gotoDetail: function(e){
+    console.log(e)
     var dID = e.currentTarget.id;
     wx.navigateTo({
       url: '/pages/communtity/detail?dID='+dID
