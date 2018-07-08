@@ -1,0 +1,224 @@
+server：
+
+全部post：
+openid token
+
+audio对象：
+/audio
+
+{
+	audio_id: ''
+}
+
+{
+	id: '',
+	name: '',
+	url: '',
+	img: '',
+	intro: '',
+	like_num: '',
+	comment_num: '',
+	isliked: '',
+	iscollected: '',
+	location: ''
+}
+
+comment对象:
+/comment
+
+{
+	comment_id: '',
+}
+
+{
+	user: user{},
+	text: ,
+	date: ,//时间戳
+	like_num: ,
+	isliked: ,
+	replyto: user{},
+}
+
+user对象:
+/user
+
+{
+	user_id: ''
+}
+
+{
+	user_id: '',
+	name:'',
+	age: '',
+	gender: '',
+	address: '',
+	birthday: ''
+}
+
+feed对象:
+
+feed:
+{
+	user: user{},
+	audio: audio{},
+	tags: [tag{}],
+}
+
+tag:
+{
+	audio_id: '',
+	text: ''
+}
+
+
+medal:
+{
+	name: '',
+	img_url: '',
+	text: '',
+	achieved: ''
+
+}
+
+*****************************
+
+/api
+
+觅声：
+{
+	action: 'get_index',
+	listentype: 'diff'/'like',
+	channel: 'unset'/'channel_name',
+}
+
+{
+	err: 'ok',
+	audio: audio{},
+	audio_next: audio{}
+}
+
+// 上一首自己记
+
+
+点赞：
+{
+	action: 'like_audio',
+	audio_id: ''
+}
+
+{
+	err: 'ok'
+}
+
+
+觅声_评论
+
+{
+	action: 'get_comments',
+	audio_id: ''
+}
+
+{
+	comments:[
+		comment{},
+		comment{},...
+	]
+}
+
+觅声_发表评论
+{
+	action: 'post_comment',
+	audio_id: '',
+	text:''
+}
+
+{
+	err:'ok'
+}
+
+觅声_收藏
+{
+	action: 'get_collection_set_name'
+}
+
+{
+	collection_set: [
+		{
+			collection_id: '',
+			collection_name: ''
+		}
+	]
+}
+
+{
+	action: 'add_collection_set',
+	collection_name : ''
+}
+{
+	err: 'ok'
+}
+
+{
+	action: 'add_collection',
+	audio_id: '',
+	collection_id: ''
+}
+{
+	err: 'ok'
+}
+
+
+
+{
+	action: 'get_explore',
+	last_audio_id: '',
+}
+{
+	feeds: [
+		feed{},
+		feed{}
+	]// 10条
+}
+
+
+{
+	action: 'get_all_feed',
+	audio_id: ''
+}
+{
+	err: 'ok',
+	feed: feed{}	
+}
+
+{
+	action: 'post_audio',
+	feed{}
+}
+{
+	err: 'ok'
+}
+
+{
+	action: 'get_my_feed',
+	audio_id: ''
+}
+{
+	err: 'ok',
+	feed: feed{}	
+}
+
+{
+	action: 'get_medal',
+}
+{
+	err:'ok',
+	medals: [
+		medal{
+
+		},
+		medal{
+
+		}
+	]
+}
+

@@ -6,6 +6,7 @@
 			<view class="time">
 				45"
 			</view>
+      <!--当点击的是当前正在播放的feed，-->
 			<view	class="audio">
 				<image src="/image/icon-sound.svg" class="audio-icon"></image>
 			</view>

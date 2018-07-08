@@ -1,5 +1,7 @@
 /*声觅主页面*/
 // pages/index_page/index_page.js
+const c = require('../../utils/c.js');
+const r = c.r;
 Page({
 
   /**
@@ -17,6 +19,16 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
+    if(!c.check()) return;
+    if(wx.getStorageSync('server_first_time')){
+      wx.setStorageSync('server_first_time',false);
+      r({
+        data:{
+          action: 'post_userinfo',
+          data: wx.getStorageSync('userInfo')
+        }
+      })
+    }
     const player = wx.getBackgroundAudioManager()
     player.title = '此时此刻'
     player.epname = '此时此刻'

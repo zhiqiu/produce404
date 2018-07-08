@@ -1,11 +1,12 @@
 {
   "pages": [
+    "pages/mine/mine",
     "pages/communtity/community",
     "pages/index_page/index_page",
+    "pages/login_page/login_page",
     "pages/index/index",
     "pages/logs/logs",
     "pages/record/record",
-    "pages/mine/mine",
     "pages/mine/my_msg/my_msg",
     "pages/mine/my_agreement/my_agreement",
     "pages/mine/my_coll/my_coll",

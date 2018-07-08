@@ -1,33 +1,18 @@
-/*发现页面*/
-// pages/communtity/community.js
-
-const c = require('../../utils/c.js')
-const r = c.r;
+// pages/login_page/login_page.js
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-    playing_preFeedId : -1,  //当前播放的feed Id
-
-    feeds : []
+  
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    r({
-      data:{
-        action: 'get_explore',
-        last_audio_id: ''
-      },
-      success: function(res){
-        console.log(res);
-        
-      }
-    })
+  
   },
 
   /**
@@ -78,12 +63,14 @@ Page({
   onShareAppMessage: function () {
   
   },
-  
-  gotoDetail: function(e){
-    console.log(e)
-    var dID = e.currentTarget.id;
-    wx.navigateTo({
-      url: '/pages/communtity/detail?dID='+dID
-    })
+  clickLogin: function(res){
+    if(res.detail.userInfo){
+      wx.setStorageSync('userInfo',res.detail.userInfo)
+      wx.switchTab({
+        url: '/pages/index_page/index_page'
+      })
+    }else{
+      // 请去设置打开权限
+    }
   }
 })
