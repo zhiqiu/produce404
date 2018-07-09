@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, Integer, CHAR, BigInteger, Date, TIMESTAMP, ForeignKey
+from sqlalchemy import Column, String, Integer, Date, TIMESTAMP, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
 from datetime import date, datetime
 import re
@@ -29,7 +29,11 @@ class Creatable():
     def toDict(self):
         returnDict = {}
         for fr in self.outputFields:
-            returnDict[fr] = getattr(self, fr).__str__()
+            data = getattr(self, fr)
+            if data.__class__.__name__ in ["date", "datetime"]:
+                returnDict[fr] = str(data)
+            else:
+                returnDict[fr] = data
         return returnDict
 
 
@@ -53,7 +57,7 @@ class User(Base, Creatable):
     openid = Column(String(28), primary_key=True)
     name = Column(String)
     age = Column(Integer)
-    gender = Column(CHAR(1), default="U")  # M: male, F: female, U: unset
+    gender = Column(String(1), default="U")  # M: male, F: female, U: unset
     address = Column(String)
     birthday = Column(Date)
     create_time = Column(TIMESTAMP)
@@ -66,12 +70,12 @@ class User(Base, Creatable):
         try:
             self.age = int(self.age)
         except:
-            raise DataFormatException("Age must be an integer.")
+            raise DataFormatException("age must be an integer.")
         if self.gender not in ["M", "F", "U"]:
-            raise DataFormatException("Gender must be one of M/F/U for Male/Female/Unset")
+            raise DataFormatException("gender must be one of M/F/U for Male/Female/Unset")
         m = dateRexp.match(self.birthday)
         if not m:
-            raise DataFormatException("Date format error.")
+            raise DataFormatException("birthday format error: YYYY-MM-DD")
         year = int(m.group(1))
         month = int(m.group(2))
         day = int(m.group(3))
@@ -128,7 +132,7 @@ class Medal(Base, Creatable):
         try:
             self.condition = int(self.condition)
         except:
-            raise DataFormatException("Condition must be an integer.")
+            raise DataFormatException("condition must be an integer.")
 
 
 class Comment(Base, Creatable):
@@ -136,10 +140,10 @@ class Comment(Base, Creatable):
 
     comment_id = Column(Integer, primary_key=True, autoincrement=True)
     text = Column(String)
-    audio_id = Column(Integer, ForeignKey("audio.audio_id"))
+    audio_id = Column(ForeignKey("audio.audio_id"))
     # user1 reply to user2, or user1 reply the sound (when user2 == user1)
-    user_openid = Column(Integer, ForeignKey("user.openid"))
-    replyto = Column(Integer, ForeignKey("user.openid"))
+    user_openid = Column(ForeignKey("user.openid"))
+    replyto = Column(ForeignKey("user.openid"))
     create_time = Column(TIMESTAMP)
 
     requiredFields = ["text", "audio_id", "user_openid", "replyto"]
@@ -167,8 +171,8 @@ class Forward(Base, Creatable):
     __tablename__ = "forward"
 
     forward_id = Column(Integer, primary_key=True, autoincrement=True)
-    user_openid = Column(Integer, ForeignKey("user.openid"))
-    audio_id = Column(Integer, ForeignKey("audio.audio_id"))
+    user_openid = Column(ForeignKey("user.openid"))
+    audio_id = Column(ForeignKey("audio.audio_id"))
     destination = Column(String)
     create_time = Column(TIMESTAMP)
 
@@ -177,10 +181,6 @@ class Forward(Base, Creatable):
 
     def __init__(self, **kwargs):
         commonInitClass(self, **kwargs)
-        try:
-            self.timestrap = int(self.timestrap)
-        except:
-            raise DataFormatException("Timestrap must be an integer.")
 
 # relationship tables:
 
@@ -188,8 +188,8 @@ class R_User_Create_Audio(Base, Creatable):
     __tablename__ = "r_user_create_audio"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    user_openid = Column(Integer, ForeignKey("user.openid"))
-    audio_id = Column(Integer, ForeignKey("audio.audio_id"))
+    user_openid = Column(ForeignKey("user.openid"))
+    audio_id = Column(ForeignKey("audio.audio_id"))
     create_time = Column(TIMESTAMP)
 
     requiredFields = ["user_openid", "audio_id"]
@@ -197,13 +197,17 @@ class R_User_Create_Audio(Base, Creatable):
 
     def __init__(self, **kwargs):
         commonInitClass(self, **kwargs)
+        try:
+            self.audio_id = int(self.audio_id)
+        except:
+            raise DataFormatException("audio_id must be an integer.")
 
 class R_Audio_Has_AudioTag(Base, Creatable):
     __tablename__ = "r_audio_has_audiotag"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    audio_id = Column(Integer, ForeignKey("audio.audio_id"))
-    audiotag_id = Column(Integer, ForeignKey("audiotag.audiotag_id"))
+    audio_id = Column(ForeignKey("audio.audio_id"))
+    audiotag_id = Column(ForeignKey("audiotag.audiotag_id"))
     create_time = Column(TIMESTAMP)
 
     requiredFields = ["audio_id", "audiotag_id"]
@@ -211,13 +215,21 @@ class R_Audio_Has_AudioTag(Base, Creatable):
 
     def __init__(self, **kwargs):
         commonInitClass(self, **kwargs)
+        try:
+            self.audio_id = int(self.audio_id)
+        except:
+            raise DataFormatException("audio_id must be an integer.")
+        try:
+            self.audiotag_id = int(self.audiotag_id)
+        except:
+            raise DataFormatException("audiotag_id must be an integer.")
 
 class R_User_Has_Medal(Base, Creatable):
     __tablename__ = "r_user_has_medal"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    user_openid = Column(Integer, ForeignKey("user.openid"))
-    medal_id = (Integer, ForeignKey("medal.medal_id"))
+    user_openid = Column(ForeignKey("user.openid"))
+    medal_id = Column(ForeignKey("medal.medal_id"))
     create_time = Column(TIMESTAMP)
 
     requiredFields = ["user_openid", "medal_id"]
@@ -225,14 +237,18 @@ class R_User_Has_Medal(Base, Creatable):
 
     def __init__(self, **kwargs):
         commonInitClass(self, **kwargs)
+        try:
+            self.medal_id = int(self.medal_id)
+        except:
+            raise DataFormatException("medal_id must be an integer.")
 
 class R_User1_Follow_User2(Base, Creatable):
     __tablename__ = "r_user1_follow_user2"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     # user1 follows user2
-    user1 = Column(Integer, ForeignKey("user.openid"))
-    user2 = Column(Integer, ForeignKey("user.openid"))
+    user1 = Column(ForeignKey("user.openid"))
+    user2 = Column(ForeignKey("user.openid"))
     create_time = Column(TIMESTAMP)
 
     requiredFields = ["user1", "user2"]
@@ -245,8 +261,8 @@ class R_Audio_In_Collection(Base, Creatable):
     __tablename__ = "r_audio_in_collection"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    audio_id = Column(Integer, ForeignKey("audio.audio_id"))
-    collection_id = Column(Integer, ForeignKey("collection.collection_id"))
+    audio_id = Column(ForeignKey("audio.audio_id"))
+    collection_id = Column(ForeignKey("collection.collection_id"))
     create_time = Column(TIMESTAMP)
 
     requiredFields = ["audio_id", "collection_id"]
@@ -254,13 +270,21 @@ class R_Audio_In_Collection(Base, Creatable):
 
     def __init__(self, **kwargs):
         commonInitClass(self, **kwargs)
+        try:
+            self.audio_id = int(self.audio_id)
+        except:
+            raise DataFormatException("audio_id must be an integer.")
+        try:
+            self.collection_id = int(self.collection_id)
+        except:
+            raise DataFormatException("collection_id must be an integer.")
 
 class R_User_Interested_AudioTag(Base, Creatable):
     __tablename__ = "r_user_interested_audiotag"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    user_openid = Column(Integer, ForeignKey("user.openid"))
-    audio_id = Column(Integer, ForeignKey("audio.audio_id"))
+    user_openid = Column(ForeignKey("user.openid"))
+    audio_id = Column(ForeignKey("audio.audio_id"))
     create_time = Column(TIMESTAMP)
 
     requiredFields = ["user_openid", "audio_id"]
@@ -268,6 +292,10 @@ class R_User_Interested_AudioTag(Base, Creatable):
 
     def __init__(self, **kwargs):
         commonInitClass(self, **kwargs)
+        try:
+            self.audio_id = int(self.audio_id)
+        except:
+            raise DataFormatException("audio_id must be an integer.")
 
 Tables = {
     "user": User,
