@@ -1,48 +1,42 @@
 <!--pages/index_page/index_page.wxml-->
 
-<view class="headbar flex-wrp" style="flex-direction:row;">
-	<view class="btn-1 flex-item">
-		<button wx:if="{{!listenDiff}}" ontap="listenDiffToggle">听见不同</button>
-		<button wx:if="{{listenDiff}}" ontap="listenDiffToggle">回归我的喜好</button>
+<view class="headbar">
+	<view class="btn-1">
+		<view wx:if="{{!listenDiff}}" class="btn"  ontap="listenDiffToggle">听见不同</view>
+		<view wx:if="{{listenDiff}}" class="btn" ontap="listenDiffToggle">我的喜好</view>
 	</view>
-	<view class="btn-2 flex-item">
-		<button disabled="disabled">沉浸模式</button>
+	<view class="btn-2 ">
+		<view class="btn" >频道</view>
 	</view>
 </view>
 
 <view class="player">
-	<image src="{{audioImgSrc}}"></image>
+	<image class="img" src="https://enj0.com/img-player.png" mode="aspectFill" ontap="playorpause"></image>
 	<view class="text">
-		<text>{{audioName}}</text>
+		<view>{{audioName}}</view>
+		<view>audio info 哈哈哈哈哈哈</view>
 	</view>
-	<button ontap="playorpause">播放/暂停</button>
 	<progress percent="{{audioProgress}}"></progress>
 </view>
 
 <view class="control">
-	<view class="btn-1">
-		<button wx:if="{{!currentLike}}" ontap="like">点赞</button>
-		<button wx:if="{{currentLike}}" ontap="dislike">点赞(变了颜色的)</button>
-	</view>
-	<view class="btn-2">
-		<button ontap="gotoComments">评论</button>
-	</view>
-	<view class="btn-3">
-		<button ontap="gotoCollect">收藏</button>
-	</view>
-	<view class="btn-4">
-		<button open-type="share">分享</button>
+	<view class="btns">
+		<view class="btn-group">
+			<image src="/image/icon-like.svg" class="icon-md btn-up">btns</image>
+			<view class="btn-num"> 10</view>
+		</view>
+		<view class="btn-group">
+			<image src="/image/icon-comments.svg" class="icon-md btn-up">btns</image>
+			<view class="btn-num"> 23</view>
+		</view>
+		<view class="btn-group">
+			<image src="/image/icon-collect.svg" class="icon-md btn-up">btns</image>
+			<!-- <view class="btn-num"> 10</view> -->
+		</view>
+		<view class="btn-group">
+			<image src="/image/icon-share.svg" class="icon-md btn-up">btns</image>
+			<!-- <view class="btn-num"> 10</view> -->
+		</view>
 	</view>
 </view>
 
-<view class="footbar">
-	<view class="btn-3">
-		<button>听</button>
-	</view>
-	<view class="btn-4">
-		<button>鉴</button>
-	</view>
-	<view class="btn-5">
-		<button>你</button>
-	</view>
-</view>

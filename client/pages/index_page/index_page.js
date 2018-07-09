@@ -26,7 +26,7 @@ Page({
     player.epname = '此时此刻'
     player.singer = '许巍'
     player.coverImgUrl = 'http://y.gtimg.cn/music/photo_new/T002R300x300M000003rsKF44GyaSk.jpg?max_age=2592000'
-    player.src = 'http://ws.stream.qqmusic.qq.com/M500001VfvsJ21xFqb.mp3?guid=ffffffff82def4af4b12b3cd9337d5e7&uin=346897220&vkey=6292F51E1E384E061FF02C31F716658E5C81F5594D561F2E88B854E81CAAB7806D5E4F103E55D33C16F3FAC506D1AB172DE8600B37E43FAD&fromtag=46' // 设置了 src 之后会自动播放
+    player.src = 'http://create404-cos-1253746840.file.myqcloud.com/audio/%E4%BA%A4%E9%80%9A%E5%B7%A5%E5%85%B7/%E6%91%A9%E6%89%98%E8%BD%A6%E5%90%AF%E5%8A%A8%E6%97%B6%E7%9A%84%E5%A3%B0%E9%9F%B3.mp3?sign=7dtVHxEoh8Nx8QQo6agxIWy4rjxhPTEyNTM3NDY4NDAmaz1BS0lEaEhmclN3dktFd1NuejFBVnhKWmlmUXpTbXRwWXBxaVAmZT0xNTMzNzI3Nzc1JnQ9MTUzMTEzNTc3NSZyPTExMzc0NDg2MCZmPS9hdWRpby8lRTQlQkElQTQlRTklODAlOUElRTUlQjclQTUlRTUlODUlQjcvJUU2JTkxJUE5JUU2JTg5JTk4JUU4JUJEJUE2JUU1JTkwJUFGJUU1JThBJUE4JUU2JTk3JUI2JUU3JTlBJTg0JUU1JUEzJUIwJUU5JTlGJUIzLm1wMyZiPWNyZWF0ZTQwNC1jb3M=' // 设置了 src 之后会自动播放
     let page = this;
     player.onTimeUpdate(function(){
       page.setData({
@@ -82,8 +82,8 @@ Page({
    */
   onShareAppMessage: function (options) {
     return {
-      title: '【分享标题】',
-      path: '/contentpath',
+      title: '声觅',
+      path: '/pages/login_page/login_page',
       // imageUrl
     }
   },

@@ -1,4 +1,6 @@
-<!--pages/login_page/login_page.wxml-->
-<text>pages/login_page/login_page.wxml</text>
 
-<button open-type="getUserInfo" bindgetuserinfo="clickLogin">Login!</button>
+<view	class="wholepage">
+<image class="img" src="https://enj0.com/img-login.png" mode="aspectFill"></image>
+<button open-type="getUserInfo" bindgetuserinfo="clickLogin" class="btn">欢迎加入</button>
+
+</view>

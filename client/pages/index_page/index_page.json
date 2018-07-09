@@ -1,1 +1,5 @@
-{}
+{
+	"navigationBarTitleText":"声觅",
+	"backgroundColor": "#ffdd40",
+	"disableScroll": true
+}
