@@ -118,7 +118,16 @@ const test = function(){
 		}
 	})
 	
-
+  r({
+    data:{
+      action: 'get_user_info',
+      last_audio_id: ''
+    },
+    succcess: function(res){
+      log("get_usr_info")
+      log(res)
+    }
+  })
 
 }
 
