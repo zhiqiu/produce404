@@ -65,6 +65,7 @@ testAudio = {
 
 testComment = {
     "comment_id": "1",
+    "audio_id": "2",
     "user": testUser,
 	"text": "我要评论",
 	"date": "date format",
@@ -96,6 +97,12 @@ testFeed = {
     "iscollected": True
 }
 
+testCollection = {
+    "collection_id": "4",
+    "name": "收藏夹",
+    "creator_openid": '1'
+}
+
 class API():
     def __init__(self, engine):
         base = createAllTable(engine)
@@ -108,9 +115,9 @@ class API():
         "like_audio": "likeAudio",
         "get_comments": "getComments",
         "post_comment": "postComment",
-        "get_collection_set_name": "getCollectionSetName",
-        "add_collection_set": "addCollectionSet",
+        "get_collection": "getCollections",
         "add_collection": "addCollection",
+        "add_into_collection": "addIntoCollection",
         "get_explore": "getExplore",
         "get_one_feed": "getOneFeed",
         "get_my_feed": "getMyFeeds",
@@ -262,8 +269,8 @@ class API():
 
         if DEBUG_COMMUNITATION:
             return Status.success({
-                "audio": "audio",
-                "audio_next": "audio_next"
+                "audio": testAudio,
+                "audio_next": testAudio
             })
 
     
@@ -299,8 +306,10 @@ class API():
         if DEBUG_COMMUNITATION:
             return Status.success({
                 "comments": [
-                    "comment1",
-                    "comment2"
+                    testComment,
+                    testComment,
+                    testComment,
+                    testComment,
                 ]
             })
     
@@ -310,6 +319,7 @@ class API():
         {
             action: 'post_comment',
             audio_id: '',
+            reply_to_user_openid: '',
             text:''
         }
         {
@@ -319,29 +329,29 @@ class API():
         if DEBUG_COMMUNITATION:
             return Status.success()
     
-    def getCollectionSetName(self, form):
+    def getCollections(self, form):
         '''
         觅声_收藏_显示所有收藏夹
         {
-            action: 'get_collection_set_name'
+            action: 'get_collections'
         }
         {
-            collection_set: [
-                {
-                    collection_id: '',
-                    collection_name: ''
-                }
+            collections: [
+                collection{},
+                collection{},
             ]
         }
         '''
         if DEBUG_COMMUNITATION:
             return Status.success({
-                "collection_set": [
-                    "collection1"
+                "collections": [
+                    testCollection,
+                    testCollection,
+                    testCollection,
                 ]
             })
 
-    def addCollectionSet(self, form):
+    def addCollection(self, form):
         '''
         觅声_收藏_增加收藏夹
         {
@@ -355,11 +365,11 @@ class API():
         if DEBUG_COMMUNITATION:
             return Status.success()
 
-    def addCollection(self, form):
+    def addIntoCollection(self, form):
         '''
         觅声_收藏_增加收藏
         {
-            action: 'add_collection',
+            action: 'add_into_collection',
             audio_id: '',
             collection_id: ''
         }
@@ -387,7 +397,9 @@ class API():
         if DEBUG_COMMUNITATION:
             return Status.success({
                 "feeds":[
-                    "feed1"
+                    testFeed,
+                    testFeed,
+                    testFeed,
                 ]
             })
 
@@ -404,9 +416,7 @@ class API():
         '''
         if DEBUG_COMMUNITATION:
             return Status.success({
-                "feeds":[
-                    "feed1"
-                ]
+                "feed": testFeed
             })
     
     def getMyFeeds(self,form):
@@ -417,13 +427,15 @@ class API():
             last_audio_id: ''
         }
         {
-            feed: [feed{}]
+            feeds: [
+                feed{}
+            ]
         }
         '''
         if DEBUG_COMMUNITATION:
             return Status.success({
                 "feeds":[
-                    "feed1"
+                    testFeed
                 ]
             })
 
@@ -432,7 +444,8 @@ class API():
         上传一个音频
         {
             action: 'post_audio',
-            feed{}
+            audio: audio{},
+            tags: [tag{}...]
         }
         {
             err: 'ok'
@@ -457,6 +470,9 @@ class API():
         if DEBUG_COMMUNITATION:
             return Status.success({
                 "medals": [
-                    "medal"
+                    testMedal,
+                    testMedal,
+                    testMedal,
+                    testMedal,
                 ]
             })

@@ -28,6 +28,7 @@ comment对象:
 
 {
     comment_id: '',
+    audio_id: '',
 	user: user{},
 	text: ,
 	date: ,//时间戳
@@ -88,7 +89,17 @@ medal对象:
 	img_url: '',
 	text: '',
 	achieved: ''
+}
 
+收藏夹对象:
+/debugapi/Collection
+{
+    collection_id: ''
+}
+{
+    collection_id: '',
+    name: ''
+    creator_openid: ''
 }
 
 *****************************
@@ -145,6 +156,7 @@ medal对象:
 {
 	action: 'post_comment',
 	audio_id: '',
+    reply_to_user_openid: '',//置为空字符串表示直接回复某个feed
 	text:''
 }
 {
@@ -153,20 +165,18 @@ medal对象:
 
 觅声_收藏_显示所有收藏夹
 {
-	action: 'get_collection_set_name'
+	action: 'get_collections'
 }
 {
-	collection_set: [
-		{
-			collection_id: '',
-			collection_name: ''
-		}
+	collections: [
+        collection{},
+        collection{},
 	]
 }
 
 觅声_收藏_增加收藏夹
 {
-	action: 'add_collection_set',
+	action: 'add_collection',
 	collection_name : ''
 }
 {
@@ -175,7 +185,7 @@ medal对象:
 
 觅声_收藏_增加收藏
 {
-	action: 'add_collection',
+	action: 'add_into_collection',
 	audio_id: '',
 	collection_id: ''
 }
@@ -207,7 +217,8 @@ medal对象:
 上传一个音频
 {
 	action: 'post_audio',
-	feed{}
+	audio: audio{},
+    tags: [tag{}...]
 }
 {
 	err: 'ok'
@@ -219,7 +230,9 @@ medal对象:
 	audio_id: ''
 }
 {
-	feed: feed{}	
+	feeds: [
+        feed{}	
+    ]
 }
 
 获取用户的徽章

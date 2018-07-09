@@ -32,11 +32,11 @@ if DEBUG:
     # all debug interface
     @app.route("/debugapi/", methods=["GET", "POST"])
     def queryAPIWithoutTable():
-        return "Page not found. Url format: /debugapi/tableName"
+        return "Page not found. Url format: /debugapi/tablename"
 
-    @app.route("/debugapi/<tableName>", methods=["GET", "POST"])
-    def queryAPI(tableName):
-
+    @app.route("/debugapi/<table>", methods=["GET", "POST"])
+    def queryAPI(table):
+        tableName = table.lower()
         if request.method == "GET":
             getArgs = request.args.to_dict()
             print(getArgs)
@@ -54,10 +54,11 @@ if DEBUG:
 
     @app.route("/debug/", methods=["GET", "POST"])
     def debugPageWithoutTable():
-        return "Page not found. Url format: /debug/tableName"
+        return "Page not found. Url format: /debug/tablename"
 
-    @app.route("/debug/<tableName>")
-    def debugPage(tableName):
+    @app.route("/debug/<table>")
+    def debugPage(table):
+        tableName = table.lower()
         if tableName not in Tables:
             return "Table %s not found." % tableName
         fields = Tables[tableName].requiredFields

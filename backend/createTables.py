@@ -27,6 +27,7 @@ class Creatable():
         return json.dumps(self.toDict())
     
     def toDict(self):
+        returnDict = {}
         for fr in self.outputFields:
             returnDict[fr] = getattr(self, fr).__str__()
         return returnDict
@@ -114,7 +115,7 @@ class Medal(Base, Creatable):
     __tablename__ = "medal"
 
     medal_id = Column(Integer, primary_key=True, autoincrement=True)
-    name = Column(String(10))
+    name = Column(String)
     img_url = Column(String)  # oss url
     condition = Column(Integer)
     create_time = Column(TIMESTAMP)
@@ -148,6 +149,20 @@ class Comment(Base, Creatable):
         commonInitClass(self, **kwargs)
 
 
+class Connection(Base, Creatable):
+    __tablename__ = "collection"
+
+    collection_id = Column(Integer, primary_key=True, autoincrement=True)
+    name = Column(String)
+    creator_openid = Column(String(28))
+    create_time = Column(TIMESTAMP)
+
+    requiredFields = ["name", "creator_openid"]
+    outputFields = ["collection_set_id"] + requiredFields + ["create_time"]
+
+    def __init__(self, **kwargs):
+        commonInitClass(self, **kwargs)
+
 class Forward(Base, Creatable):
     __tablename__ = "forward"
 
@@ -169,8 +184,8 @@ class Forward(Base, Creatable):
 
 # relationship tables:
 
-class R_User_Audio(Base, Creatable):
-    __tablename__ = "r_user_audio"
+class R_User_Create_Audio(Base, Creatable):
+    __tablename__ = "r_user_create_audio"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     user_openid = Column(Integer, ForeignKey("user.openid"))
@@ -183,8 +198,8 @@ class R_User_Audio(Base, Creatable):
     def __init__(self, **kwargs):
         commonInitClass(self, **kwargs)
 
-class R_Audio_AudioTag(Base, Creatable):
-    __tablename__ = "r_audio_audiotag"
+class R_Audio_Has_AudioTag(Base, Creatable):
+    __tablename__ = "r_audio_has_audiotag"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     audio_id = Column(Integer, ForeignKey("audio.audio_id"))
@@ -197,8 +212,8 @@ class R_Audio_AudioTag(Base, Creatable):
     def __init__(self, **kwargs):
         commonInitClass(self, **kwargs)
 
-class R_User_Medal(Base, Creatable):
-    __tablename__ = "r_user_medal"
+class R_User_Has_Medal(Base, Creatable):
+    __tablename__ = "r_user_has_medal"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     user_openid = Column(Integer, ForeignKey("user.openid"))
@@ -211,8 +226,8 @@ class R_User_Medal(Base, Creatable):
     def __init__(self, **kwargs):
         commonInitClass(self, **kwargs)
 
-class R_Follow(Base, Creatable):
-    __tablename__ = "r_follow"
+class R_User1_Follow_User2(Base, Creatable):
+    __tablename__ = "r_user1_follow_user2"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     # user1 follows user2
@@ -226,22 +241,22 @@ class R_Follow(Base, Creatable):
     def __init__(self, **kwargs):
         commonInitClass(self, **kwargs)
 
-class R_Favorite_Audio(Base, Creatable):
-    __tablename__ = "r_favorite_audio"
+class R_Audio_In_Collection(Base, Creatable):
+    __tablename__ = "r_audio_in_collection"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    user_openid = Column(Integer, ForeignKey("user.openid"))
     audio_id = Column(Integer, ForeignKey("audio.audio_id"))
+    collection_id = Column(Integer, ForeignKey("collection.collection_id"))
     create_time = Column(TIMESTAMP)
 
-    requiredFields = ["user_openid", "audio_id"]
+    requiredFields = ["audio_id", "collection_id"]
     outputFields = requiredFields + ["create_time"]
 
     def __init__(self, **kwargs):
         commonInitClass(self, **kwargs)
 
-class R_Interested_AudioTag(Base, Creatable):
-    __tablename__ = "r_interested_audiotag"
+class R_User_Interested_AudioTag(Base, Creatable):
+    __tablename__ = "r_user_interested_audiotag"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     user_openid = Column(Integer, ForeignKey("user.openid"))
@@ -255,16 +270,17 @@ class R_Interested_AudioTag(Base, Creatable):
         commonInitClass(self, **kwargs)
 
 Tables = {
-    "User": User,
-    "Audio": Audio,
-    "AudioTag": AudioTag,
-    "Medal": Medal,
-    "Comment": Comment,
-    "Forward": Forward,
-    "R_User_Audio": R_User_Audio,
-    "R_Audio_AudioTag": R_Audio_AudioTag,
-    "R_User_Medal": R_User_Medal,
-    "R_Follow": R_Follow,
-    "R_Favorite_Audio": R_Favorite_Audio,
-    "R_Interested_AudioTag": R_Interested_AudioTag,
+    "user": User,
+    "audio": Audio,
+    "audiotag": AudioTag,
+    "medal": Medal,
+    "comment": Comment,
+    "collection": Connection,
+    "forward": Forward,
+    "r_user_create_audio": R_User_Create_Audio,
+    "r_audio_has_audiotag": R_Audio_Has_AudioTag,
+    "r_user_has_medal": R_User_Has_Medal,
+    "r_user1_follow_user2": R_User1_Follow_User2,
+    "r_audio_in_collection": R_Audio_In_Collection,
+    "r_user_interested_audiotag": R_User_Interested_AudioTag,
 }

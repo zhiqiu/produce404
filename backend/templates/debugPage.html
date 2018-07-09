@@ -45,6 +45,7 @@
                 display: block;
                 font-size: inherit;
                 font-family: inherit;
+                cursor: pointer;
             }
             #display{
                 width: 100%;
@@ -71,7 +72,7 @@
                 }
                 $.ajax({
                     method: "post",
-                    url: "/api/" + "{{ tableName }}".toLowerCase(),
+                    url: "/debugapi/{{ tableName }}",
                     data: postData,
                     dataType: "json",
                     success: function(data) {
