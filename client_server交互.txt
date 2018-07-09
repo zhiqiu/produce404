@@ -123,8 +123,8 @@ medal对象:
 	channel: 'unset'/'channel_name',
 }
 {
-	audio: audio{},
-	audio_next: audio{}
+	feed: feed{},
+	feed_next: feed{}
 }
 // 上一首由前端记录
 

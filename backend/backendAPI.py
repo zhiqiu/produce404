@@ -1,115 +1,29 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
-from createTables import createAllTable, Tables, DataFormatException
+from sqlalchemy.sql.expression import func
+from createTables import createAllTable, tables
 from config import DEBUG, DEBUG_COMMUNITATION, appID, appSecret
-import json
-import requests
+from utils import DataFormatException, Status, Encrypt
+from testbench import *
+import json, requests
 
 __all__ = ["API"]
 
-class Status():
-    def success(resp=None):
-        if resp:
-            return {
-                "err": "ok",
-                "resp": resp
-            }
-        else:
-            return {
-                "err": "ok"
-            }
-    
-    def notFound():
-        return {
-            "err": "not found"
-        }
-    
-    def internalError(exception):
-        return {
-            "err": str(exception) if DEBUG else "internal error occured."
-        }
-    
-    def dataFormatError(exception):
-        return {
-            "err": "DataFormatError: " + str(exception)
-        }
-
-class Encrypt():
-    def encrypt(self, text):
-        cipherText = text
-        return cipherText
-
-    def decrypt(self, cipherText):
-        text = cipherText
-        return text
-
-testUser = {
-    "openid": "o6_bmjrPTlm6_2sgVt7hMZOPfL2M",
-    "name": "user name",
-    "age": "18",
-    "gender": "F",
-    "address": "你心里",
-    "birthday": "2000-05-20",
-    "create_time": "2018-07-09 05:36:33.294922"
-}
-
-testAudio = {
-    "audio_id": "1",
-    "url": "http://audio.com",
-    "img": "http://audio.com",
-    "intro": "for test",
-    "location": "广东 深圳",
-    "create_time": "2018-07-09 05:36:33.294922"
-}
-
-testComment = {
-    "comment_id": "1",
-    "audio_id": "2",
-    "user": testUser,
-	"text": "我要评论",
-	"date": "date format",
-	"like_num": 100,
-	"isliked": True,
-	"replyto": testUser,
-}
-
-testTag = {
-    "audiotag_id": "2",
-    "text": "心情"
-}
-
-testMedal = {
-    "medai_id": "3",
-	"name": "10万点赞徽章",
-	"img_url": "http://image.com",
-	"text": "10万点赞徽章",
-	"achieved": True
-}
-
-testFeed = {
-    "user": testUser,
-    "audio": testAudio,
-    "tags": [testTag] * 10,
-    "like_num": 1000,
-    "comment_num": 233,
-    "isliked": True,
-    "iscollected": True
-}
-
-testCollection = {
-    "collection_id": "4",
-    "name": "收藏夹",
-    "creator_openid": '1'
-}
-
 class API():
     def __init__(self, engine):
+        self.dbName = engine.name
         base = createAllTable(engine)
         Session = sessionmaker(bind=engine)
         self.session = Session()
+        if DEBUG:
+            try:
+                makeTestDatabase(self.session)
+            except Exception as e:
+                self.session.rollback()
+                print(e)
 
-    allAPI = {
+    action2API = {
         "login": "login",
         "get_index": "getIndex",
         "like_audio": "likeAudio",
@@ -127,10 +41,10 @@ class API():
 
     def commonGetAPI(self, tableName, **kwargs):
         try:
-            if tableName not in Tables:
+            if tableName not in tables:
                 return Status.internalError("Table %s doesn't exists." % tableName)
 
-            tableClass = Tables[tableName]
+            tableClass = tables[tableName]
 
             for field in kwargs:
                 if not hasattr(tableClass, field):
@@ -147,10 +61,10 @@ class API():
 
     def commonAddAPI(self, tableName, **kwargs):
         try:
-            if tableName not in Tables:
+            if tableName not in tables:
                 return Status.internalError("Table %s doesn't exists." % tableName)
 
-            tableClass = Tables[tableName]
+            tableClass = tables[tableName]
 
             for field in kwargs:
                 if not hasattr(tableClass, field):
@@ -171,12 +85,18 @@ class API():
         try:
             action = form["action"]
             if action != "login" and not DEBUG_COMMUNITATION:
-                encryptor = Encrypt()
-                origialText = encryptor.decrypt(form["token"])
-                tokenObject = json.loads(originalText)
-                form["openid"] = tokenObject["openid"]
-                form["sessionKey"] = tokenObject["session_key"]
-            return getattr(self, API.allAPI[action])(form)
+                try:
+                    encryptor = Encrypt()
+                    origialText = encryptor.decrypt(form["token"])
+                    tokenObject = json.loads(originalText)
+                    form["openid"] = tokenObject["openid"]
+                    form["sessionKey"] = tokenObject["session_key"]
+                except Exception as e:
+                    raise Exception("invalid token")
+            else:
+                form["openid"] = "openid"
+                form["session_key"] = "123"
+            return getattr(self, API.action2API[action])(form)
         except Exception as e:
             return Status.internalError(e)
 
@@ -239,19 +159,25 @@ class API():
             resJson = json.loads(res.text)
             openID = resJson["openid"]
             sessionKey = resJson["session_key"]
-            
+
             # 加密 openid 和 session_key 获得token
             encryptor = Encrypt()
             token = {"openid": openID, "session_key": sessionKey}
             token = encryptor.encrypt(json.dumps(token))
 
+            # 查询数据库，检测是否首次登陆
+            firstTime = False
+            User = tables["user"]
+            if not self.session.query(User.openid).filter(User.openid == openID):
+                firstTime = True
+
             return Status.success({
                 "token": token,
-                "first_time": True
+                "first_time": firstTime
             })
         except Exception as e:
             return Status.internalError("invalid code")
-    
+
     def getIndex(self, form):
         '''
         觅声首页：
@@ -261,19 +187,35 @@ class API():
             channel: 'unset'/'channel_name',
         }
         {
-            audio: audio{},
-            audio_next: audio{}
+            feed: feed{},
+            feed_next: feed{}
         }
         // 上一首由前端记录
         '''
 
-        if DEBUG_COMMUNITATION:
-            return Status.success({
-                "audio": testAudio,
-                "audio_next": testAudio
-            })
+        User = tables["user"]
+        Audio = tables["audio"]
+        R_U_A = tables["R_User_Create_Audio"]
 
-    
+        # 不同的数据库类型有不同的随机查询方式
+        if self.dbName == "sqlite":
+            randfunc = func.random()
+        else:
+            # for mysql
+            randfunc = func.rand()
+
+        # 随机查询两个audio
+        randTwoAudios = self.session.query(Audio).order_by(randfunc).limit(2).all()
+        audio_ids = [audio.audio_id for audio in randTwoAudios]
+
+        # 查询对应的user，tag，以及其他信息，组装成feed
+        self.session.query(User, R_U_A)
+
+        return Status.success({
+            "feed": randTwoAudios[0].toDict(),
+            "feed_next": randTwoAudios[1].toDict(),
+        })
+
     def likeAudio(self, form):
         '''
         点赞：
@@ -288,6 +230,8 @@ class API():
 
         if DEBUG_COMMUNITATION:
             return Status.success()
+        
+
     
     def getComments(self, form):
         '''

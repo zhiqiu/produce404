@@ -1,5 +1,5 @@
 from backendAPI import API
-from createTables import Tables
+from createTables import tables
 from config import engine, DEBUG, PORT
 from json import dumps
 from flask import Flask, request, render_template
@@ -39,7 +39,6 @@ if DEBUG:
         tableName = table.lower()
         if request.method == "GET":
             getArgs = request.args.to_dict()
-            print(getArgs)
             result = api.commonGetAPI(tableName, **getArgs)
             return dumps(result)
 
@@ -59,9 +58,9 @@ if DEBUG:
     @app.route("/debug/<table>")
     def debugPage(table):
         tableName = table.lower()
-        if tableName not in Tables:
+        if tableName not in tables:
             return "Table %s not found." % tableName
-        fields = Tables[tableName].requiredFields
+        fields = tables[tableName].requiredFields
         return render_template("debugPage.html", fields=fields, tableName=tableName)
 
 if __name__ == "__main__":

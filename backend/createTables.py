@@ -1,17 +1,15 @@
 from sqlalchemy import Column, String, Integer, Date, TIMESTAMP, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
+from utils import DataFormatException
 from datetime import date, datetime
 import re
 
-__all__ = ["createAllTable", "Tables", "DataFormatException"]
+__all__ = ["createAllTable", "tables"]
 
 
 def createAllTable(engine):
     Base.metadata.create_all(engine)
     return Base
-
-class DataFormatException(Exception):
-    pass
 
 # common super class
 
@@ -153,15 +151,15 @@ class Comment(Base, Creatable):
         commonInitClass(self, **kwargs)
 
 
-class Connection(Base, Creatable):
+class Collection(Base, Creatable):
     __tablename__ = "collection"
 
     collection_id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String)
-    creator_openid = Column(String(28))
+    user_openid = Column(ForeignKey("user.openid"))
     create_time = Column(TIMESTAMP)
 
-    requiredFields = ["name", "creator_openid"]
+    requiredFields = ["name", "user_openid"]
     outputFields = ["collection_set_id"] + requiredFields + ["create_time"]
 
     def __init__(self, **kwargs):
@@ -279,8 +277,8 @@ class R_Audio_In_Collection(Base, Creatable):
         except:
             raise DataFormatException("collection_id must be an integer.")
 
-class R_User_Interested_AudioTag(Base, Creatable):
-    __tablename__ = "r_user_interested_audiotag"
+class R_User_Like_Audio(Base, Creatable):
+    __tablename__ = "r_user_like_audio"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     user_openid = Column(ForeignKey("user.openid"))
@@ -297,18 +295,19 @@ class R_User_Interested_AudioTag(Base, Creatable):
         except:
             raise DataFormatException("audio_id must be an integer.")
 
-Tables = {
+# all tables dict
+tables = {
     "user": User,
     "audio": Audio,
     "audiotag": AudioTag,
     "medal": Medal,
     "comment": Comment,
-    "collection": Connection,
+    "collection": Collection,
     "forward": Forward,
     "r_user_create_audio": R_User_Create_Audio,
     "r_audio_has_audiotag": R_Audio_Has_AudioTag,
     "r_user_has_medal": R_User_Has_Medal,
     "r_user1_follow_user2": R_User1_Follow_User2,
     "r_audio_in_collection": R_Audio_In_Collection,
-    "r_user_interested_audiotag": R_User_Interested_AudioTag,
+    "r_user_like_audio": R_User_Like_Audio,
 }
