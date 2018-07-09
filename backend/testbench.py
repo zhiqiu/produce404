@@ -61,7 +61,7 @@ testCollection = {
 
 
 def makeTestDatabase(session):
-    for i in range(10):
+    for i in range(1, 10):
         tables["user"](**{
             "openid": "openid%d"%i,
             "name": "name%d"%i,
@@ -70,8 +70,8 @@ def makeTestDatabase(session):
             "address": "address%d"%i,
             "birthday": "1999-9-%d"%(i+1),
         }).create(session)
-    
-    for i in range(10):
+
+    for i in range(1, 10):
         tables["audio"](**{
             "url": "http://ws.stream.qqmusic.qq.com/M500001VfvsJ21xFqb.mp3?guid=ffffffff82def4af4b12b3cd9337d5e7&uin=346897220&vkey=6292F51E1E384E061FF02C31F716658E5C81F5594D561F2E88B854E81CAAB7806D5E4F103E55D33C16F3FAC506D1AB172DE8600B37E43FAD&fromtag=46",
             "intro": "intro%d"%i,
@@ -79,19 +79,19 @@ def makeTestDatabase(session):
             "location": "location%d"%i,
         }).create(session)
     
-    for i in range(10):
+    for i in range(1, 10):
         tables["audiotag"](**{
             "tagname": "tagname%d"%i
         }).create(session)
 
-    for i in range(10):
+    for i in range(1, 10):
         tables["medal"](**{
             "name": "name%d"%i,
             "img_url": "img_url%d"%i,
             "condition": i,
         }).create(session)
     
-    for i in range(9):
+    for i in range(1, 9):
         tables["comment"](**{
             "text": "text%d"%i,
             "audio_id": i,
@@ -99,43 +99,43 @@ def makeTestDatabase(session):
             "replyto": "openid%d"%(i+1),
         }).create(session)
     
-    for i in range(10):
+    for i in range(1, 10):
         tables["collection"](**{
             "name": "name%d"%i,
             "user_openid": "openid%d"%i,
         }).create(session)
     
-    for i in range(10):
+    for i in range(1, 10):
         tables["r_user_create_audio"](**{
             "user_openid": "openid%d"%i,
             "audio_id": i,
         }).create(session)
 
-    for i in range(10):
+    for i in range(1, 10):
         tables["r_audio_has_audiotag"](**{
             "audio_id": i,
             "audiotag_id": i,
         }).create(session)
 
-    for i in range(10):
+    for i in range(1, 10):
         tables["r_user_has_medal"](**{
             "user_openid": "openid%d"%i,
             "medal_id": i,
         }).create(session)
 
-    for i in range(9):
+    for i in range(1, 9):
         tables["r_user1_follow_user2"](**{
             "user1": "openid%d"%i,
             "user2": "openid%d"%(i+1),
         }).create(session)
 
-    for i in range(10):
+    for i in range(1, 10):
         tables["r_audio_in_collection"](**{
             "audio_id": i,
             "collection_id": i,
         }).create(session)
 
-    for i in range(10):
+    for i in range(1, 10):
         tables["r_user_like_audio"](**{
             "user_openid": "openid%d"%i,
             "audio_id": i,

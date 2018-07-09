@@ -2,7 +2,7 @@ from sqlalchemy import Column, String, Integer, Date, TIMESTAMP, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
 from utils import DataFormatException
 from datetime import date, datetime
-import re
+import re, json
 
 __all__ = ["createAllTable", "tables"]
 

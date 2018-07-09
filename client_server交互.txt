@@ -106,6 +106,15 @@ medal对象:
 
 /api
 
+获取自己的信息
+{
+    action: "get_user_info"
+}
+
+{
+    user: user{}
+}
+
 觅声_登录
 {
     action: "login",

@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, and_
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.sql.expression import func
@@ -24,6 +24,7 @@ class API():
                 print(e)
 
     action2API = {
+        "get_user_info": "getUserInfo",
         "login": "login",
         "get_index": "getIndex",
         "like_audio": "likeAudio",
@@ -78,6 +79,7 @@ class API():
             return Status.internalError(e)
         else:
             return Status.success()
+
     
     def postCallAPI(self, form):
         if not form:
@@ -94,7 +96,7 @@ class API():
                 except Exception as e:
                     raise Exception("invalid token")
             else:
-                form["openid"] = "openid"
+                form["openid"] = "openid1"
                 form["session_key"] = "123"
             return getattr(self, API.action2API[action])(form)
         except Exception as e:
@@ -102,6 +104,21 @@ class API():
 
 
     #############################   API   #############################
+
+    def getUserInfo(self, form):
+        '''
+        获取自己的信息
+        {
+            token:
+        }
+        {
+            user: user{}
+        }
+        '''
+        User = tables["user"]
+        user = self.session.query(User).filter(User.openid == form["openid"]).first()
+        print(user)
+        return user.toDict()
 
     def login(self, form):
         '''
@@ -168,7 +185,7 @@ class API():
             # 查询数据库，检测是否首次登陆
             firstTime = False
             User = tables["user"]
-            if not self.session.query(User.openid).filter(User.openid == openID):
+            if not self.session.query(User).filter(User.openid == openID):
                 firstTime = True
 
             return Status.success({
@@ -195,7 +212,15 @@ class API():
 
         User = tables["user"]
         Audio = tables["audio"]
-        R_U_A = tables["R_User_Create_Audio"]
+        UCA = tables["r_user_create_audio"]
+        AudioTag = tables["audiotag"]
+        AHA = tables["r_audio_has_audiotag"]
+        ULA = tables["r_user_like_audio"]
+        Collection = tables["collection"]
+        AIC = tables["r_audio_in_collection"]
+        Comment = tables["comment"]
+
+        print(form["openid"])
 
         # 不同的数据库类型有不同的随机查询方式
         if self.dbName == "sqlite":
@@ -206,14 +231,44 @@ class API():
 
         # 随机查询两个audio
         randTwoAudios = self.session.query(Audio).order_by(randfunc).limit(2).all()
-        audio_ids = [audio.audio_id for audio in randTwoAudios]
 
         # 查询对应的user，tag，以及其他信息，组装成feed
-        self.session.query(User, R_U_A)
+        feeds = []
+        for audio in randTwoAudios:
+            audio_id = audio.audio_id
+            user = self.session.query(User, UCA.audio_id).filter(and_(
+                User.openid == UCA.user_openid,
+                UCA.audio_id == audio_id
+                )).first()[0]
+
+            tags = [res.toDict() for res in self.session.query(AudioTag).filter(and_(
+                AudioTag.audiotag_id == AHA.audiotag_id,
+                AHA.audio_id == audio_id
+            )).all()]
+
+            like_users = [res[0] for res in self.session.query(ULA.user_openid).filter(ULA.audio_id == audio_id).all()]
+            
+            comment_num = self.session.query(Comment.comment_id).filter(Comment.audio_id == audio_id).count()
+
+            isliked = form["openid"] in like_users
+            iscollected = bool(self.session.query(User.openid).filter(and_(
+                User.openid == Collection.user_openid,
+                Collection.collection_id == AIC.collection_id,
+                AIC.audio_id == audio_id
+            )).first())
+            feeds.append({
+                "user": user.toDict(),
+                "audio": audio.toDict(),
+                "tags": tags,
+                "like_num": len(like_users),
+                "comment_num": comment_num,
+                "isliked": isliked,
+                "iscollected": iscollected
+            })
 
         return Status.success({
-            "feed": randTwoAudios[0].toDict(),
-            "feed_next": randTwoAudios[1].toDict(),
+            "feed": feeds[0],
+            "feed_next": feeds[1],
         })
 
     def likeAudio(self, form):
