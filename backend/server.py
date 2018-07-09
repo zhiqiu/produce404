@@ -7,7 +7,7 @@ from flask import Flask, request, render_template
 __all__ = ["app"]
 
 api = API(engine)
-app = Flask("create404", template_folder='backend/templates')
+app = Flask("create404", template_folder='templates')
 
 @app.errorhandler(404)
 def page_not_found(_):
