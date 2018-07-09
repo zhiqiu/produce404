@@ -34,3 +34,7 @@ root账号密码：create404mysql
 
 具体配置请自行登录腾讯云查看  
 https://console.cloud.tencent.com/cos/bucket  
+
+## APP KEY
+SecretId: AKIDhHfrSwvKEwSnz1AVxJZifQzSmtpYpqiP  
+SecretKey: d5LPHyTmtnV1CPUQBvXxCFJFzXxEMJ4i  
