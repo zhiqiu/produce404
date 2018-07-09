@@ -22,3 +22,19 @@ try:
     from localConfig import *
 except:
     pass
+
+
+# config for app key
+class Config(object):
+    def __init__(self):
+        pass
+
+    COMMON_POLICY = r'''{"statement": [{"action": ["name/cos:*"],"effect": "allow","resource":"*"}],"version": "2.0"}'''
+
+
+    POLICY = COMMON_POLICY
+    DURATION_SECOND = 1800
+    SECRET_ID = 'AKIDhHfrSwvKEwSnz1AVxJZifQzSmtpYpqiP'
+    SECRET_KEY = 'd5LPHyTmtnV1CPUQBvXxCFJFzXxEMJ4i'
+
+

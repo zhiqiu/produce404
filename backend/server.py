@@ -3,11 +3,16 @@ from createTables import tables
 from config import engine, DEBUG, PORT
 from json import dumps
 from flask import Flask, request, render_template
+from flask import Blueprint
+from sign import sign 
 
 __all__ = ["app"]
 
 api = API(engine)
 app = Flask("create404", template_folder='templates')
+
+app.register_blueprint(sign, url_prefix='/sign')
+
 
 @app.errorhandler(404)
 def page_not_found(_):
