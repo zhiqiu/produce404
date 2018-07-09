@@ -2,13 +2,11 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 from createTables import createAllTable, Tables, DataFormatException
-from config import DEBUG, appID, appSecret
+from config import DEBUG, DEBUG_COMMUNITATION, appID, appSecret
 import json
 import requests
 
 __all__ = ["API"]
-
-DEBUG_COMMUNITATION = True
 
 class Status():
     def success(resp=None):
@@ -46,6 +44,58 @@ class Encrypt():
         text = cipherText
         return text
 
+testUser = {
+    "openid": "o6_bmjrPTlm6_2sgVt7hMZOPfL2M",
+    "name": "user name",
+    "age": "18",
+    "gender": "F",
+    "address": "你心里",
+    "birthday": "2000-05-20",
+    "create_time": "2018-07-09 05:36:33.294922"
+}
+
+testAudio = {
+    "audio_id": "1",
+    "url": "http://audio.com",
+    "img": "http://audio.com",
+    "intro": "for test",
+    "location": "广东 深圳",
+    "create_time": "2018-07-09 05:36:33.294922"
+}
+
+testComment = {
+    "comment_id": "1",
+    "user": testUser,
+	"text": "我要评论",
+	"date": "date format",
+	"like_num": 100,
+	"isliked": True,
+	"replyto": testUser,
+}
+
+testTag = {
+    "audiotag_id": "2",
+    "text": "心情"
+}
+
+testMedal = {
+    "medai_id": "3",
+	"name": "10万点赞徽章",
+	"img_url": "http://image.com",
+	"text": "10万点赞徽章",
+	"achieved": True
+}
+
+testFeed = {
+    "user": testUser,
+    "audio": testAudio,
+    "tags": [testTag] * 10,
+    "like_num": 1000,
+    "comment_num": 233,
+    "isliked": True,
+    "iscollected": True
+}
+
 class API():
     def __init__(self, engine):
         base = createAllTable(engine)
@@ -70,10 +120,10 @@ class API():
 
     def commonGetAPI(self, tableName, **kwargs):
         try:
-            if not hasattr(Tables, tableName):
+            if tableName not in Tables:
                 return Status.internalError("Table %s doesn't exists." % tableName)
 
-            tableClass = getattr(Tables, tableName)
+            tableClass = Tables[tableName]
 
             for field in kwargs:
                 if not hasattr(tableClass, field):
@@ -90,10 +140,10 @@ class API():
 
     def commonAddAPI(self, tableName, **kwargs):
         try:
-            if not hasattr(Tables, tableName):
+            if tableName not in Tables:
                 return Status.internalError("Table %s doesn't exists." % tableName)
 
-            tableClass = getattr(Tables, tableName)
+            tableClass = Tables[tableName]
 
             for field in kwargs:
                 if not hasattr(tableClass, field):
@@ -129,14 +179,14 @@ class API():
     def login(self, form):
         '''
         觅声_登录
-            {
-                action: "login",
-                code: "code"
-            }
-            {
-                token: "token",
-                first_time: false
-            }
+        {
+            action: "login",
+            code: "code"
+        }
+        {
+            token: "token",
+            first_time: false
+        }
 
         //获取openid和session_key:
         request:
@@ -207,7 +257,7 @@ class API():
             audio: audio{},
             audio_next: audio{}
         }
-        // 上一首前端记录
+        // 上一首由前端记录
         '''
 
         if DEBUG_COMMUNITATION:
@@ -398,12 +448,9 @@ class API():
             action: 'get_medal',
         }
         {
-            err:'ok',
             medals: [
-                medal{
-                },
-                medal{
-                }
+                medal{},
+                medal{}
             ]
         }
         '''
@@ -413,13 +460,3 @@ class API():
                     "medal"
                 ]
             })
-
-
-
-if __name__ == "__main__":
-    for f in dir(API):
-        print(getattr(API, f).__doc__)
-    # Py = Pycrypto("ASddsaas")
-    # t = "asdfghjkl呵呵哒"
-    # e = Py.encrypt(t)
-    # Py.decrypt(e)

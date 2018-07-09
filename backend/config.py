@@ -1,7 +1,11 @@
 from sqlalchemy import create_engine
 
+__all__ = ["DEBUG", "PORT", "engine", "appID", "appSecret"]
 
 DEBUG = True
+
+# debug server-client communitation
+DEBUG_COMMUNITATION = True
 
 # flask port
 PORT = 80
@@ -15,10 +19,6 @@ appID = "appID"
 appSecret = "appSecret"
 
 try:
-    import localConfig
-    PORT = localConfig.PORT
-    engine = localConfig.engine
-    appID = localConfig.appID
-    appSecret = localConfig.appSecret
+    from localConfig import *
 except:
     pass

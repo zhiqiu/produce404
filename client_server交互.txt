@@ -1,36 +1,33 @@
 server：
 
 全部post：
-openid token
+token
 
 audio对象：
-/audio
+/debugapi/Audio
 
 {
 	audio_id: ''
 }
 
 {
-	id: '',
-	name: '',
+	audio_id: '',
 	url: '',
 	img: '',
 	intro: '',
-	like_num: '',
-	comment_num: '',
-	isliked: '',
-	iscollected: '',
-	location: ''
+	location: '',
+    create_time: ''
 }
 
 comment对象:
-/comment
+/debugapi/Comment
 
 {
 	comment_id: '',
 }
 
 {
+    comment_id: '',
 	user: user{},
 	text: ,
 	date: ,//时间戳
@@ -40,19 +37,20 @@ comment对象:
 }
 
 user对象:
-/user
+/debugapi/User
 
 {
-	user_id: ''
+	openid: ''
 }
 
 {
-	user_id: '',
+	openid: '',
 	name:'',
 	age: '',
 	gender: '',
 	address: '',
-	birthday: ''
+	birthday: '',
+    create_time: ''
 }
 
 feed对象:
@@ -62,17 +60,30 @@ feed:
 	user: user{},
 	audio: audio{},
 	tags: [tag{}],
+    like_num: '',
+	comment_num: '',
+	isliked: '',
+	iscollected: '',
 }
 
-tag:
+tag对象:
+/debugapi/AudioTag
 {
-	audio_id: '',
+    audiotag_id: ''
+}
+{
+    audiotag_id: '',
 	text: ''
 }
 
 
-medal:
+medal对象:
+/debugapi/Medal
 {
+    medai_id: ''
+}
+{
+    medai_id: '',
 	name: '',
 	img_url: '',
 	text: '',
@@ -84,20 +95,27 @@ medal:
 
 /api
 
-觅声：
+觅声_登录
+{
+    action: "login",
+    code: "code"
+}
+{
+    token: "token",
+    first_time: false
+}
+
+觅声首页：
 {
 	action: 'get_index',
 	listentype: 'diff'/'like',
 	channel: 'unset'/'channel_name',
 }
-
 {
-	err: 'ok',
 	audio: audio{},
 	audio_next: audio{}
 }
-
-// 上一首自己记
+// 上一首由前端记录
 
 
 点赞：
@@ -105,19 +123,17 @@ medal:
 	action: 'like_audio',
 	audio_id: ''
 }
-
 {
 	err: 'ok'
 }
 
 
-觅声_评论
+觅声_获取评论
 
 {
 	action: 'get_comments',
 	audio_id: ''
 }
-
 {
 	comments:[
 		comment{},
@@ -131,16 +147,14 @@ medal:
 	audio_id: '',
 	text:''
 }
-
 {
 	err:'ok'
 }
 
-觅声_收藏
+觅声_收藏_显示所有收藏夹
 {
 	action: 'get_collection_set_name'
 }
-
 {
 	collection_set: [
 		{
@@ -150,6 +164,7 @@ medal:
 	]
 }
 
+觅声_收藏_增加收藏夹
 {
 	action: 'add_collection_set',
 	collection_name : ''
@@ -158,6 +173,7 @@ medal:
 	err: 'ok'
 }
 
+觅声_收藏_增加收藏
 {
 	action: 'add_collection',
 	audio_id: '',
@@ -167,8 +183,7 @@ medal:
 	err: 'ok'
 }
 
-
-
+发现_显示10条
 {
 	action: 'get_explore',
 	last_audio_id: '',
@@ -180,16 +195,16 @@ medal:
 	]// 10条
 }
 
-
+获取1条feed
 {
 	action: 'get_one_feed',
 	audio_id: ''
 }
 {
-	err: 'ok',
 	feed: feed{}	
 }
 
+上传一个音频
 {
 	action: 'post_audio',
 	feed{}
@@ -198,27 +213,22 @@ medal:
 	err: 'ok'
 }
 
+按用户获取feeds
 {
 	action: 'get_my_feed',
 	audio_id: ''
 }
 {
-	err: 'ok',
 	feed: feed{}	
 }
 
+获取用户的徽章
 {
 	action: 'get_medal',
 }
 {
-	err:'ok',
 	medals: [
-		medal{
-
-		},
-		medal{
-
-		}
+		medal{},
+		medal{}
 	]
 }
-
