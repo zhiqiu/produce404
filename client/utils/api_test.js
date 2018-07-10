@@ -123,14 +123,12 @@ const test = function(){
       action: 'get_user_info',
       last_audio_id: ''
     },
-    succcess: function(res){
+    success: function(res){
       log("get_usr_info")
       log(res)
     }
   })
-
 }
-
 
 module.exports = {
 	test: test
