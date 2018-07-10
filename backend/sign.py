@@ -4,7 +4,7 @@ from cam.auth.cam_url import CamUrl
 import urllib.request
 from config import Config
 from flask import Blueprint
-
+from flask import Flask, request, render_template
 sign = Blueprint('signcos', __name__)
 
 @sign.route('/')
@@ -20,6 +20,12 @@ def signcos():
     proxy_handler = urllib.request.ProxyHandler({'https': '10.14.87.100:8080'})
     opener = urllib.request.build_opener()
     r = opener.open(real_url)
-    response = str(r.read())
+    response = r.read()
     #print(response)
     return response
+
+
+@sign.route('/test')
+def testcos():
+    return render_template("test.html")
+

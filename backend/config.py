@@ -8,7 +8,7 @@ DEBUG = True
 DEBUG_COMMUNITATION = True
 
 # flask port
-PORT = 80
+PORT = 2345
 
 # database engine. Use sqlite3 for debug
 engine = create_engine('sqlite:///foo.db?check_same_thread=False', echo=DEBUG)

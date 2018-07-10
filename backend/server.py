@@ -11,7 +11,7 @@ __all__ = ["app"]
 api = API(engine)
 app = Flask("create404", template_folder='templates')
 
-app.register_blueprint(sign, url_prefix='/sign')
+app.register_blueprint(sign, url_prefix='/sign', template_folder="templates")
 
 
 @app.errorhandler(404)
