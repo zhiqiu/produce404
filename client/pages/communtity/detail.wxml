@@ -74,7 +74,79 @@
 	</view>
 
 	<view class="comments">
+		<view class="info-card-out">
 
+				<view class="info-card">
+					<view class="info-group">
+						<view class="avatar">
+							<image src="/image/example-avatar.svg" class="avatar-big"></image>
+						</view>
+
+						<view class="info-detail-group">
+							<view class="info-name">
+								<text>哈哈哈</text>
+							</view>
+							<view class="info-date">
+								<text>7-5 23:21</text>
+							</view>
+						</view>
+					</view>
+					
+
+					<view class="description">
+						<text class="content">哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈</text>
+					</view>
+
+					<view class="btns">
+						<view class="btn-group">
+							<image src="/image/icon-like.svg" class="icon-sm btn-up">btns</image>
+							<view class="btn-num"> 10</view>
+						</view>
+						<view class="btn-group">
+							<image src="/image/icon-comments.svg" class="icon-sm btn-up">btns</image>
+							<view class="btn-num"> 23</view>
+						</view>
+						
+					</view>
+				</view>
+			</view>
+			
+			<view class="info-card-out">
+
+				<view class="info-card">
+					<view class="info-group">
+						<view class="avatar">
+							<image src="/image/example-avatar.svg" class="avatar-big"></image>
+						</view>
+
+						<view class="info-detail-group">
+							<view class="info-name">
+								<text>哈哈哈</text>
+							</view>
+							<view class="info-date">
+								<text>7-5 23:21</text>
+							</view>
+						</view>
+					</view>
+					
+
+					<view class="description">
+						<text class="content">哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈</text>
+					</view>
+
+					<view class="btns">
+						<view class="btn-group">
+							<image src="/image/icon-like.svg" class="icon-sm btn-up">btns</image>
+							<view class="btn-num"> 10</view>
+						</view>
+						<view class="btn-group">
+							<image src="/image/icon-comments.svg" class="icon-sm btn-up">btns</image>
+							<view class="btn-num"> 23</view>
+						</view>
+						
+					</view>
+				</view>
+			</view>
 	</view>
 
 
