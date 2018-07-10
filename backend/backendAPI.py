@@ -279,7 +279,6 @@ class API():
                 "comment_num": comment_num,
                 "isliked": isliked,
                 "iscollected": iscollected,
-                "collections": [c.toDict() for c in collections],
             })
 
         return Status.success({
