@@ -73,6 +73,7 @@ const login = function(){
 								wx.setStorageSync('server_first_time',true);
 							}
 						}
+            getApp().initGlobalData();
 					}
 				})
 			}else{

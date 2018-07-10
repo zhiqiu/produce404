@@ -8,6 +8,7 @@ const log = console.log;
 App({
   onLaunch: function() {
     c.login();
+
   },
 
   globalData: {
@@ -55,6 +56,7 @@ App({
         that.globalData.indexData = {}
         that.globalData.indexData.feed = res.data.resp.feed
         that.globalData.indexData.feed_next = res.data.resp.feed_next
+        wx.setStorageSync("index_feed_data", that.globalData.indexData.feed)
       }
     })
 

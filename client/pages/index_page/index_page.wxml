@@ -1,42 +1,42 @@
 <!--pages/index_page/index_page.wxml-->
 
 <view class="headbar">
-	<view class="btn-1">
-		<view wx:if="{{!listenDiff}}" class="btn"  ontap="listenDiffToggle">听见不同</view>
-		<view wx:if="{{listenDiff}}" class="btn" ontap="listenDiffToggle">我的喜好</view>
-	</view>
-	<view class="btn-2 ">
-		<view class="btn" >频道</view>
-	</view>
+  <view class="btn-1">
+    <view wx:if="{{!listenDiff}}" class="btn" ontap="listenDiffToggle">听见不同</view>
+    <view wx:if="{{listenDiff}}" class="btn" ontap="listenDiffToggle">我的喜好</view>
+  </view>
+  <view class="btn-2 ">
+    <view class="btn">频道</view>
+  </view>
 </view>
 
 <view class="player">
-	<image class="img" src="https://enj0.com/img-player.png" mode="aspectFill" ontap="playorpause"></image>
-	<view class="text">
-		<view>{{audioName}}</view>
-		<view>audio info 哈哈哈哈哈哈</view>
-	</view>
-	<progress percent="{{audioProgress}}"></progress>
+  <image class="img" src="https://enj0.com/img-player.png" mode="aspectFill" ontap="playorpause"></image>
+  <view class="text">
+    <view>{{feed.audio.name}}</view>
+    <view>{{feed.audio.intro}}</view>
+  </view>
+  <progress percent="{{audioProgress}}"></progress>
 </view>
 
 <view class="control">
-	<view class="btns">
-		<view class="btn-group">
-			<image src="/image/icon-like.svg" class="icon-md btn-up">btns</image>
-			<view class="btn-num"> 10</view>
-		</view>
-		<view class="btn-group">
-			<image src="/image/icon-comments.svg" class="icon-md btn-up">btns</image>
-			<view class="btn-num"> 23</view>
-		</view>
-		<view class="btn-group">
-			<image src="/image/icon-collect.svg" class="icon-md btn-up">btns</image>
-			<!-- <view class="btn-num"> 10</view> -->
-		</view>
-		<view class="btn-group">
-			<image src="/image/icon-share.svg" class="icon-md btn-up">btns</image>
-			<!-- <view class="btn-num"> 10</view> -->
-		</view>
-	</view>
+  <view class="btns">
+    <view class="btn-group">
+      <image wx:if="{{feed.isliked}}" src="/image/icon-like.svg" class="icon-md btn-up">btns</image>
+      <image wx:else src="/image/icon-like.svg" class="icon-md btn-up">btns</image>
+      <view class="btn-num">{{feed.audio.like_num}}</view>
+    </view>
+    <view class="btn-group">
+      <image src="/image/icon-comments.svg" class="icon-md btn-up">btns</image>
+      <view class="btn-num">{{feed.comment_num}}</view>
+    </view>
+    <view class="btn-group">
+      <image src="/image/icon-collect.svg" class="icon-md btn-up">btns</image>
+      <!-- <view class="btn-num"> 10</view> -->
+    </view>
+    <view class="btn-group">
+      <image src="/image/icon-share.svg" class="icon-md btn-up">btns</image>
+      <!-- <view class="btn-num"> 10</view> -->
+    </view>
+  </view>
 </view>
-
