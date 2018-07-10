@@ -1,2 +1,18 @@
-<!--pages/record/record.wxml-->
-<text>pages/record/record.wxml</text>
+
+<view class="record">
+	<view class="cir">
+		<image src="/image/icon-mac.svg"  class="icon-mac"> </image>
+	</view>
+	<textarea class="text">请输入文字
+	</textarea>
+	<view class="holder">
+		<view class="pos">点击定位</view>
+		<view class="tag">#标签</view>
+	</view>
+
+	<view	class="submit">
+		提  交
+	</view>
+
+</view>
+

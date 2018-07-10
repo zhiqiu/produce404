@@ -1,19 +1,33 @@
-/*我的收藏页面，包括各收藏集*/
-// pages/mine/my_coll/my_coll.js
+/*发现页面*/
+// pages/communtity/community.js
+
+const c = require('../../utils/c.js')
+const r = c.r;
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-  
+    playing_preFeedId : -1,  //当前播放的feed Id
+
+    feeds : []
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-  
+    r({
+      data:{
+        action: 'get_explore',
+        last_audio_id: ''
+      },
+      success: function(res){
+        console.log(res);
+        
+      }
+    })
   },
 
   /**
@@ -63,5 +77,13 @@ Page({
    */
   onShareAppMessage: function () {
   
+  },
+  
+  gotoDetail: function(e){
+    console.log(e)
+    var dID = e.currentTarget.id;
+    wx.navigateTo({
+      url: '/pages/communtity/detail?dID='+dID
+    })
   }
 })
