@@ -8,119 +8,135 @@ Page({
    * 页面的初始数据
    */
   data: {
-    audioImgSrc: 'http://y.gtimg.cn/music/photo_new/T002R300x300M000003rsKF44GyaSk.jpg?max_age=2592000',
-    audioName: '此时此刻',
-    audioProgress: 0,
-    listenDiff: false,
-    currentLike: false
+    feed: wx.getStorageSync("index_feed_data") || {},
+    dataloaded: false
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function (options) {
-    if(!c.check()) return;
-    
+  onLoad: function(options) {
+    if (!c.check()) return;
+
+    if (getApp().globalData.indexData.feed.audio){
+      console.log(getApp().globalData.indexData.feed);
+      this.setData({
+        feed: getApp().globalData.indexData.feed,
+        dataloaded: true
+      })
+    }else{
+      this.setData({
+        feed: wx.getStorageSync("index_feed_data"),
+        dataloaded: true
+      })
+      
+    }
+    console.log(this.data)
+      
+    while(!this.data.dataloaded){ console.log('wait')}
+    console.log('aaaa')
+    console.log(this.data)
     const player = wx.getBackgroundAudioManager()
-    player.title = '此时此刻'
-    player.epname = '此时此刻'
-    player.singer = '许巍'
-    player.coverImgUrl = 'http://y.gtimg.cn/music/photo_new/T002R300x300M000003rsKF44GyaSk.jpg?max_age=2592000'
-    player.src = 'http://create404-cos-1253746840.file.myqcloud.com/audio/%E4%BA%A4%E9%80%9A%E5%B7%A5%E5%85%B7/%E6%91%A9%E6%89%98%E8%BD%A6%E5%90%AF%E5%8A%A8%E6%97%B6%E7%9A%84%E5%A3%B0%E9%9F%B3.mp3?sign=7dtVHxEoh8Nx8QQo6agxIWy4rjxhPTEyNTM3NDY4NDAmaz1BS0lEaEhmclN3dktFd1NuejFBVnhKWmlmUXpTbXRwWXBxaVAmZT0xNTMzNzI3Nzc1JnQ9MTUzMTEzNTc3NSZyPTExMzc0NDg2MCZmPS9hdWRpby8lRTQlQkElQTQlRTklODAlOUElRTUlQjclQTUlRTUlODUlQjcvJUU2JTkxJUE5JUU2JTg5JTk4JUU4JUJEJUE2JUU1JTkwJUFGJUU1JThBJUE4JUU2JTk3JUI2JUU3JTlBJTg0JUU1JUEzJUIwJUU5JTlGJUIzLm1wMyZiPWNyZWF0ZTQwNC1jb3M=' // 设置了 src 之后会自动播放
+    player.title = this.data.feed.audio.name
+    player.epname = this.data.feed.audio.intro
+    player.singer = this.data.feed.user.name
+    player.coverImgUrl = this.data.feed.audio.img
+    player.src = this.data.feed.audio.url // 设置了 src 之后会自动播放
     let page = this;
-    player.onTimeUpdate(function(){
+    player.onTimeUpdate(function() {
       page.setData({
-        audioProgress : parseInt(100 * player.currentTime / player.duration)
+        audioProgress: parseInt(100 * player.currentTime / player.duration)
       })
     })
+    console.log(this.data)
   },
 
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
-  onReady: function () {
-  
+  onReady: function() {
+
   },
 
   /**
    * 生命周期函数--监听页面显示
    */
-  onShow: function () {
-  
+  onShow: function() {
+
   },
 
   /**
    * 生命周期函数--监听页面隐藏
    */
-  onHide: function () {
-  
+  onHide: function() {
+
   },
 
   /**
    * 生命周期函数--监听页面卸载
    */
-  onUnload: function () {
-  
+  onUnload: function() {
+
   },
 
   /**
    * 页面相关事件处理函数--监听用户下拉动作
    */
-  onPullDownRefresh: function () {
+  onPullDownRefresh: function() {
     console.log('下拉切歌')
   },
 
   /**
    * 页面上拉触底事件的处理函数
    */
-  onReachBottom: function () {
+  onReachBottom: function() {
     console.log('上拉切歌')
   },
 
   /**
    * 用户点击右上角分享
    */
-  onShareAppMessage: function (options) {
+  onShareAppMessage: function(options) {
     return {
       title: '声觅',
       path: '/pages/login_page/login_page',
       // imageUrl
     }
   },
-  playorpause: function(){
+  playorpause: function() {
     const player = wx.getBackgroundAudioManager()
-    if(player.paused){
+    if (player.paused) {
       player.play()
-    }else{
+    } else {
       player.pause()
     }
 
   },
-  listenDiffToggle: function(){
+  listenDiffToggle: function() {
     this.setData({
       listenDiff: !this.data.listenDiff
     })
   },
-  like: function(){
+  like: function() {
     this.setData({
       currentLike: true
     })
   },
-  dislike: function(){
+  dislike: function() {
     this.setData({
       currentLike: false
     })
   },
-  gotoComments: function(){
+  gotoComments: function() {
     var audioInfo = ''
     wx.navigateTo({
-      url: '/pages/comments/comments?'+audioInfo
+      url: '/pages/comments/comments?' + audioInfo
     })
   },
-  gotoCollect: function(){
+  gotoCollect: function() {
     var audioInfo = ''
     wx.navigateTo({
-      url: '/pages/collection/add_collection?'+audioInfo
+      url: '/pages/collection/add_collection?' + audioInfo
     })
   }
 

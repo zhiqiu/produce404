@@ -184,6 +184,17 @@ medal对象:
 	]
 }
 
+觅声_收藏_显示收藏夹内容
+{
+	action: 'get_collection_content',
+    collection_id: id
+}
+{
+	feeds: [
+        feed{}...
+	]
+}
+
 觅声_收藏_增加收藏夹
 {
 	action: 'add_collection',

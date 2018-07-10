@@ -18,23 +18,11 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    r({
-      data:{
-        action: 'get_explore',
-        last_audio_id: ''
-      },
-      success: function(res){
-        console.log(res);
-        
-      }
-    })
-  },
-
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
-  
+    this.setData({
+      feeds: getApp().globalData.exploreData.feeds
+    }) 
+    console.log(this.data.feeds)
+    
   },
 
   /**
