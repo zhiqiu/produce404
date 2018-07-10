@@ -38,7 +38,7 @@ overflow: hidden;
 	background:#ffffff;
 border-radius:14px;
 width:268px;
-height:129px;
+height:40%;
 flex-wrap:wrap;
 padding: 5px;
 font-family:PingFangHK-Regular;
@@ -46,6 +46,7 @@ font-size:15px;
 color:#999999;
 letter-spacing:0.35px;
 text-align:left;
+margin-top:60px;
 
 }
 

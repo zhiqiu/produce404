@@ -1,13 +1,16 @@
 {
   "pages": [
+    "pages/communtity/add_comment",
+    "pages/record/record",
     "pages/index_page/index_page",
+    "pages/mine/my_msg/my_msg",
+    "pages/index_page/detail",
+    "pages/communtity/detail",
     "pages/mine/mine",
     "pages/communtity/community",
     "pages/login_page/login_page",
     "pages/index/index",
     "pages/logs/logs",
-    "pages/record/record",
-    "pages/mine/my_msg/my_msg",
     "pages/mine/my_agreement/my_agreement",
     "pages/mine/my_coll/my_coll",
     "pages/player_test/player",
@@ -15,8 +18,7 @@
     "pages/add_collection/add_collection",
     "pages/mine/sys_msg/sys_msg",
     "pages/record_test/record_test",
-    "pages/mine/my_coll/single_coll/single_coll",
-    "pages/communtity/detail"
+    "pages/mine/my_coll/single_coll/single_coll"
   ],
   "window": {
     "backgroundTextStyle": "light",
@@ -43,7 +45,7 @@
       },
       {
         "iconPath": "image/bar-wode.png",
-        "selectedIconPath": "image/bar-wode.png",
+        "selectedIconPath": "image/bar-wode-active.png",
         "pagePath": "pages/mine/mine",
         "text": "我的"
       }

@@ -1,21 +1,245 @@
-<!--pages/mine/my_coll/my_coll.wxml-->
-<view class="my_coll">
-  <view class="coll_1">
-    <image>头像</image>
-    <view class="msg">
-      <button>第一条收藏</button>
-    </view>
-  </view>
-  <view class="coll_2">
-    <image>头像</image>
-    <view class="msg">
-      <button>第二条收藏</button>
-    </view>
-  </view>
-  <view class="coll_3">
-    <image>头像</image>
-    <view class="msg">
-      <button>第三条收藏</button>
-    </view>
-  </view>
+<!--pages/communtity/community.wxml-->
+
+<view class="timeline">
+	<view class="info" ontap="gotoDetail" id="detail-id">
+		<view class="holder">
+			<view class="time">
+				45"
+			</view>
+      <!--当点击的是当前正在播放的feed，-->
+			<view	class="audio">
+				<image src="/image/icon-sound.svg" class="audio-icon"></image>
+			</view>
+		</view>
+		
+		<view class="description">
+			<text class="content">哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈</text>
+		</view>
+
+		
+
+		<view class="tags">
+			<view class="tag">
+				<text class="tag-text">#tag1</text>
+			</view>
+			<view class="tag">
+				<text class="tag-text">#tag2</text>
+			</view>
+		</view>
+
+		<view class="holder">
+			<view class="author">
+				<text>Author</text>
+			</view>
+
+			<view class="btns">
+				<view class="btn-group">
+					<image src="/image/icon-like.svg" class="icon-sm btn-up">btns</image>
+					<view class="btn-num"> 10</view>
+				</view>
+				<view class="btn-group">
+					<image src="/image/icon-comments.svg" class="icon-sm btn-up">btns</image>
+					<view class="btn-num"> 23</view>
+				</view>
+				<view class="btn-group">
+					<image src="/image/icon-collect.svg" class="icon-sm btn-up">btns</image>
+					<!-- <view class="btn-num"> 10</view> -->
+				</view>
+			</view>
+		</view>
+
+	</view>
+
+	<view class="info">
+		<view class="holder">
+			<view class="time">
+				45"
+			</view>
+			<view	class="audio">
+				<image src="/image/icon-sound.svg" class="audio-icon"></image>
+			</view>
+		</view>
+		
+		<view class="description">
+			<text class="content">哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈</text>
+		</view>
+
+		
+
+		<view class="tags">
+			<view class="tag">
+				<text class="tag-text">#tag1</text>
+			</view>
+			<view class="tag">
+				<text class="tag-text">#tag2</text>
+			</view>
+		</view>
+
+		<view class="holder">
+			<view class="author">
+				<text>Author</text>
+			</view>
+
+			<view class="btns">
+				<view class="btn-group">
+					<image src="/image/icon-like.svg" class="icon-sm btn-up">btns</image>
+					<view class="btn-num"> 10</view>
+				</view>
+				<view class="btn-group">
+					<image src="/image/icon-comments.svg" class="icon-sm btn-up">btns</image>
+					<view class="btn-num"> 23</view>
+				</view>
+				<view class="btn-group">
+					<image src="/image/icon-collect.svg" class="icon-sm btn-up">btns</image>
+					<!-- <view class="btn-num"> 10</view> -->
+				</view>
+			</view>
+		</view>
+
+	</view>
+
+	<view class="info">
+		<view class="holder">
+			<view class="time">
+				45"
+			</view>
+			<view	class="audio">
+				<image src="/image/icon-sound.svg" class="audio-icon"></image>
+			</view>
+		</view>
+		
+		<view class="description">
+			<text class="content">哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈</text>
+		</view>
+
+		
+
+		<view class="tags">
+			<view class="tag">
+				<text class="tag-text">#tag1</text>
+			</view>
+			<view class="tag">
+				<text class="tag-text">#tag2</text>
+			</view>
+		</view>
+
+		<view class="holder">
+			<view class="author">
+				<text>Author</text>
+			</view>
+
+			<view class="btns">
+				<view class="btn-group">
+					<image src="/image/icon-like.svg" class="icon-sm btn-up">btns</image>
+					<view class="btn-num"> 10</view>
+				</view>
+				<view class="btn-group">
+					<image src="/image/icon-comments.svg" class="icon-sm btn-up">btns</image>
+					<view class="btn-num"> 23</view>
+				</view>
+				<view class="btn-group">
+					<image src="/image/icon-collect.svg" class="icon-sm btn-up">btns</image>
+					<!-- <view class="btn-num"> 10</view> -->
+				</view>
+			</view>
+		</view>
+
+	</view>
+
+	<view class="info">
+		<view class="holder">
+			<view class="time">
+				45"
+			</view>
+			<view	class="audio">
+				<image src="/image/icon-sound.svg" class="audio-icon"></image>
+			</view>
+		</view>
+		
+		<view class="description">
+			<text class="content">哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈</text>
+		</view>
+
+		
+
+		<view class="tags">
+			<view class="tag">
+				<text class="tag-text">#tag1</text>
+			</view>
+			<view class="tag">
+				<text class="tag-text">#tag2</text>
+			</view>
+		</view>
+
+		<view class="holder">
+			<view class="author">
+				<text>Author</text>
+			</view>
+
+			<view class="btns">
+				<view class="btn-group">
+					<image src="/image/icon-like.svg" class="icon-sm btn-up">btns</image>
+					<view class="btn-num"> 10</view>
+				</view>
+				<view class="btn-group">
+					<image src="/image/icon-comments.svg" class="icon-sm btn-up">btns</image>
+					<view class="btn-num"> 23</view>
+				</view>
+				<view class="btn-group">
+					<image src="/image/icon-collect.svg" class="icon-sm btn-up">btns</image>
+					<!-- <view class="btn-num"> 10</view> -->
+				</view>
+			</view>
+		</view>
+
+	</view>
+
+	<view class="info">
+		<view class="holder">
+			<view class="time">
+				45"
+			</view>
+			<view	class="audio">
+				<image src="/image/icon-sound.svg" class="audio-icon"></image>
+			</view>
+		</view>
+		
+		<view class="description">
+			<text class="content">哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈</text>
+		</view>
+
+		
+
+		<view class="tags">
+			<view class="tag">
+				<text class="tag-text">#tag1</text>
+			</view>
+			<view class="tag">
+				<text class="tag-text">#tag2</text>
+			</view>
+		</view>
+
+		<view class="holder">
+			<view class="author">
+				<text>Author</text>
+			</view>
+
+			<view class="btns">
+				<view class="btn-group">
+					<image src="/image/icon-like.svg" class="icon-sm btn-up">btns</image>
+					<view class="btn-num"> 10</view>
+				</view>
+				<view class="btn-group">
+					<image src="/image/icon-comments.svg" class="icon-sm btn-up">btns</image>
+					<view class="btn-num"> 23</view>
+				</view>
+				<view class="btn-group">
+					<image src="/image/icon-collect.svg" class="icon-sm btn-up">btns</image>
+					<!-- <view class="btn-num"> 10</view> -->
+				</view>
+			</view>
+		</view>
+
+	</view>
 </view>
+

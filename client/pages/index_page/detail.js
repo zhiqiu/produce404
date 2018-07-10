@@ -1,28 +1,25 @@
-/*发现页面*/
-// pages/communtity/community.js
-
-const c = require('../../utils/c.js')
-const r = c.r;
+// pages/communtity/detail.js
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-    playing_preFeedId : -1,  //当前播放的feed Id
-
-    feeds : []
+  
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    this.setData({
-      feeds: getApp().globalData.exploreData.feeds
-    }) 
-    console.log(this.data.feeds)
-    
+  
+  },
+
+  /**
+   * 生命周期函数--监听页面初次渲染完成
+   */
+  onReady: function () {
+  
   },
 
   /**
@@ -65,13 +62,5 @@ Page({
    */
   onShareAppMessage: function () {
   
-  },
-  
-  gotoDetail: function(e){
-    console.log(e)
-    var dID = e.currentTarget.id;
-    wx.navigateTo({
-      url: '/pages/communtity/detail?dID='+dID
-    })
   }
 })

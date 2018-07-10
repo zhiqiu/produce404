@@ -34,6 +34,7 @@ class API():
         "get_comments": "getComments",
         "post_comment": "postComment",
         "get_collections": "getCollections",
+        "get_collection_content": "getCollectionContent",
         "add_collection": "addCollection",
         "add_into_collection": "addIntoCollection",
         "get_explore": "getExplore",
@@ -82,8 +83,53 @@ class API():
             return Status.internalError(e)
         else:
             return Status.success()
-
     
+
+    def packFeed(self, openid, user, audio):
+        audio_id = audio.audio_id
+
+        tags = self.session.query(AudioTag).filter(and_(
+            AudioTag.deleted == False,
+            R_Audio_Has_AudioTag.deleted == False,
+            AudioTag.audiotag_id == R_Audio_Has_AudioTag.audiotag_id,
+            R_Audio_Has_AudioTag.audio_id == audio_id
+        )).all()
+
+        like_num = self.session.query(User.openid).filter(and_(
+            User.openid == R_User_Like_Audio.user_openid,
+            R_User_Like_Audio.deleted == False,
+            R_User_Like_Audio.audio_id == audio_id,
+            )).count()
+
+        comment_num = self.session.query(Comment.comment_id).filter(and_(
+            Comment.deleted == False,
+            Comment.audio_id == audio_id
+            )).count()
+
+        isliked = bool(self.session.query(R_User_Like_Audio.user_openid).filter(and_(
+            R_User_Like_Audio.user_openid == openid,
+            R_User_Like_Audio.deleted == False,
+            R_User_Like_Audio.audio_id == audio_id,
+            )).count())
+
+        iscollected = bool(self.session.query(Collection).filter(and_(
+            Collection.deleted == False,
+            R_Audio_In_Collection.deleted == False,
+            Collection.user_openid == openid,
+            Collection.collection_id == R_Audio_In_Collection.collection_id,
+            R_Audio_In_Collection.audio_id == audio_id
+        )).first())
+
+        return {
+            "user": user.toDict(),
+            "audio": audio.toDict(),
+            "tags": [tag.toDict() for tag in tags],
+            "like_num": like_num,
+            "comment_num": comment_num,
+            "isliked": isliked,
+            "iscollected": iscollected,
+        }
+
     def postCallAPI(self, form):
         if not form:
             return Status.internalError("Missing form data")
@@ -238,50 +284,7 @@ class API():
 
         # 查询对应的user，tag，以及其他信息，组装成feed
         openid = form["openid"]
-        feeds = []
-        for user, audio in randTwoAudios:
-            audio_id = audio.audio_id
-
-            tags = self.session.query(AudioTag).filter(and_(
-                AudioTag.deleted == False,
-                R_Audio_Has_AudioTag.deleted == False,
-                AudioTag.audiotag_id == R_Audio_Has_AudioTag.audiotag_id,
-                R_Audio_Has_AudioTag.audio_id == audio_id
-            )).all()
-
-            like_num = self.session.query(User.openid).filter(and_(
-                User.openid == R_User_Like_Audio.user_openid,
-                R_User_Like_Audio.deleted == False,
-                R_User_Like_Audio.audio_id == audio_id,
-                )).count()
-
-            comment_num = self.session.query(Comment.comment_id).filter(and_(
-                Comment.deleted == False,
-                Comment.audio_id == audio_id
-                )).count()
-
-            isliked = bool(self.session.query(R_User_Like_Audio.user_openid).filter(and_(
-                R_User_Like_Audio.user_openid == openid,
-                R_User_Like_Audio.deleted == False,
-                R_User_Like_Audio.audio_id == audio_id,
-                )).count())
-
-            iscollected = bool(self.session.query(Collection).filter(and_(
-                Collection.deleted == False,
-                R_Audio_In_Collection.deleted == False,
-                Collection.user_openid == openid,
-                Collection.collection_id == R_Audio_In_Collection.collection_id,
-                R_Audio_In_Collection.audio_id == audio_id
-            )).first())
-            feeds.append({
-                "user": user.toDict(),
-                "audio": audio.toDict(),
-                "tags": [tag.toDict() for tag in tags],
-                "like_num": like_num,
-                "comment_num": comment_num,
-                "isliked": isliked,
-                "iscollected": iscollected,
-            })
+        feeds = [self.packFeed(openid, user, audio) for user, audio in randTwoAudios]
 
         return Status.success({
             "feed": feeds[0],
@@ -436,6 +439,45 @@ class API():
             "collections": [c.toDict() for c in collections]
         })
 
+    def getCollectionContent(self, form):
+        '''
+        觅声_收藏_显示收藏夹内容
+        {
+            action: 'get_collection_content',
+            collection_id: id
+        }
+        {
+            feeds: [
+                feed{}...
+            ]
+        }
+        '''
+        openid = form["openid"]
+        collection_id = form["collection_id"]
+        Collection.checkExist(self.session, collection_id)
+
+        if not self.session.query(Collection.collection_id).filter(and_(
+            Collection.user_openid == openid,
+            Collection.collection_id == collection_id
+        )).first():
+            raise Exception("It's not your collection.")
+
+        findAudio = self.session.query(User, Audio).filter(and_(
+            User.deleted == False,
+            Audio.deleted == False,
+            R_User_Create_Audio.deleted == False,
+            R_Audio_In_Collection.deleted == False,
+            User.openid == R_User_Create_Audio.user_openid,
+            R_User_Create_Audio.audio_id == Audio.audio_id,
+            Audio.audio_id == R_Audio_In_Collection.audio_id,
+            R_Audio_In_Collection.collection_id == collection_id
+        )).all()
+
+        feeds = [self.packFeed(openid, user, audio) for user, audio in findAudio]
+        return Status.success({
+            "feeds": feeds
+        })
+
     def addCollection(self, form):
         '''
         觅声_收藏_增加收藏夹
@@ -479,8 +521,8 @@ class API():
         )).first():
             raise Exception("It's not your collection.")
 
-        Audio.checkExist(audio_id)
-        Collection.checkExist(collection_id)
+        Audio.checkExist(self.session, audio_id)
+        Collection.checkExist(self.session, collection_id)
 
         R_Audio_In_Collection(audio_id=audio_id, collection_id=collection_id).create(self.session)
 
@@ -500,14 +542,36 @@ class API():
             ]// 10条
         }
         '''
-        if DEBUG_COMMUNITATION:
-            return Status.success({
-                "feeds":[
-                    testFeed,
-                    testFeed,
-                    testFeed,
-                ]
-            })
+        openid = form["openid"]
+        last_audio_id = ""
+        if "last_audio_id" in form:
+            last_audio_id = form["last_audio_id"]
+            try:
+                if last_audio_id:
+                    last_audio_id = int(last_audio_id)
+            except:
+                raise DataFormatException("last_audio_id must be an integer or empty string")
+
+        findAudios = self.session.query(User, Audio).filter(and_(
+            User.openid != openid,
+            User.deleted == False,
+            Audio.deleted == False,
+            R_User_Create_Audio.deleted == False,
+            User.openid == R_User_Create_Audio.user_openid,
+            R_User_Create_Audio.audio_id == Audio.audio_id,
+        ))
+
+        if last_audio_id != "":
+            findAudios = findAudios.filter(Audio.audio_id < last_audio_id)
+
+        # 每次显示10条
+        findAudios = findAudios.order_by(Audio.audio_id.desc()).limit(10).all()
+
+        feeds = [self.packFeed(openid, user, audio) for user, audio in findAudios]
+        
+        return Status.success({
+            "feeds": feeds
+        })
 
     def getOneFeed(self, form):
         '''
@@ -534,48 +598,7 @@ class API():
             R_User_Create_Audio.audio_id == Audio.audio_id
         )).first()
 
-        tags = self.session.query(AudioTag).filter(and_(
-            AudioTag.deleted == False,
-            R_Audio_Has_AudioTag.deleted == False,
-            AudioTag.audiotag_id == R_Audio_Has_AudioTag.audiotag_id,
-            R_Audio_Has_AudioTag.audio_id == audio_id
-        )).all()
-
-        like_num = self.session.query(User.openid).filter(and_(
-            User.openid == R_User_Like_Audio.user_openid,
-            R_User_Like_Audio.deleted == False,
-            R_User_Like_Audio.audio_id == audio_id,
-            )).count()
-
-        comment_num = self.session.query(Comment.comment_id).filter(and_(
-            Comment.deleted == False,
-            Comment.audio_id == audio_id
-            )).count()
-
-        isliked = bool(self.session.query(R_User_Like_Audio.user_openid).filter(and_(
-            R_User_Like_Audio.user_openid == openid,
-            R_User_Like_Audio.deleted == False,
-            R_User_Like_Audio.audio_id == audio_id,
-            )).count())
-
-        iscollected = bool(self.session.query(Collection).filter(and_(
-            Collection.deleted == False,
-            R_Audio_In_Collection.deleted == False,
-            Collection.user_openid == openid,
-            Collection.collection_id == R_Audio_In_Collection.collection_id,
-            R_Audio_In_Collection.audio_id == audio_id
-        )).first())
-
-        feed = {
-            "user": user.toDict(),
-            "audio": audio.toDict(),
-            "tags": [tag.toDict() for tag in tags],
-            "like_num": like_num,
-            "comment_num": comment_num,
-            "isliked": isliked,
-            "iscollected": iscollected,
-            "collections": [c.toDict() for c in collections],
-        }
+        feed = self.packFeed(openid, user, audio)
 
         return Status.success({
             "feed": feed
@@ -596,12 +619,14 @@ class API():
         '''
 
         openid = form["openid"]
-        last_audio_id = form["last_audio_id"]
-        try:
-            if last_audio_id:
-                last_audio_id = int(last_audio_id)
-        except:
-            raise DataFormatException("last_audio_id must be an integer or empty string")
+        last_audio_id = ""
+        if "last_audio_id" in form:
+            last_audio_id = form["last_audio_id"]
+            try:
+                if last_audio_id:
+                    last_audio_id = int(last_audio_id)
+            except:
+                raise DataFormatException("last_audio_id must be an integer or empty string")
         findAudios = self.session.query(User, Audio).filter(and_(
             User.openid == openid,
             Audio.deleted == False,
@@ -611,55 +636,12 @@ class API():
         ))
 
         if last_audio_id != "":
-            findAudios = findAudios.finter(Audio.audio_id < last_audio_id)
+            findAudios = findAudios.filter(Audio.audio_id < last_audio_id)
 
         # 每次显示10条
         findAudios = findAudios.order_by(Audio.audio_id.desc()).limit(10).all()
 
-        feeds = []
-        for user, audio in findAudios:
-            audio_id = audio.audio_id
-
-            tags = self.session.query(AudioTag).filter(and_(
-                AudioTag.deleted == False,
-                R_Audio_Has_AudioTag.deleted == False,
-                AudioTag.audiotag_id == R_Audio_Has_AudioTag.audiotag_id,
-                R_Audio_Has_AudioTag.audio_id == audio_id
-            )).all()
-
-            like_num = self.session.query(User.openid).filter(and_(
-                User.openid == R_User_Like_Audio.user_openid,
-                R_User_Like_Audio.deleted == False,
-                R_User_Like_Audio.audio_id == audio_id,
-                )).count()
-
-            comment_num = self.session.query(Comment.comment_id).filter(and_(
-                Comment.deleted == False,
-                Comment.audio_id == audio_id
-                )).count()
-
-            isliked = bool(self.session.query(R_User_Like_Audio.user_openid).filter(and_(
-                R_User_Like_Audio.user_openid == openid,
-                R_User_Like_Audio.deleted == False,
-                R_User_Like_Audio.audio_id == audio_id,
-                )).count())
-
-            iscollected = bool(self.session.query(Collection).filter(and_(
-                Collection.deleted == False,
-                R_Audio_In_Collection.deleted == False,
-                Collection.user_openid == openid,
-                Collection.collection_id == R_Audio_In_Collection.collection_id,
-                R_Audio_In_Collection.audio_id == audio_id
-            )).first())
-            feeds.append({
-                "user": user.toDict(),
-                "audio": audio.toDict(),
-                "tags": [tag.toDict() for tag in tags],
-                "like_num": like_num,
-                "comment_num": comment_num,
-                "isliked": isliked,
-                "iscollected": iscollected,
-            })
+        feeds = [self.packFeed(openid, user, audio) for user, audio in findAudios]
         
         return Status.success({
             "feeds": feeds
@@ -681,10 +663,12 @@ class API():
         openid = form["openid"]
         audio = json.loads(form["audio"])
         tags = json.loads(form["tags"])
+        print(audio)
+        print(tags)
         audioObj = Audio(**audio)
         audioObj.create(self.session)
         for tag in tags:
-            tagObj = AudioTag(tag)
+            tagObj = AudioTag(**tag)
             tagObj.create(self.session)
             R_Audio_Has_AudioTag(audio_id=audioObj.audio_id,
                 audiotag_id=tagObj.audiotag_id).create(self.session)
