@@ -1,10 +1,28 @@
-from sqlalchemy import Column, String, Integer, Date, TIMESTAMP, ForeignKey
+from sqlalchemy import Column, String, Integer, Date, TIMESTAMP, BOOLEAN, ForeignKey
+from sqlalchemy import and_
 from sqlalchemy.ext.declarative import declarative_base
 from utils import DataFormatException
 from datetime import date, datetime
 import re, json
 
-__all__ = ["createAllTable", "tables"]
+__all__ = [
+    "createAllTable",
+    "tables",
+    "User",
+    "Audio",
+    "AudioTag",
+    "Medal",
+    "Comment",
+    "Collection",
+    "Forward",
+    "R_User_Create_Audio",
+    "R_Audio_Has_AudioTag",
+    "R_User_Has_Medal",
+    "R_User1_Follow_User2",
+    "R_Audio_In_Collection",
+    "R_User_Like_Audio",
+    "R_User_Like_Comment",
+]
 
 
 def createAllTable(engine):
@@ -21,29 +39,50 @@ class Creatable():
         session.add(self)
         session.commit()
 
-    def __str__(self):
-        return json.dumps(self.toDict())
-    
+    def merge(self, session):
+        session.merge(self)
+        session.commit()
+
+    @classmethod
+    def checkExist(cls, session, pkey):
+        classObj = cls
+        className = classObj.__name__
+        primaryKey = classObj.__primaryKey__
+        findResult = session.query(classObj).filter(and_(
+            classObj.deleted == False,
+            getattr(classObj, primaryKey) == pkey
+        )).count()
+
+        if not findResult:
+            raise Exception(className + " doesn't exists.")
+
     def toDict(self):
         returnDict = {}
-        for fr in self.outputFields:
+        for fr in self.__allFields__:
             data = getattr(self, fr)
             if data.__class__.__name__ in ["date", "datetime"]:
                 returnDict[fr] = str(data)
             else:
                 returnDict[fr] = data
+        if self.__class__.__name__ == "User":
+            returnDict["age"] = date.today().year - self.birthday.year
         return returnDict
+
+    def __str__(self):
+        return json.dumps(self.toDict())
 
 
 def commonInitClass(self, **kwargs):
     missedFields = []
-    for rf in self.requiredFields:
+    for rf in self.__requiredFields__:
         if rf not in kwargs:
             missedFields.append(rf)
-        else:
-            setattr(self, rf, kwargs[rf])
     if missedFields:
         raise DataFormatException("Missing fields. (%s) are required." % (",".join(missedFields)))
+    for f in kwargs:
+        if f in self.__allFields__:
+            setattr(self, f, kwargs[f])
+
 
 dateRexp = re.compile(r"([\d]{4})-([\d]{1,2})-([\d]{1,2})")
 
@@ -54,21 +93,18 @@ class User(Base, Creatable):
 
     openid = Column(String(28), primary_key=True)
     name = Column(String)
-    age = Column(Integer)
     gender = Column(String(1), default="U")  # M: male, F: female, U: unset
     address = Column(String)
     birthday = Column(Date)
     create_time = Column(TIMESTAMP)
+    deleted = Column(BOOLEAN, default=False)
 
-    requiredFields = ["openid","name","age","gender","address","birthday"]
-    outputFields = requiredFields + ["create_time"]
+    __primaryKey__ = "openid"
+    __requiredFields__ = ["openid","name","gender","address","birthday"]
+    __allFields__ = __requiredFields__ + ["create_time", "deleted"]
 
     def __init__(self, **kwargs):
         commonInitClass(self, **kwargs)
-        try:
-            self.age = int(self.age)
-        except:
-            raise DataFormatException("age must be an integer.")
         if self.gender not in ["M", "F", "U"]:
             raise DataFormatException("gender must be one of M/F/U for Male/Female/Unset")
         m = dateRexp.match(self.birthday)
@@ -92,9 +128,11 @@ class Audio(Base, Creatable):
     img = Column(String)
     location = Column(String)
     create_time = Column(TIMESTAMP)
+    deleted = Column(BOOLEAN, default=False)
 
-    requiredFields = ["url", "intro", "img", "location"]
-    outputFields = ["audio_id"] + requiredFields + ["create_time"]
+    __primaryKey__ = "audio_id"
+    __requiredFields__ = ["url", "intro", "img", "location"]
+    __allFields__ = ["audio_id"] + __requiredFields__ + ["create_time", "deleted"]
 
     def __init__(self, **kwargs):
         commonInitClass(self, **kwargs)
@@ -106,9 +144,11 @@ class AudioTag(Base, Creatable):
     audiotag_id = Column(Integer, primary_key=True, autoincrement=True)
     tagname = Column(String(5))
     create_time = Column(TIMESTAMP)
+    deleted = Column(BOOLEAN, default=False)
 
-    requiredFields = ["tagname"]
-    outputFields = ["audiotag_id"] + requiredFields + ["create_time"]
+    __primaryKey__ = "audiotag_id"
+    __requiredFields__ = ["tagname"]
+    __allFields__ = ["audiotag_id"] + __requiredFields__ + ["create_time", "deleted"]
 
     def __init__(self, **kwargs):
         commonInitClass(self, **kwargs)
@@ -121,9 +161,11 @@ class Medal(Base, Creatable):
     img_url = Column(String)  # oss url
     condition = Column(Integer)
     create_time = Column(TIMESTAMP)
+    deleted = Column(BOOLEAN, default=False)
 
-    requiredFields = ["name", "img_url", "condition"]
-    outputFields = ["medal_id"] + requiredFields + ["create_time"]
+    __primaryKey__ = "medal_id"
+    __requiredFields__ = ["name", "img_url", "condition"]
+    __allFields__ = ["medal_id"] + __requiredFields__ + ["create_time", "deleted"]
 
     def __init__(self, **kwargs):
         commonInitClass(self, **kwargs)
@@ -143,9 +185,11 @@ class Comment(Base, Creatable):
     user_openid = Column(ForeignKey("user.openid"))
     replyto = Column(ForeignKey("user.openid"))
     create_time = Column(TIMESTAMP)
+    deleted = Column(BOOLEAN, default=False)
 
-    requiredFields = ["text", "audio_id", "user_openid", "replyto"]
-    outputFields = ["comment_id"] + requiredFields + ["create_time"]
+    __primaryKey__ = "comment_id"
+    __requiredFields__ = ["text", "audio_id", "user_openid", "replyto"]
+    __allFields__ = ["comment_id"] + __requiredFields__ + ["create_time", "deleted"]
 
     def __init__(self, **kwargs):
         commonInitClass(self, **kwargs)
@@ -158,9 +202,11 @@ class Collection(Base, Creatable):
     name = Column(String)
     user_openid = Column(ForeignKey("user.openid"))
     create_time = Column(TIMESTAMP)
+    deleted = Column(BOOLEAN, default=False)
 
-    requiredFields = ["name", "user_openid"]
-    outputFields = ["collection_set_id"] + requiredFields + ["create_time"]
+    __primaryKey__ = "collection_id"
+    __requiredFields__ = ["name", "user_openid"]
+    __allFields__ = ["collection_id"] + __requiredFields__ + ["create_time", "deleted"]
 
     def __init__(self, **kwargs):
         commonInitClass(self, **kwargs)
@@ -173,9 +219,11 @@ class Forward(Base, Creatable):
     audio_id = Column(ForeignKey("audio.audio_id"))
     destination = Column(String)
     create_time = Column(TIMESTAMP)
+    deleted = Column(BOOLEAN, default=False)
 
-    requiredFields = ["user_openid", "audio_id", "destination"]
-    outputFields = ["forward_id"] + requiredFields + ["create_time"]
+    __primaryKey__ = "forward_id"
+    __requiredFields__ = ["user_openid", "audio_id", "destination"]
+    __allFields__ = ["forward_id"] + __requiredFields__ + ["create_time", "deleted"]
 
     def __init__(self, **kwargs):
         commonInitClass(self, **kwargs)
@@ -189,9 +237,11 @@ class R_User_Create_Audio(Base, Creatable):
     user_openid = Column(ForeignKey("user.openid"))
     audio_id = Column(ForeignKey("audio.audio_id"))
     create_time = Column(TIMESTAMP)
+    deleted = Column(BOOLEAN, default=False)
 
-    requiredFields = ["user_openid", "audio_id"]
-    outputFields = requiredFields + ["create_time"]
+    __primaryKey__ = "id"
+    __requiredFields__ = ["user_openid", "audio_id"]
+    __allFields__ = ["id"] + __requiredFields__ + ["create_time", "deleted"]
 
     def __init__(self, **kwargs):
         commonInitClass(self, **kwargs)
@@ -207,9 +257,11 @@ class R_Audio_Has_AudioTag(Base, Creatable):
     audio_id = Column(ForeignKey("audio.audio_id"))
     audiotag_id = Column(ForeignKey("audiotag.audiotag_id"))
     create_time = Column(TIMESTAMP)
+    deleted = Column(BOOLEAN, default=False)
 
-    requiredFields = ["audio_id", "audiotag_id"]
-    outputFields = requiredFields + ["create_time"]
+    __primaryKey__ = "id"
+    __requiredFields__ = ["audio_id", "audiotag_id"]
+    __allFields__ = ["id"] + __requiredFields__ + ["create_time", "deleted"]
 
     def __init__(self, **kwargs):
         commonInitClass(self, **kwargs)
@@ -229,9 +281,11 @@ class R_User_Has_Medal(Base, Creatable):
     user_openid = Column(ForeignKey("user.openid"))
     medal_id = Column(ForeignKey("medal.medal_id"))
     create_time = Column(TIMESTAMP)
+    deleted = Column(BOOLEAN, default=False)
 
-    requiredFields = ["user_openid", "medal_id"]
-    outputFields = requiredFields + ["create_time"]
+    __primaryKey__ = "id"
+    __requiredFields__ = ["user_openid", "medal_id"]
+    __allFields__ = ["id"] + __requiredFields__ + ["create_time", "deleted"]
 
     def __init__(self, **kwargs):
         commonInitClass(self, **kwargs)
@@ -248,9 +302,11 @@ class R_User1_Follow_User2(Base, Creatable):
     user1 = Column(ForeignKey("user.openid"))
     user2 = Column(ForeignKey("user.openid"))
     create_time = Column(TIMESTAMP)
+    deleted = Column(BOOLEAN, default=False)
 
-    requiredFields = ["user1", "user2"]
-    outputFields = requiredFields + ["create_time"]
+    __primaryKey__ = "id"
+    __requiredFields__ = ["user1", "user2"]
+    __allFields__ = ["id"] + __requiredFields__ + ["create_time", "deleted"]
 
     def __init__(self, **kwargs):
         commonInitClass(self, **kwargs)
@@ -262,9 +318,11 @@ class R_Audio_In_Collection(Base, Creatable):
     audio_id = Column(ForeignKey("audio.audio_id"))
     collection_id = Column(ForeignKey("collection.collection_id"))
     create_time = Column(TIMESTAMP)
+    deleted = Column(BOOLEAN, default=False)
 
-    requiredFields = ["audio_id", "collection_id"]
-    outputFields = requiredFields + ["create_time"]
+    __primaryKey__ = "id"
+    __requiredFields__ = ["audio_id", "collection_id"]
+    __allFields__ = ["id"] + __requiredFields__ + ["create_time", "deleted"]
 
     def __init__(self, **kwargs):
         commonInitClass(self, **kwargs)
@@ -284,9 +342,11 @@ class R_User_Like_Audio(Base, Creatable):
     user_openid = Column(ForeignKey("user.openid"))
     audio_id = Column(ForeignKey("audio.audio_id"))
     create_time = Column(TIMESTAMP)
+    deleted = Column(BOOLEAN, default=False)
 
-    requiredFields = ["user_openid", "audio_id"]
-    outputFields = requiredFields + ["create_time"]
+    __primaryKey__ = "id"
+    __requiredFields__ = ["user_openid", "audio_id"]
+    __allFields__ = ["id"] + __requiredFields__ + ["create_time", "deleted"]
 
     def __init__(self, **kwargs):
         commonInitClass(self, **kwargs)
@@ -294,6 +354,26 @@ class R_User_Like_Audio(Base, Creatable):
             self.audio_id = int(self.audio_id)
         except:
             raise DataFormatException("audio_id must be an integer.")
+
+class R_User_Like_Comment(Base, Creatable):
+    __tablename__ = "r_user_like_comment"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    user_openid = Column(ForeignKey("user.openid"))
+    comment_id = Column(ForeignKey("comment.comment_id"))
+    create_time = Column(TIMESTAMP)
+    deleted = Column(BOOLEAN, default=False)
+
+    __primaryKey__ = "id"
+    __requiredFields__ = ["user_openid", "comment_id"]
+    __allFields__ = ["id"] + __requiredFields__ + ["create_time", "deleted"]
+
+    def __init__(self, **kwargs):
+        commonInitClass(self, **kwargs)
+        try:
+            self.comment_id = int(self.comment_id)
+        except:
+            raise DataFormatException("comment_id must be an integer.")
 
 # all tables dict
 tables = {
@@ -310,4 +390,5 @@ tables = {
     "r_user1_follow_user2": R_User1_Follow_User2,
     "r_audio_in_collection": R_Audio_In_Collection,
     "r_user_like_audio": R_User_Like_Audio,
+    "r_user_like_comment": R_User_Like_Comment,
 }

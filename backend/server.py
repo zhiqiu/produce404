@@ -65,7 +65,7 @@ if DEBUG:
         tableName = table.lower()
         if tableName not in tables:
             return "Table %s not found." % tableName
-        fields = tables[tableName].requiredFields
+        fields = tables[tableName].__requiredFields__
         return render_template("debugPage.html", fields=fields, tableName=tableName)
 
 if __name__ == "__main__":

@@ -31,7 +31,7 @@ comment对象:
     audio_id: '',
 	user: user{},
 	text: ,
-	date: ,//时间戳
+	create_time: '',
 	like_num: ,
 	isliked: ,
 	replyto: user{},
@@ -99,7 +99,7 @@ medal对象:
 {
     collection_id: '',
     name: ''
-    creator_openid: ''
+    user_openid: ''
 }
 
 *****************************
@@ -220,7 +220,7 @@ medal对象:
 	audio_id: ''
 }
 {
-	feed: feed{}	
+	feed: feed{}
 }
 
 上传一个音频
