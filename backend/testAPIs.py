@@ -17,7 +17,7 @@ def debugtest(table, params):
     print("#"*100)
     print("\ntable name:", table.lower())
     print("\n\nparams:\n\n", params)
-    res = requests.get(debugurl, params=params)
+    res = requests.get(debugurl+table, params=params)
     jsonRes = json.loads(res.text)
     print("\n\nresponse:\n\n", json.dumps(jsonRes, indent=2))
     print("\n" + "#"*100)
@@ -43,6 +43,11 @@ test({
     "audio_id": 2
 })
 
-debugtest({
-    "openid": "openid1"
-},url=debugurl + "r_user_like_audio")
+debugtest("r_user_like_audio",{
+    "user_openid": "openid1"
+})
+
+test({
+    "action": "get_comments",
+    "audio_id": 2
+})

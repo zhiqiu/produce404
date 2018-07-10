@@ -1,5 +1,65 @@
 from createTables import *
 
+testUser = {
+    "openid": "o6_bmjrPTlm6_2sgVt7hMZOPfL2M",
+    "name": "user name",
+    "age": "18",
+    "gender": "F",
+    "address": "你心里",
+    "birthday": "2000-05-20",
+    "create_time": "2018-07-09 05:36:33.294922"
+}
+
+testAudio = {
+    "audio_id": "1",
+    "url": "http://audio.com",
+    "img": "http://audio.com",
+    "intro": "for test",
+    "location": "广东 深圳",
+    "create_time": "2018-07-09 05:36:33.294922"
+}
+
+testComment = {
+    "comment_id": "1",
+    "audio_id": "2",
+    "user": testUser,
+	"text": "我要评论",
+	"date": "date format",
+	"like_num": 100,
+	"isliked": True,
+	"replyto": testUser,
+}
+
+testTag = {
+    "audiotag_id": "2",
+    "text": "心情"
+}
+
+testMedal = {
+    "medai_id": "3",
+	"name": "10万点赞徽章",
+	"img_url": "http://image.com",
+	"text": "10万点赞徽章",
+	"achieved": True
+}
+
+testFeed = {
+    "user": testUser,
+    "audio": testAudio,
+    "tags": [testTag] * 10,
+    "like_num": 1000,
+    "comment_num": 233,
+    "isliked": True,
+    "iscollected": True
+}
+
+testCollection = {
+    "collection_id": "4",
+    "name": "收藏夹",
+    "creator_openid": '1'
+}
+
+
 def makeTestDatabase(session):
 
     for i in range(1, 10):

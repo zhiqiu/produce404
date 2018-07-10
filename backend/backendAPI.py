@@ -315,8 +315,8 @@ class API():
             like.deleted = False
         else:
             like = R_User_Like_Audio(user_openid=openid, audio_id=audio_id)
-        like.merge(session)
-        
+        like.merge(self.session)
+
         return Status.success()
     
     def getComments(self, form):
