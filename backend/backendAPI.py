@@ -315,7 +315,7 @@ class API():
             like.deleted = False
         else:
             like = R_User_Like_Audio(user_openid=openid, audio_id=audio_id)
-        like.merge()
+        like.merge(session)
         
         return Status.success()
     
@@ -407,7 +407,7 @@ class API():
                 user_openid=openid,
                 replyto=replyto,
                 text=form["text"]
-                ).create()
+                ).create(self.session)
         
         return Status.success()
     
@@ -450,7 +450,7 @@ class API():
         
         openid = form["openid"]
         name = form["collection_name"]
-        Collection(user_openid=openid,name=name).create()
+        Collection(user_openid=openid,name=name).create(self.session)
 
         return Status.success()
 
@@ -482,7 +482,7 @@ class API():
         Audio.checkExist(audio_id)
         Collection.checkExist(collection_id)
 
-        R_Audio_In_Collection(audio_id=audio_id, collection_id=collection_id).create()
+        R_Audio_In_Collection(audio_id=audio_id, collection_id=collection_id).create(self.session)
 
         return Status.success()
 
@@ -682,12 +682,12 @@ class API():
         audio = json.loads(form["audio"])
         tags = json.loads(form["tags"])
         audioObj = Audio(**audio)
-        audioObj.create()
+        audioObj.create(self.session)
         for tag in tags:
             tagObj = AudioTag(tag)
-            tagObj.create()
+            tagObj.create(self.session)
             R_Audio_Has_AudioTag(audio_id=audioObj.audio_id,
-                audiotag_id=tagObj.audiotag_id).create()
+                audiotag_id=tagObj.audiotag_id).create(self.session)
         
         return Status.success()
     

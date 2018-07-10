@@ -14,6 +14,7 @@ audio对象：
 	audio_id: '',
 	url: '',
 	img: '',
+    name: '',
 	intro: '',
 	location: '',
     create_time: ''

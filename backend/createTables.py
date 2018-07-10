@@ -124,6 +124,7 @@ class Audio(Base, Creatable):
 
     audio_id = Column(Integer, primary_key=True, autoincrement=True)
     url = Column(String)  # oss url
+    name = Column(String)
     intro = Column(String(30))
     img = Column(String)
     location = Column(String)
@@ -132,7 +133,7 @@ class Audio(Base, Creatable):
     duration = Column(Integer)
 
     __primaryKey__ = "audio_id"
-    __requiredFields__ = ["url", "intro", "img", "location", "duration"]
+    __requiredFields__ = ["url", "name", "intro", "img", "location", "duration"]
     __allFields__ = ["audio_id"] + __requiredFields__ + ["create_time", "deleted"]
 
     def __init__(self, **kwargs):
