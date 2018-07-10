@@ -124,7 +124,9 @@ class API():
         )).first()
 
         if user:
-            return user.toDict()
+            return Status.success({
+                "user": user.toDict()
+                })
         else:
             raise Exception("User does't exists.")
 
