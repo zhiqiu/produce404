@@ -9,6 +9,7 @@ App({
   onLaunch: function() {
     c.login();
   },
+
   globalData: {
     checkAPI: require('/utils/api_test.js'),
     //首页数据
@@ -28,6 +29,9 @@ App({
         gender: '',
         address: '',
         birthday: '',
+        create_time: '',
+        deleted: false,
+        openid: "openid1"
       },
       feeds: [], //我的Feed
       collection: [],
@@ -40,6 +44,7 @@ App({
   },
 
   initGlobalData: function() {
+    var that = this;
     r({
       data: {
         action: 'get_index',
@@ -47,8 +52,9 @@ App({
         channel: 'unset'
       },
       success: function(res) {
-        this.globalData.indexData.feed = res.data.resp.feed
-        this.globalData.indexData.feed_next = res.data.resp.feed_next
+        that.globalData.indexData = {}
+        that.globalData.indexData.feed = res.data.resp.feed
+        that.globalData.indexData.feed_next = res.data.resp.feed_next
       }
     })
 
@@ -58,7 +64,8 @@ App({
         last_audio_id: ''
       },
       success: function(res) {
-        this.globalData.exploreData.feeds = res.data.resp.feeds
+        that.globalData.exploreData = {}
+        that.globalData.exploreData.feeds = res.data.resp.feeds
       }
     })
 
@@ -67,7 +74,8 @@ App({
         action: 'get_user_info',
       },
       success: function(res) {
-        this.globalData.myData.userInfo = res.data.resp.userInfo
+        that.globalData.myData = {}
+        that.globalData.myData.userInfo = res.data
       }
     })
 
@@ -77,7 +85,8 @@ App({
         last_audio_id: ''
       },
       success: function(res) {
-        this.globalData.myData.feeds = res.data.resp.feeds
+        that.globalData.myData = {}
+        that.globalData.myData.feeds = res.data.resp.feeds
       }
     })
 
@@ -87,8 +96,11 @@ App({
         last_audio_id: ''
       },
       success: function(res) {
-        this.globalData.myData.medal = res.data.resp.medals
+        that.globalData.myData = {}
+        that.globalData.myData.medal = res.data.resp.medals
       }
     })
+
+    log(that.globalData)
   }
 })
