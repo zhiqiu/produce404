@@ -77,6 +77,7 @@ def makeTestDatabase(session):
             "intro": "intro%d"%i,
             "img": "http://y.gtimg.cn/music/photo_new/T002R300x300M000003rsKF44GyaSk.jpg?max_age=2592000",
             "location": "location%d"%i,
+            "duration": i,
         }).create(session)
     
     for i in range(1, 10):
