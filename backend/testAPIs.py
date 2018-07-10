@@ -125,3 +125,7 @@ test({
         }
     ])
 })
+
+test({
+    "action": "get_medal"
+})
