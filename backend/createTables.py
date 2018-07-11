@@ -1,7 +1,7 @@
 from sqlalchemy import Column, String, Integer, Date, TIMESTAMP, BOOLEAN, ForeignKey
 from sqlalchemy import and_
 from sqlalchemy.ext.declarative import declarative_base
-from utils import DataFormatException
+from utils import DataFormatException, jsonDumps
 from datetime import date, datetime
 import re, json, time
 
@@ -82,7 +82,7 @@ class Creatable():
         return returnDict
 
     def __str__(self):
-        return json.dumps(self.toDict())
+        return jsonDumps(self.toDict())
 
 
     def commonInitClass(self, **kwargs):

@@ -4,7 +4,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.sql.expression import func
 from createTables import *
 from config import DEBUG, DEBUG_COMMUNITATION, appID, appSecret
-from utils import DataFormatException, Status, Encrypt
+from utils import DataFormatException, Status, Encrypt, jsonDumps
 from testbench import *
 import json
 import requests
@@ -247,7 +247,7 @@ class API():
             # 加密 openid 和 session_key 获得token
             encryptor = Encrypt()
             token = {"openid": openID, "session_key": sessionKey}
-            token = encryptor.encrypt(json.dumps(token))
+            token = encryptor.encrypt(jsonDumps(token))
 
             # 查询数据库，检测是否首次登陆
             firstTime = False
@@ -732,6 +732,7 @@ class API():
         }
         '''
 
+        print(form)
         openid = form["openid"]
         user = json.loads(form["user"])
         user["openid"] = openid
