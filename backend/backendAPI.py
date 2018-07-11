@@ -4,9 +4,8 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.sql.expression import func
 from createTables import *
 from config import DEBUG, DEBUG_COMMUNITATION, appID, appSecret
-from utils import DataFormatException, Status, Encrypt, jsonDumps
+from utils import DataFormatException, Status, Encrypt, jsonDumps, jsonLoads
 from testbench import *
-import json
 import requests
 
 
@@ -150,7 +149,7 @@ class API():
                 try:
                     encryptor = Encrypt()
                     origialText = encryptor.decrypt(form["token"])
-                    tokenObject = json.loads(originalText)
+                    tokenObject = jsonLoads(originalText)
                     form["openid"] = tokenObject["openid"]
                     form["sessionKey"] = tokenObject["session_key"]
                 except Exception as e:
@@ -244,7 +243,7 @@ class API():
 
         try:
             res = requests.get(url, params=params)
-            resJson = json.loads(res.text)
+            resJson = jsonLoads(res.text)
             openID = resJson["openid"]
             sessionKey = resJson["session_key"]
 
@@ -686,8 +685,8 @@ class API():
         '''
 
         openid = form["openid"]
-        audio = json.loads(form["audio"])
-        tags = json.loads(form["tags"])
+        audio = jsonLoads(form["audio"])
+        tags = jsonLoads(form["tags"])
         audioObj = Audio(**audio)
         audioObj.create(self.session)
         R_User_Create_Audio(user_openid=openid, audio_id=audioObj.audio_id).create(self.session)
@@ -739,7 +738,7 @@ class API():
 
         print(form)
         openid = form["openid"]
-        user = json.loads(form["user"], encoding="utf-8")
+        user = jsonLoads(form["user"], encoding="utf-8")
         user["openid"] = openid
         User(**user).merge(self.session)
 

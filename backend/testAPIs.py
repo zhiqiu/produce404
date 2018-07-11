@@ -1,6 +1,5 @@
 import requests
-from utils import jsonDumps
-import json
+from utils import jsonDumps, jsonLoads
 
 url = "http://127.0.0.1:24135/api"
 debugurl = "http://127.0.0.1:24135/debugapi/"
@@ -10,7 +9,7 @@ def test(params):
     print("\naction:", params["action"])
     print("\n\nparams:\n\n", params)
     res = requests.get(url, params=params)
-    jsonRes = json.loads(res.text)
+    jsonRes = jsonLoads(res.text)
     print("\n\nresponse:\n\n", jsonDumps(jsonRes, indent=2))
     print("\n" + "#"*100)
 
@@ -19,7 +18,7 @@ def debugtest(table, params):
     print("\ntable name:", table.lower())
     print("\n\nparams:\n\n", params)
     res = requests.get(debugurl+table, params=params)
-    jsonRes = json.loads(res.text)
+    jsonRes = jsonLoads(res.text)
     print("\n\nresponse:\n\n", jsonDumps(jsonRes, indent=2))
     print("\n" + "#"*100)
 
@@ -34,7 +33,7 @@ test({
         "name": "zhangruotian",
         "gender": "F",
         "img": "http://y.gtimg.cn/music/photo_new/T002R300x300M000003rsKF44GyaSk.jpg?max_age=2592000",
-        "address": "weiyena",
+        "address": "维也纳酒店",
         "birthday": "1998-9-8",
     })
 })
