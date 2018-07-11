@@ -12,14 +12,13 @@
 
         <view class="info-detail-group">
           <view class="info-name">
-            <text>哈哈哈</text>
+            <text>{{user.name}}</text>
           </view>
         </view>
       </view>
       <view class="some-btn">
         <view class="btn" >我的消息</view>
         <view class="btn" >我的收藏</view>
-          
       </view>
     </view>
   </view>

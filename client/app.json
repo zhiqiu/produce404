@@ -1,8 +1,8 @@
 {
   "pages": [
+    "pages/index_page/index_page",
     "pages/communtity/add_comment",
     "pages/record/record",
-    "pages/index_page/index_page",
     "pages/mine/my_msg/my_msg",
     "pages/index_page/detail",
     "pages/communtity/detail",
