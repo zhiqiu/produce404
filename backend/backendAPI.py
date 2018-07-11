@@ -23,6 +23,7 @@ class API():
             try:
                 makeTestDatabase(self.session)
             except Exception as e:
+                print(e)
                 self.session.rollback()
 
     action2API = {
