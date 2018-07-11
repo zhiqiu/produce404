@@ -14,10 +14,11 @@ PORT = 24135
 # database engine. Use sqlite3 for debug
 curdir = os.path.abspath(os.path.dirname(__file__))
 databaseFile = os.path.join(curdir, "..", "foo.db")
-engine = create_engine("sqlite:///%s?check_same_thread=False" % databaseFile, echo=False)
+# engine = create_engine("sqlite:///%s?check_same_thread=False" % databaseFile, echo=False)
 
 # use mysql for production environment.
-# engine = create_engine("mysql+mysqldb://gz-cdb-joz8xrwl.sql.tencentcdb.com:62357", echo=True)
+engine = create_engine("mysql+pymysql://root:create404mysql@gz-cdb-joz8xrwl.sql.tencentcdb.com:62357/test",
+    pool_recycle=3600, echo=True)
 
 # app config
 appID = "appID"
