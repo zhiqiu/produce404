@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine, and_
+from sqlalchemy import and_
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.sql.expression import func
@@ -24,7 +24,6 @@ class API():
                 makeTestDatabase(self.session)
             except Exception as e:
                 self.session.rollback()
-                print(e)
 
     action2API = {
         "get_user_info": "getUserInfo",

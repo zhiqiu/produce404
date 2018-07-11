@@ -24,6 +24,7 @@ __all__ = [
     "R_User_Like_Comment",
 ]
 
+tablePrefix = "t1_"
 
 def createAllTable(engine):
     Base.metadata.create_all(engine)
@@ -89,7 +90,7 @@ dateRexp = re.compile(r"([\d]{4})-([\d]{1,2})-([\d]{1,2})")
 # entity tables:
 
 class User(Base, Creatable):
-    __tablename__ = "user"
+    __tablename__ = tablePrefix + "user"
 
     openid = Column(String(28), primary_key=True)
     name = Column(String)
@@ -120,7 +121,7 @@ class User(Base, Creatable):
 
 
 class Audio(Base, Creatable):
-    __tablename__ = "audio"
+    __tablename__ = tablePrefix + "audio"
 
     audio_id = Column(Integer, primary_key=True, autoincrement=True)
     url = Column(String)  # oss url
@@ -141,7 +142,7 @@ class Audio(Base, Creatable):
 
 
 class AudioTag(Base, Creatable):
-    __tablename__ = "audiotag"
+    __tablename__ = tablePrefix + "audiotag"
 
     audiotag_id = Column(Integer, primary_key=True, autoincrement=True)
     tagname = Column(String(5))
@@ -156,7 +157,7 @@ class AudioTag(Base, Creatable):
         commonInitClass(self, **kwargs)
 
 class Medal(Base, Creatable):
-    __tablename__ = "medal"
+    __tablename__ = tablePrefix + "medal"
 
     medal_id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String)
@@ -178,14 +179,14 @@ class Medal(Base, Creatable):
 
 
 class Comment(Base, Creatable):
-    __tablename__ = "comment"
+    __tablename__ = tablePrefix + "comment"
 
     comment_id = Column(Integer, primary_key=True, autoincrement=True)
     text = Column(String)
-    audio_id = Column(ForeignKey("audio.audio_id"))
+    audio_id = Column(ForeignKey(tablePrefix + "audio.audio_id"))
     # user1 reply to user2, or user1 reply the sound (when user2 == user1)
-    user_openid = Column(ForeignKey("user.openid"))
-    replyto = Column(ForeignKey("user.openid"))
+    user_openid = Column(ForeignKey(tablePrefix + "user.openid"))
+    replyto = Column(ForeignKey(tablePrefix + "user.openid"))
     create_time = Column(TIMESTAMP)
     deleted = Column(BOOLEAN, default=False)
 
@@ -198,11 +199,11 @@ class Comment(Base, Creatable):
 
 
 class Collection(Base, Creatable):
-    __tablename__ = "collection"
+    __tablename__ = tablePrefix + "collection"
 
     collection_id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String)
-    user_openid = Column(ForeignKey("user.openid"))
+    user_openid = Column(ForeignKey(tablePrefix + "user.openid"))
     create_time = Column(TIMESTAMP)
     deleted = Column(BOOLEAN, default=False)
 
@@ -214,11 +215,11 @@ class Collection(Base, Creatable):
         commonInitClass(self, **kwargs)
 
 class Forward(Base, Creatable):
-    __tablename__ = "forward"
+    __tablename__ = tablePrefix + "forward"
 
     forward_id = Column(Integer, primary_key=True, autoincrement=True)
-    user_openid = Column(ForeignKey("user.openid"))
-    audio_id = Column(ForeignKey("audio.audio_id"))
+    user_openid = Column(ForeignKey(tablePrefix + "user.openid"))
+    audio_id = Column(ForeignKey(tablePrefix + "audio.audio_id"))
     destination = Column(String)
     create_time = Column(TIMESTAMP)
     deleted = Column(BOOLEAN, default=False)
@@ -233,11 +234,11 @@ class Forward(Base, Creatable):
 # relationship tables:
 
 class R_User_Create_Audio(Base, Creatable):
-    __tablename__ = "r_user_create_audio"
+    __tablename__ = tablePrefix + "r_user_create_audio"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    user_openid = Column(ForeignKey("user.openid"))
-    audio_id = Column(ForeignKey("audio.audio_id"))
+    user_openid = Column(ForeignKey(tablePrefix + "user.openid"))
+    audio_id = Column(ForeignKey(tablePrefix + "audio.audio_id"))
     create_time = Column(TIMESTAMP)
     deleted = Column(BOOLEAN, default=False)
 
@@ -253,11 +254,11 @@ class R_User_Create_Audio(Base, Creatable):
             raise DataFormatException("audio_id must be an integer.")
 
 class R_Audio_Has_AudioTag(Base, Creatable):
-    __tablename__ = "r_audio_has_audiotag"
+    __tablename__ = tablePrefix + "r_audio_has_audiotag"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    audio_id = Column(ForeignKey("audio.audio_id"))
-    audiotag_id = Column(ForeignKey("audiotag.audiotag_id"))
+    audio_id = Column(ForeignKey(tablePrefix + "audio.audio_id"))
+    audiotag_id = Column(ForeignKey(tablePrefix + "audiotag.audiotag_id"))
     create_time = Column(TIMESTAMP)
     deleted = Column(BOOLEAN, default=False)
 
@@ -277,11 +278,11 @@ class R_Audio_Has_AudioTag(Base, Creatable):
             raise DataFormatException("audiotag_id must be an integer.")
 
 class R_User_Has_Medal(Base, Creatable):
-    __tablename__ = "r_user_has_medal"
+    __tablename__ = tablePrefix + "r_user_has_medal"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    user_openid = Column(ForeignKey("user.openid"))
-    medal_id = Column(ForeignKey("medal.medal_id"))
+    user_openid = Column(ForeignKey(tablePrefix + "user.openid"))
+    medal_id = Column(ForeignKey(tablePrefix + "medal.medal_id"))
     create_time = Column(TIMESTAMP)
     deleted = Column(BOOLEAN, default=False)
 
@@ -297,12 +298,12 @@ class R_User_Has_Medal(Base, Creatable):
             raise DataFormatException("medal_id must be an integer.")
 
 class R_User1_Follow_User2(Base, Creatable):
-    __tablename__ = "r_user1_follow_user2"
+    __tablename__ = tablePrefix + "r_user1_follow_user2"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     # user1 follows user2
-    user1 = Column(ForeignKey("user.openid"))
-    user2 = Column(ForeignKey("user.openid"))
+    user1 = Column(ForeignKey(tablePrefix + "user.openid"))
+    user2 = Column(ForeignKey(tablePrefix + "user.openid"))
     create_time = Column(TIMESTAMP)
     deleted = Column(BOOLEAN, default=False)
 
@@ -314,11 +315,11 @@ class R_User1_Follow_User2(Base, Creatable):
         commonInitClass(self, **kwargs)
 
 class R_Audio_In_Collection(Base, Creatable):
-    __tablename__ = "r_audio_in_collection"
+    __tablename__ = tablePrefix + "r_audio_in_collection"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    audio_id = Column(ForeignKey("audio.audio_id"))
-    collection_id = Column(ForeignKey("collection.collection_id"))
+    audio_id = Column(ForeignKey(tablePrefix + "audio.audio_id"))
+    collection_id = Column(ForeignKey(tablePrefix + "collection.collection_id"))
     create_time = Column(TIMESTAMP)
     deleted = Column(BOOLEAN, default=False)
 
@@ -338,11 +339,11 @@ class R_Audio_In_Collection(Base, Creatable):
             raise DataFormatException("collection_id must be an integer.")
 
 class R_User_Like_Audio(Base, Creatable):
-    __tablename__ = "r_user_like_audio"
+    __tablename__ = tablePrefix + "r_user_like_audio"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    user_openid = Column(ForeignKey("user.openid"))
-    audio_id = Column(ForeignKey("audio.audio_id"))
+    user_openid = Column(ForeignKey(tablePrefix + "user.openid"))
+    audio_id = Column(ForeignKey(tablePrefix + "audio.audio_id"))
     create_time = Column(TIMESTAMP)
     deleted = Column(BOOLEAN, default=False)
 
@@ -358,11 +359,11 @@ class R_User_Like_Audio(Base, Creatable):
             raise DataFormatException("audio_id must be an integer.")
 
 class R_User_Like_Comment(Base, Creatable):
-    __tablename__ = "r_user_like_comment"
+    __tablename__ = tablePrefix + "r_user_like_comment"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    user_openid = Column(ForeignKey("user.openid"))
-    comment_id = Column(ForeignKey("comment.comment_id"))
+    user_openid = Column(ForeignKey(tablePrefix + "user.openid"))
+    comment_id = Column(ForeignKey(tablePrefix + "comment.comment_id"))
     create_time = Column(TIMESTAMP)
     deleted = Column(BOOLEAN, default=False)
 

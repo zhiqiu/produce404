@@ -5,13 +5,22 @@ from json import dumps
 from flask import Flask, request, render_template
 from flask import Blueprint
 from sign import sign 
+import os
 
 __all__ = ["app"]
 
 api = API(engine)
-app = Flask("create404", template_folder='templates')
 
-app.register_blueprint(sign, url_prefix='/sign', template_folder="templates")
+# turn the template folder and static folder to absolute path
+# so that you can start the server in any working folder
+curdir = os.path.abspath(os.path.dirname(__file__))
+template_folder = os.path.join(curdir, "templates")
+static_folder = os.path.join(curdir, "static")
+
+app = Flask("create404", template_folder=template_folder, static_folder=static_folder)
+
+# the sign and upload file blueprint
+app.register_blueprint(sign, url_prefix='/sign', template_folder=template_folder, static_folder=static_folder)
 
 
 @app.errorhandler(404)
@@ -22,9 +31,7 @@ def page_not_found(_):
 def getIndex():
     return '<script>s="It works! ";for(i=0;i<11;i++) s+=s;document.write(s);</script>'
 
-apiMethod = "GET" if DEBUG else "POST"
-
-@app.route("/api", methods=[apiMethod])
+@app.route("/api", methods=["GET", "POST"])
 def dealRequests():
     if request.method == "GET":
         form = request.args.to_dict()
