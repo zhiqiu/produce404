@@ -734,7 +734,7 @@ class API():
 
         print(form)
         openid = form["openid"]
-        user = json.loads(form["user"])
+        user = json.loads(form["user"], encoding="utf-8")
         user["openid"] = openid
         User(**user).merge(self.session)
 

@@ -34,7 +34,7 @@ test({
         "name": "zhangruotian",
         "gender": "F",
         "img": "http://y.gtimg.cn/music/photo_new/T002R300x300M000003rsKF44GyaSk.jpg?max_age=2592000",
-        "address": "维也纳酒店",
+        "address": "weiyena",
         "birthday": "1998-9-8",
     })
 })
