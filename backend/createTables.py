@@ -24,7 +24,7 @@ __all__ = [
     "R_User_Like_Comment",
 ]
 
-tablePrefix = "t16_"
+tablePrefix = "t17_"
 
 def createAllTable(engine):
     try:

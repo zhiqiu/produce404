@@ -160,6 +160,7 @@ class API():
                 form["session_key"] = "123"
             return getattr(self, API.action2API[action])(form)
         except Exception as e:
+            self.session.rollback()
             return Status.internalError(e)
 
 
@@ -293,6 +294,7 @@ class API():
             R_User_Create_Audio.audio_id == Audio.audio_id
         )).order_by(randfunc).limit(2).all()
 
+        print(randTwoAudios)
         # 查询对应的user，tag，以及其他信息，组装成feed
         openid = form["openid"]
         feeds = [self.packFeed(openid, user, audio) for user, audio in randTwoAudios]
