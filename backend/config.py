@@ -17,7 +17,7 @@ databaseFile = os.path.join(curdir, "..", "foo.db")
 # engine = create_engine("sqlite:///%s?check_same_thread=False" % databaseFile, echo=False)
 
 # use mysql for production environment.
-engine = create_engine("mysql+pymysql://root:create404mysql@gz-cdb-joz8xrwl.sql.tencentcdb.com:62357/test",
+engine = create_engine("mysql+pymysql://dba:create404mysql@ladyrick.com/create404",
     pool_recycle=3600, echo=True)
 
 # app config

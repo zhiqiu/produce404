@@ -3,3 +3,4 @@ sqlalchemy
 flask
 uwsgi
 pycrypto
+pymysql
