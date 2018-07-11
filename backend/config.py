@@ -1,7 +1,7 @@
 from sqlalchemy import create_engine
 import os
 
-__all__ = ["DEBUG", "PORT", "engine", "appID", "appSecret"]
+__all__ = ["DEBUG", "PORT", "engine", "appID", "appSecret", "DEBUG_COMMUNITATION", "Config"]
 
 DEBUG = True
 
@@ -9,22 +9,21 @@ DEBUG = True
 DEBUG_COMMUNITATION = True
 
 # flask port
-PORT = 2345
+PORT = 24135
 
 # database engine. Use sqlite3 for debug
 curdir = os.path.abspath(os.path.dirname(__file__))
 databaseFile = os.path.join(curdir, "..", "foo.db")
-engine = create_engine("sqlite:///%s?check_same_thread=False" % databaseFile, echo=DEBUG)
+engine = create_engine("sqlite:///%s?check_same_thread=False" % databaseFile, echo=False)
+
+# use mysql for production environment.
+# engine = create_engine("mysql+mysqldb://gz-cdb-joz8xrwl.sql.tencentcdb.com:62357", echo=True)
 
 # app config
 appID = "appID"
 
 appSecret = "appSecret"
 
-try:
-    from localConfig import *
-except:
-    pass
 
 
 # config for app key
