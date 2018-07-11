@@ -21,21 +21,20 @@ class API():
         self.session = Session()
         try: # create system users: system, nobody
             for sysuser in ["system", "nobody"]:
-                User(**{
+                self.session.add(User(**{
                     "openid": sysuser,
                     "name": sysuser,
                     "gender": "U",
+                    "img": "no avatar",
                     "address": "inside",
                     "birthday": "2000-1-1",
-                }).create(self.session)
-        except:
-            pass
-        if DEBUG:
-            try:
+                }))
+            self.session.commit()
+            if DEBUG:
                 makeTestDatabase(self.session)
-            except Exception as e:
-                print(e)
-                self.session.rollback()
+        except:
+            self.session.rollback()
+            print("Session has rollback.")
 
     action2API = {
         "get_user_info": "getUserInfo",
@@ -409,7 +408,7 @@ class API():
 
         openid = form["openid"]
         audio_id = form["audio_id"]
-        replyro = ""
+        replyto = ""
         if "reply_to_openid" in form:
             replyto = form["reply_to_user_openid"]
 
@@ -504,6 +503,13 @@ class API():
         
         openid = form["openid"]
         name = form["collection_name"]
+        if self.session.query(Collection.collection_id).filter(and_(
+            Collection.deleted == False,
+            Collection.user_openid == openid,
+            Collection.name == name
+        )).count():
+            return Status.internalError("Collection already exists.")
+
         Collection(user_openid=openid,name=name).create(self.session)
 
         return Status.success()
@@ -607,7 +613,8 @@ class API():
             Audio.deleted == False,
             R_User_Create_Audio.deleted == False,
             User.openid == R_User_Create_Audio.user_openid,
-            R_User_Create_Audio.audio_id == Audio.audio_id
+            R_User_Create_Audio.audio_id == Audio.audio_id,
+            Audio.audio_id == audio_id
         )).first()
 
         feed = self.packFeed(openid, user, audio)
@@ -675,18 +682,17 @@ class API():
         openid = form["openid"]
         audio = json.loads(form["audio"])
         tags = json.loads(form["tags"])
-        print(audio)
-        print(tags)
         audioObj = Audio(**audio)
         audioObj.create(self.session)
+        R_User_Create_Audio(user_openid=openid, audio_id=audioObj.audio_id).create(self.session)
         for tag in tags:
             tagObj = AudioTag(**tag)
             tagObj.create(self.session)
             R_Audio_Has_AudioTag(audio_id=audioObj.audio_id,
                 audiotag_id=tagObj.audiotag_id).create(self.session)
-        
+
         return Status.success()
-    
+
     def getMedal(self, form):
         '''
         获取用户的徽章

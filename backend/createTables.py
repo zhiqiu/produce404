@@ -3,7 +3,7 @@ from sqlalchemy import and_
 from sqlalchemy.ext.declarative import declarative_base
 from utils import DataFormatException
 from datetime import date, datetime
-import re, json
+import re, json, time
 
 __all__ = [
     "createAllTable",
@@ -24,11 +24,15 @@ __all__ = [
     "R_User_Like_Comment",
 ]
 
-tablePrefix = "t9_"
+tablePrefix = "t15_"
 
 def createAllTable(engine):
-    Base.metadata.create_all(engine)
-    return Base
+    try:
+        Base.metadata.create_all(engine)
+    except:
+        print("Create failed. Try again in 5 seconds.")
+        time.sleep(5)
+        createAllTable(engine)
 
 # common super class
 
@@ -38,11 +42,17 @@ class Creatable():
     def create(self, session):
         self.create_time = datetime.utcnow()
         session.add(self)
-        session.commit()
+        try:
+            session.commit()
+        except:
+            session.rollback()
 
     def merge(self, session):
         session.merge(self)
-        session.commit()
+        try:
+            session.commit()
+        except:
+            session.rollback()
 
     @classmethod
     def checkExist(cls, session, pkey):
@@ -106,13 +116,14 @@ class User(Base, Creatable):
     openid = Column(String(28), primary_key=True)
     name = Column(String(64))
     gender = Column(String(1), default="U")  # M: male, F: female, U: unset
+    img = Column(String(512))
     address = Column(String(128))
     birthday = Column(Date)
     create_time = Column(TIMESTAMP)
     deleted = Column(BOOLEAN, default=False)
 
     __primaryKey__ = "openid"
-    __requiredFields__ = ["openid","name","gender","address","birthday"]
+    __requiredFields__ = ["openid","name","gender","img","address","birthday"]
     __allFields__ = __requiredFields__ + ["create_time", "deleted"]
 
     def __init__(self, **kwargs):
