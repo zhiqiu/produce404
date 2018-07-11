@@ -143,8 +143,10 @@ def makeTestDatabase(session):
             "audio_id": i,
         }).create(session)
 
-    for i in range(1, 10):
+    for i in range(1, 9):
         R_User_Like_Comment(**{
             "user_openid": "openid%d"%i,
             "comment_id": i,
         }).create(session)
+
+    print("All test objects created successfully.")
