@@ -7,6 +7,8 @@
 
 <body>
     <input id="file-selector" type="file">
+    <input id="file-download" type="text">
+    <input type="button" value="Click Download" onclick="download()" />
     <script src="/static/cos-js-sdk-v5.min.js"></script>
     <script>
         var Bucket = 'create404-cos-1253746840';
@@ -60,6 +62,28 @@
                 console.log(err, data);
             });
         };
+
+	function download(){
+            filename = document.getElementById("file-download").value;
+ 	    console.log(filename)
+	    // get url
+	    cos.getObjectUrl({
+    	        Bucket: Bucket, /* 必须 */
+    	        Region: Region,    /* 必须 */
+    	        Key: filename,
+    	        Sign: true
+	        }, function (err, data) {
+	            console.log(err || data.Url);
+	    });
+	    // get obj file
+	    cos.getObject({
+    		Bucket: Bucket, /* 必须 */
+    		Region: Region,    /* 必须 */
+    		Key:   filename                          /* 必须 */
+		}, function(err, data) {
+    		console.log(err || data);
+	    });
+	}
     </script>
 </body>
 

@@ -14,7 +14,7 @@ PORT = 24135
 # database engine. Use sqlite3 for debug
 curdir = os.path.abspath(os.path.dirname(__file__))
 databaseFile = os.path.join(curdir, "..", "foo.db")
-# engine = create_engine("sqlite:///%s?check_same_thread=False" % databaseFile, echo=False)
+engine = create_engine("sqlite:///%s?check_same_thread=False" % databaseFile, echo=False)
 
 # use mysql for production environment.
 engine = create_engine("mysql+pymysql://dba:create404mysql@ladyrick.com/create404", pool_recycle=3600, echo=False)
