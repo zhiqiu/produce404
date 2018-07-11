@@ -1,7 +1,7 @@
 /*发现页面*/
 // pages/communtity/community.js
 
-const c = require('../../utils/c.js')
+const c = require('../../../utils/c.js')
 const r = c.r;
 Page({
 

@@ -1,6 +1,9 @@
 <!--pages/communtity/community.wxml-->
 
 <view class="timeline">
+	<view ontap="gotoRecord">
+		点击录音
+	</view>
   <view wx:for="{{feeds}}">
     <view class="info" ontap="gotoDetail" id="detail-id">
       <view class="holder">

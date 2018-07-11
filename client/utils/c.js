@@ -1,6 +1,6 @@
 'use strict'
 
-const baseUrl = 'http://404.ladyrick.com/';
+const baseUrl = 'https://404.ladyrick.com/';
 var token = wx.getStorageSync('token') || '';
 
 const r = function(option,api){
@@ -87,5 +87,7 @@ const login = function(){
 module.exports = {
   login: login,
   r:r,
+  baseUrl:baseUrl,
+  token:token,
   check:check
 }

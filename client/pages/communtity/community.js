@@ -73,5 +73,10 @@ Page({
     wx.navigateTo({
       url: '/pages/communtity/detail?dID='+dID
     })
+  },
+  gotoRecord: function(e){
+    wx.navigateTo({
+      url: '/pages/record/record'
+    })
   }
 })

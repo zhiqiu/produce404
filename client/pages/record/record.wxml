@@ -1,7 +1,7 @@
 
 <view class="record">
 	<view class="cir">
-		<image src="/image/icon-mac.svg"  class="icon-mac"> </image>
+		<image src="/image/icon-mac.svg"  class="icon-mac" ontap="touch"> </image>
 	</view>
 	<textarea class="text">请输入文字
 	</textarea>
@@ -10,7 +10,7 @@
 		<view class="tag">#标签</view>
 	</view>
 
-	<view	class="submit">
+	<view	class="submit" ontap="upload">
 		提  交
 	</view>
 
