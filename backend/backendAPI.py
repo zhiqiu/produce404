@@ -160,7 +160,10 @@ class API():
                 form["session_key"] = "123"
             return getattr(self, API.action2API[action])(form)
         except Exception as e:
-            self.session.rollback()
+            try:
+                self.session.rollback()
+            except Exception as e:
+                return Status.internalError(e)
             return Status.internalError(e)
 
 
