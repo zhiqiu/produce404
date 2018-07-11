@@ -1,4 +1,5 @@
 from sqlalchemy import create_engine
+import os
 
 __all__ = ["DEBUG", "PORT", "engine", "appID", "appSecret"]
 
@@ -11,7 +12,9 @@ DEBUG_COMMUNITATION = True
 PORT = 2345
 
 # database engine. Use sqlite3 for debug
-engine = create_engine('sqlite:///foo.db?check_same_thread=False', echo=DEBUG)
+curdir = os.path.abspath(os.path.dirname(__file__))
+databaseFile = os.path.join(curdir, "..", "foo.db")
+engine = create_engine("sqlite:///%s?check_same_thread=False" % databaseFile, echo=DEBUG)
 
 # app config
 appID = "appID"

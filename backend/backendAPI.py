@@ -24,7 +24,6 @@ class API():
                 makeTestDatabase(self.session)
             except Exception as e:
                 self.session.rollback()
-                print(e)
 
     action2API = {
         "get_user_info": "getUserInfo",
