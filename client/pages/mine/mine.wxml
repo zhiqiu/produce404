@@ -17,265 +17,71 @@
         </view>
       </view>
       <view class="some-btn">
-        <view class="btn" >我的消息</view>
-        <view class="btn" >我的收藏</view>
+        <view class="btn">我的消息</view>
+        <view class="btn">我的收藏</view>
       </view>
     </view>
   </view>
   <!-- <view class="holder"> -->
-    <view class="cont1">
-      <view class="conttext">
-        声音日迹
-      </view>
+  <view class="cont1">
+    <view class="conttext">
+      声音日迹
     </view>
-    <view class="cont2">
-      <view class="conttext">
-        我的勋章
-      </view>
+  </view>
+  <view class="cont2">
+    <view class="conttext">
+      我的勋章
     </view>
+  </view>
   <!-- </view> -->
   <view class="timeline">
-    <view class="info" ontap="gotoDetail" id="detail-id">
-      <view class="holder">
-        <view class="time">
-          45"
-        </view>
-        <!--当点击的是当前正在播放的feed，-->
-        <view class="audio">
-          <image src="/image/icon-sound.svg" class="audio-icon"></image>
-        </view>
-      </view>
-      
-      <view class="description">
-        <text class="content">哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈</text>
-      </view>
-
-      
-
-      <view class="tags">
-        <view class="tag">
-          <text class="tag-text">#tag1</text>
-        </view>
-        <view class="tag">
-          <text class="tag-text">#tag2</text>
-        </view>
-      </view>
-
-      <view class="holder">
-        <view class="author">
-          <text>Author</text>
-        </view>
-
-        <view class="btns">
-          <view class="btn-group">
-            <image src="/image/icon-like.svg" class="icon-sm btn-up">btns</image>
-            <view class="btn-num"> 10</view>
+      <view wx:for="{{feeds}}">
+      <view class="info" ontap="gotoDetail" id="detail-id">
+        <view class="holder">
+          <view class="time">
+            45"
           </view>
-          <view class="btn-group">
-            <image src="/image/icon-comments.svg" class="icon-sm btn-up">btns</image>
-            <view class="btn-num"> 23</view>
-          </view>
-          <view class="btn-group">
-            <image src="/image/icon-collect.svg" class="icon-sm btn-up">btns</image>
-            <!-- <view class="btn-num"> 10</view> -->
+          <!--当点击的是当前正在播放的feed，-->
+          <view class="audio">
+            <image src="/image/icon-sound.svg" class="audio-icon"></image>
           </view>
         </view>
-      </view>
 
-    </view>
-
-  <view class="info">
-    <view class="holder">
-      <view class="time">
-        45"
-      </view>
-      <view class="audio">
-        <image src="/image/icon-sound.svg" class="audio-icon"></image>
-      </view>
-    </view>
-    
-    <view class="description">
-      <text class="content">哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈</text>
-    </view>
-
-    
-
-    <view class="tags">
-      <view class="tag">
-        <text class="tag-text">#tag1</text>
-      </view>
-      <view class="tag">
-        <text class="tag-text">#tag2</text>
-      </view>
-    </view>
-
-    <view class="holder">
-      <view class="author">
-        <text>Author</text>
-      </view>
-
-      <view class="btns">
-        <view class="btn-group">
-          <image src="/image/icon-like.svg" class="icon-sm btn-up">btns</image>
-          <view class="btn-num"> 10</view>
+        <view class="description">
+          <text class="content">{{item.audio.intro}}</text>
         </view>
-        <view class="btn-group">
-          <image src="/image/icon-comments.svg" class="icon-sm btn-up">btns</image>
-          <view class="btn-num"> 23</view>
+
+        <view class="tags">
+          <view wx:for="{{item.tags}}">
+            <view class="tag">
+              <text class="tag-text">{{item.test}}</text>
+            </view>
+          </view>
         </view>
-        <view class="btn-group">
-          <image src="/image/icon-collect.svg" class="icon-sm btn-up">btns</image>
-          <!-- <view class="btn-num"> 10</view> -->
+
+        <view class="holder">
+          <view class="author">
+            <text>{{item.user.name}}</text>
+          </view>
+
+          <view class="btns">
+            <view class="btn-group">
+              <view></view>
+              <image wx:if="{{item.audio.isliked}}" src="/image/icon-like.svg" class="icon-sm btn-up">btns</image>
+              <image wx:else src="/image/icon-like.svg" class="icon-sm btn-up">btns</image>
+              <view class="btn-num">{{item.like_num}}</view>
+            </view>
+            <view class="btn-group">
+              <image src="/image/icon-comments.svg" class="icon-sm btn-up">btns</image>
+              <view class="btn-num">{{item.comment_num}}</view>
+            </view>
+            <view class="btn-group">
+              <image src="/image/icon-collect.svg" class="icon-sm btn-up">btns</image>
+              <!-- <view class="btn-num"> 10</view> -->
+            </view>
+          </view>
         </view>
       </view>
     </view>
-
   </view>
-
-  <view class="info">
-    <view class="holder">
-      <view class="time">
-        45"
-      </view>
-      <view class="audio">
-        <image src="/image/icon-sound.svg" class="audio-icon"></image>
-      </view>
-    </view>
-    
-    <view class="description">
-      <text class="content">哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈</text>
-    </view>
-
-    
-
-    <view class="tags">
-      <view class="tag">
-        <text class="tag-text">#tag1</text>
-      </view>
-      <view class="tag">
-        <text class="tag-text">#tag2</text>
-      </view>
-    </view>
-
-    <view class="holder">
-      <view class="author">
-        <text>Author</text>
-      </view>
-
-      <view class="btns">
-        <view class="btn-group">
-          <image src="/image/icon-like.svg" class="icon-sm btn-up">btns</image>
-          <view class="btn-num"> 10</view>
-        </view>
-        <view class="btn-group">
-          <image src="/image/icon-comments.svg" class="icon-sm btn-up">btns</image>
-          <view class="btn-num"> 23</view>
-        </view>
-        <view class="btn-group">
-          <image src="/image/icon-collect.svg" class="icon-sm btn-up">btns</image>
-          <!-- <view class="btn-num"> 10</view> -->
-        </view>
-      </view>
-    </view>
-
-  </view>
-
-  <view class="info">
-    <view class="holder">
-      <view class="time">
-        45"
-      </view>
-      <view class="audio">
-        <image src="/image/icon-sound.svg" class="audio-icon"></image>
-      </view>
-    </view>
-    
-    <view class="description">
-      <text class="content">哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈</text>
-    </view>
-
-    
-
-    <view class="tags">
-      <view class="tag">
-        <text class="tag-text">#tag1</text>
-      </view>
-      <view class="tag">
-        <text class="tag-text">#tag2</text>
-      </view>
-    </view>
-
-    <view class="holder">
-      <view class="author">
-        <text>Author</text>
-      </view>
-
-      <view class="btns">
-        <view class="btn-group">
-          <image src="/image/icon-like.svg" class="icon-sm btn-up">btns</image>
-          <view class="btn-num"> 10</view>
-        </view>
-        <view class="btn-group">
-          <image src="/image/icon-comments.svg" class="icon-sm btn-up">btns</image>
-          <view class="btn-num"> 23</view>
-        </view>
-        <view class="btn-group">
-          <image src="/image/icon-collect.svg" class="icon-sm btn-up">btns</image>
-          <!-- <view class="btn-num"> 10</view> -->
-        </view>
-      </view>
-    </view>
-
-  </view>
-
-  <view class="info">
-    <view class="holder">
-      <view class="time">
-        45"
-      </view>
-      <view class="audio">
-        <image src="/image/icon-sound.svg" class="audio-icon"></image>
-      </view>
-    </view>
-    
-    <view class="description">
-      <text class="content">哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈哈</text>
-    </view>
-
-    
-
-    <view class="tags">
-      <view class="tag">
-        <text class="tag-text">#tag1</text>
-      </view>
-      <view class="tag">
-        <text class="tag-text">#tag2</text>
-      </view>
-    </view>
-
-    <view class="holder">
-      <view class="author">
-        <text>Author</text>
-      </view>
-
-      <view class="btns">
-        <view class="btn-group">
-          <image src="/image/icon-like.svg" class="icon-sm btn-up">btns</image>
-          <view class="btn-num"> 10</view>
-        </view>
-        <view class="btn-group">
-          <image src="/image/icon-comments.svg" class="icon-sm btn-up">btns</image>
-          <view class="btn-num"> 23</view>
-        </view>
-        <view class="btn-group">
-          <image src="/image/icon-collect.svg" class="icon-sm btn-up">btns</image>
-          <!-- <view class="btn-num"> 10</view> -->
-        </view>
-      </view>
-    </view>
-
-  </view>
-</view>
-
-  
 </view>
