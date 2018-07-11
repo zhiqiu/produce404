@@ -28,6 +28,22 @@ test({
 })
 
 test({
+    "action": "set_user_info",
+    "user": json.dumps({
+        "name": "zhangruotian",
+        "gender": "F",
+        "img": "http://y.gtimg.cn/music/photo_new/T002R300x300M000003rsKF44GyaSk.jpg?max_age=2592000",
+        "address": "维也纳酒店",
+        "birthday": "1998-9-8",
+    })
+})
+
+test({
+    "action": "get_user_info",
+    "token": "123"
+})
+
+test({
     "action": "login",
     "code": "345"
 })

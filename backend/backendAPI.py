@@ -38,6 +38,7 @@ class API():
 
     action2API = {
         "get_user_info": "getUserInfo",
+        "set_user_info": "setUserInfo",
         "login": "login",
         "get_index": "getIndex",
         "like_audio": "likeAudio",
@@ -223,7 +224,7 @@ class API():
 
         if DEBUG_COMMUNITATION:
             return Status.success({
-                "token": "I am token.",
+                "token": "Iamtoken.",
                 "first_time": True
             })
 
@@ -718,3 +719,22 @@ class API():
         return Status.success({
             "medals": [m.toDict() for m in medals]
         })
+
+    def setUserInfo(self, form):
+        '''
+        设置用户信息
+        {
+            "action": "set_user_info",
+            "user": user{}
+        }
+        {
+            "err": "ok"
+        }
+        '''
+
+        openid = form["openid"]
+        user = json.loads(form["user"])
+        user["openid"] = openid
+        User(**user).merge(self.session)
+
+        return Status.success()

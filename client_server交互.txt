@@ -116,6 +116,15 @@ medal对象:
     user: user{}
 }
 
+设置用户信息
+{
+    "action": "set_user_info",
+    "user": user{}
+}
+{
+    "err": "ok"
+}
+
 觅声_登录
 {
     action: "login",
