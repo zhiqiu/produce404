@@ -5,7 +5,7 @@
 		点击录音
 	</view>
   <view wx:for="{{feeds}}">
-    <view class="info" ontap="gotoDetail" id="detail-id">
+    <view class="info" ontap="gotoDetail" id="{{item.audio.audio_id}}">
       <view class="holder">
         <view class="time">
           {{item.audio.duration}}"
@@ -21,7 +21,7 @@
 
       <view class="tags">
         <view wx:for="{{item.tags}}" class="tag">
-          <text class="tag-text">{{item.text}}</text>
+          <text class="tag-text">#{{item.tagname}}#</text>
         </view>
       </view>
 

@@ -10,7 +10,6 @@ Page({
    */
   data: {
     playing_preFeedId : -1,  //当前播放的feed Id
-
     feeds : []
   },
 

@@ -1,18 +1,20 @@
 // pages/communtity/detail.js
+const c = require('../../utils/c.js')
+const r = c.r;
+
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-  
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    console.log(this.options)
+    console.log(111)
   },
 
   /**
@@ -26,7 +28,23 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-  
+
+   /* var feedId = this.options.dID;
+    var feedTmp = {}
+    var that = this;
+    console.log(feedId)
+    r({
+      data: {
+        action: 'get_one_feed',
+        audio_id: feedId
+      },
+      success: function (res) {
+        that.setData({
+          feed: res.data.resp.feed
+        })
+        console.log(that.data.feed)
+      }
+    })*/
   },
 
   /**
