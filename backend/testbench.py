@@ -67,6 +67,7 @@ def makeTestDatabase(session):
             "openid": "openid%d"%i,
             "name": "name%d"%i,
             "gender": "M" if i % 2 else "F",
+            "img": "http://y.gtimg.cn/music/photo_new/T002R300x300M000003rsKF44GyaSk.jpg?max_age=2592000",
             "address": "address%d"%i,
             "birthday": "1999-9-%d"%(i+1),
         }).create(session)
@@ -98,7 +99,7 @@ def makeTestDatabase(session):
             "text": "text%d"%i,
             "audio_id": i,
             "user_openid": "openid%d"%i,
-            "replyto": "openid%d"%(i+1),
+            "replyto": "openid%d"%(i+1) if i % 2 else "",
         }).create(session)
     
     for i in range(1, 10):
@@ -143,8 +144,10 @@ def makeTestDatabase(session):
             "audio_id": i,
         }).create(session)
 
-    for i in range(1, 10):
+    for i in range(1, 9):
         R_User_Like_Comment(**{
             "user_openid": "openid%d"%i,
             "comment_id": i,
         }).create(session)
+
+    print("All test objects created successfully.")

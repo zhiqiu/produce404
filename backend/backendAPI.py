@@ -1,12 +1,11 @@
-from sqlalchemy import create_engine, and_
+from sqlalchemy import and_
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.sql.expression import func
 from createTables import *
 from config import DEBUG, DEBUG_COMMUNITATION, appID, appSecret
-from utils import DataFormatException, Status, Encrypt
+from utils import DataFormatException, Status, Encrypt, jsonDumps, jsonLoads
 from testbench import *
-import json
 import requests
 
 
@@ -19,15 +18,26 @@ class API():
         base = createAllTable(engine)
         Session = sessionmaker(bind=engine)
         self.session = Session()
-        if DEBUG:
-            try:
+        try: # create system users: system, nobody
+            for sysuser in ["system", "nobody"]:
+                self.session.add(User(**{
+                    "openid": sysuser,
+                    "name": sysuser,
+                    "gender": "U",
+                    "img": "no avatar",
+                    "address": "inside",
+                    "birthday": "2000-1-1",
+                }))
+            self.session.commit()
+            if DEBUG:
                 makeTestDatabase(self.session)
-            except Exception as e:
-                self.session.rollback()
-                print(e)
+        except:
+            self.session.rollback()
+            print("Session has rollback.")
 
     action2API = {
         "get_user_info": "getUserInfo",
+        "set_user_info": "setUserInfo",
         "login": "login",
         "get_index": "getIndex",
         "like_audio": "likeAudio",
@@ -139,7 +149,7 @@ class API():
                 try:
                     encryptor = Encrypt()
                     origialText = encryptor.decrypt(form["token"])
-                    tokenObject = json.loads(originalText)
+                    tokenObject = jsonLoads(originalText)
                     form["openid"] = tokenObject["openid"]
                     form["sessionKey"] = tokenObject["session_key"]
                 except Exception as e:
@@ -149,6 +159,10 @@ class API():
                 form["session_key"] = "123"
             return getattr(self, API.action2API[action])(form)
         except Exception as e:
+            try:
+                self.session.rollback()
+            except Exception as e:
+                return Status.internalError(e)
             return Status.internalError(e)
 
 
@@ -213,7 +227,7 @@ class API():
 
         if DEBUG_COMMUNITATION:
             return Status.success({
-                "token": "I am token.",
+                "token": "Iamtoken.",
                 "first_time": True
             })
 
@@ -229,14 +243,14 @@ class API():
 
         try:
             res = requests.get(url, params=params)
-            resJson = json.loads(res.text)
+            resJson = jsonLoads(res.text)
             openID = resJson["openid"]
             sessionKey = resJson["session_key"]
 
             # 加密 openid 和 session_key 获得token
             encryptor = Encrypt()
             token = {"openid": openID, "session_key": sessionKey}
-            token = encryptor.encrypt(json.dumps(token))
+            token = encryptor.encrypt(jsonDumps(token))
 
             # 查询数据库，检测是否首次登陆
             firstTime = False
@@ -282,6 +296,7 @@ class API():
             R_User_Create_Audio.audio_id == Audio.audio_id
         )).order_by(randfunc).limit(2).all()
 
+        print(randTwoAudios)
         # 查询对应的user，tag，以及其他信息，组装成feed
         openid = form["openid"]
         feeds = [self.packFeed(openid, user, audio) for user, audio in randTwoAudios]
@@ -354,13 +369,12 @@ class API():
             del com["user_openid"]
             user = self.session.query(User).filter(User.openid == openid).first()
             com["user"] = user.toDict()
-            
-            if com["replyto"]:
-                reply_to_openid = com["replyto"]
-                del com["replyto"]
-                user = self.session.query(User).filter(User.openid == reply_to_openid).first()
-                com["replyto"] = user.toDict()
-            
+
+
+            reply_to_openid = com["replyto"]
+            user = self.session.query(User).filter(User.openid == reply_to_openid).first()
+            com["replyto"] = user.toDict()
+
             like_num = self.session.query(R_User_Like_Comment).filter(and_(
                 R_User_Like_Comment.deleted == False,
                 R_User_Like_Comment.comment_id == com["comment_id"]
@@ -399,7 +413,9 @@ class API():
 
         openid = form["openid"]
         audio_id = form["audio_id"]
-        replyto = form["reply_to_user_openid"]
+        replyto = ""
+        if "reply_to_openid" in form:
+            replyto = form["reply_to_user_openid"]
 
         Audio.checkExist(self.session, audio_id)
         
@@ -492,6 +508,13 @@ class API():
         
         openid = form["openid"]
         name = form["collection_name"]
+        if self.session.query(Collection.collection_id).filter(and_(
+            Collection.deleted == False,
+            Collection.user_openid == openid,
+            Collection.name == name
+        )).count():
+            return Status.internalError("Collection already exists.")
+
         Collection(user_openid=openid,name=name).create(self.session)
 
         return Status.success()
@@ -595,7 +618,8 @@ class API():
             Audio.deleted == False,
             R_User_Create_Audio.deleted == False,
             User.openid == R_User_Create_Audio.user_openid,
-            R_User_Create_Audio.audio_id == Audio.audio_id
+            R_User_Create_Audio.audio_id == Audio.audio_id,
+            Audio.audio_id == audio_id
         )).first()
 
         feed = self.packFeed(openid, user, audio)
@@ -661,20 +685,19 @@ class API():
         '''
 
         openid = form["openid"]
-        audio = json.loads(form["audio"])
-        tags = json.loads(form["tags"])
-        print(audio)
-        print(tags)
+        audio = jsonLoads(form["audio"])
+        tags = jsonLoads(form["tags"])
         audioObj = Audio(**audio)
         audioObj.create(self.session)
+        R_User_Create_Audio(user_openid=openid, audio_id=audioObj.audio_id).create(self.session)
         for tag in tags:
             tagObj = AudioTag(**tag)
             tagObj.create(self.session)
             R_Audio_Has_AudioTag(audio_id=audioObj.audio_id,
                 audiotag_id=tagObj.audiotag_id).create(self.session)
-        
+
         return Status.success()
-    
+
     def getMedal(self, form):
         '''
         获取用户的徽章
@@ -700,3 +723,23 @@ class API():
         return Status.success({
             "medals": [m.toDict() for m in medals]
         })
+
+    def setUserInfo(self, form):
+        '''
+        设置用户信息
+        {
+            "action": "set_user_info",
+            "user": user{}
+        }
+        {
+            "err": "ok"
+        }
+        '''
+
+        print(form)
+        openid = form["openid"]
+        user = jsonLoads(form["user"], encoding="utf-8")
+        user["openid"] = openid
+        User(**user).merge(self.session)
+
+        return Status.success()

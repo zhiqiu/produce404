@@ -1,7 +1,15 @@
 from config import DEBUG
 import platform
+import json
 
-__all__ = ["DataFormatException", "Status", "Encrypt"]
+__all__ = ["DataFormatException", "Status", "Encrypt", "jsonDumps", "jsonLoads"]
+
+# 自定义的jsonDumps函数
+def jsonDumps(data, **kwargs):
+    return json.dumps(data, ensure_ascii=False, **kwargs)
+
+def jsonLoads(string, **kwargs):
+    return json.loads(string, encoding="utf-8", **kwargs)
 
 # 自定义数据格式错误Exception
 class DataFormatException(Exception):

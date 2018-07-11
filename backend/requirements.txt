@@ -1,5 +1,5 @@
 requests
 sqlalchemy
 flask
-uwsgi
 pycrypto
+pymysql

@@ -1,5 +1,5 @@
 import requests
-import json
+from utils import jsonDumps, jsonLoads
 
 url = "http://127.0.0.1:24135/api"
 debugurl = "http://127.0.0.1:24135/debugapi/"
@@ -9,8 +9,8 @@ def test(params):
     print("\naction:", params["action"])
     print("\n\nparams:\n\n", params)
     res = requests.get(url, params=params)
-    jsonRes = json.loads(res.text)
-    print("\n\nresponse:\n\n", json.dumps(jsonRes, indent=2))
+    jsonRes = jsonLoads(res.text)
+    print("\n\nresponse:\n\n", jsonDumps(jsonRes, indent=2))
     print("\n" + "#"*100)
 
 def debugtest(table, params):
@@ -18,9 +18,25 @@ def debugtest(table, params):
     print("\ntable name:", table.lower())
     print("\n\nparams:\n\n", params)
     res = requests.get(debugurl+table, params=params)
-    jsonRes = json.loads(res.text)
-    print("\n\nresponse:\n\n", json.dumps(jsonRes, indent=2))
+    jsonRes = jsonLoads(res.text)
+    print("\n\nresponse:\n\n", jsonDumps(jsonRes, indent=2))
     print("\n" + "#"*100)
+
+test({
+    "action": "get_user_info",
+    "token": "123"
+})
+
+test({
+    "action": "set_user_info",
+    "user": jsonDumps({
+        "name": "zhangruotian",
+        "gender": "F",
+        "img": "http://y.gtimg.cn/music/photo_new/T002R300x300M000003rsKF44GyaSk.jpg?max_age=2592000",
+        "address": "维也纳酒店",
+        "birthday": "1998-9-8",
+    })
+})
 
 test({
     "action": "get_user_info",
@@ -61,7 +77,7 @@ test({
 
 test({
     "action": "add_collection",
-    "collection_name": "collection name hahahaha"
+    "collection_name": "collection name"
 })
 
 test({
@@ -110,20 +126,28 @@ test({
 })
 
 test({
+    "action": "get_my_feed"
+})
+
+test({
     "action": "post_audio",
-    "audio": json.dumps({
+    "audio": jsonDumps({
             "url": "http://ws.stream.qqmusic.qq.com/M500001VfvsJ21xFqb.mp3?guid=ffffffff82def4af4b12b3cd9337d5e7&uin=346897220&vkey=6292F51E1E384E061FF02C31F716658E5C81F5594D561F2E88B854E81CAAB7806D5E4F103E55D33C16F3FAC506D1AB172DE8600B37E43FAD&fromtag=46",
             "name": "testaudio",
             "intro": "testintro",
             "img": "http://y.gtimg.cn/music/photo_new/T002R300x300M000003rsKF44GyaSk.jpg?max_age=2592000",
             "location": "test location",
-            "duration": 10,
+            "duration": "10",
         }),
-    "tags": json.dumps([
+    "tags": jsonDumps([
         {
             "tagname": "testtag"
         }
     ])
+})
+
+test({
+    "action": "get_my_feed"
 })
 
 test({
