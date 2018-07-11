@@ -61,7 +61,7 @@ test({
 
 test({
     "action": "add_collection",
-    "collection_name": "collection name hahahaha"
+    "collection_name": "collection name"
 })
 
 test({
@@ -117,7 +117,7 @@ test({
             "intro": "testintro",
             "img": "http://y.gtimg.cn/music/photo_new/T002R300x300M000003rsKF44GyaSk.jpg?max_age=2592000",
             "location": "test location",
-            "duration": 10,
+            "duration": "10",
         }),
     "tags": json.dumps([
         {

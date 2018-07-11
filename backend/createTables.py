@@ -24,7 +24,7 @@ __all__ = [
     "R_User_Like_Comment",
 ]
 
-tablePrefix = "t8_"
+tablePrefix = "t9_"
 
 def createAllTable(engine):
     Base.metadata.create_all(engine)
@@ -58,6 +58,8 @@ class Creatable():
             raise Exception(className + " doesn't exists.")
 
     def toDict(self):
+        if self.__class__.__name__ == "User" and self.openid in ["system", "nobody"]:
+            return {"openid": self.openid}
         returnDict = {}
         for fr in self.__allFields__:
             data = getattr(self, fr)
@@ -85,7 +87,13 @@ class Creatable():
                 fieldType = getattr(self.__class__, f).type
                 if fieldType.__class__ == String and fieldType.length < len(kwargs[f]):
                     raise DataFormatException("Field %s's max length is %d, but get %d." % (f, fieldType.length, len(kwargs[f])))
-                setattr(self, f, kwargs[f])
+                elif fieldType.__class__ == Integer:
+                    try:
+                        setattr(self, f, int(kwargs[f]))
+                    except:
+                        raise DataFormatException(f + " must be an integer.")
+                else:
+                    setattr(self, f, kwargs[f])
 
 
 dateRexp = re.compile(r"([\d]{4})-([\d]{1,2})-([\d]{1,2})")
@@ -158,6 +166,7 @@ class AudioTag(Base, Creatable):
 
     def __init__(self, **kwargs):
         self.commonInitClass(**kwargs)
+        
 
 class Medal(Base, Creatable):
     __tablename__ = tablePrefix + "medal"
@@ -175,10 +184,6 @@ class Medal(Base, Creatable):
 
     def __init__(self, **kwargs):
         self.commonInitClass(**kwargs)
-        try:
-            self.condition = int(self.condition)
-        except:
-            raise DataFormatException("condition must be an integer.")
 
 
 class Comment(Base, Creatable):
@@ -187,7 +192,7 @@ class Comment(Base, Creatable):
     comment_id = Column(Integer, primary_key=True, autoincrement=True)
     text = Column(String(128))
     audio_id = Column(ForeignKey(tablePrefix + "audio.audio_id"))
-    # user1 reply to user2, or user1 reply the sound (when user2 == user1)
+    # user1 reply to user2, or user1 reply the sound (when user2 == nobody)
     user_openid = Column(ForeignKey(tablePrefix + "user.openid"))
     replyto = Column(ForeignKey(tablePrefix + "user.openid"))
     create_time = Column(TIMESTAMP)
@@ -198,6 +203,8 @@ class Comment(Base, Creatable):
     __allFields__ = ["comment_id"] + __requiredFields__ + ["create_time", "deleted"]
 
     def __init__(self, **kwargs):
+        if "replyto" not in kwargs or kwargs["replyto"] == "":
+            kwargs["replyto"] = "nobody"
         self.commonInitClass(**kwargs)
 
 
@@ -216,6 +223,7 @@ class Collection(Base, Creatable):
 
     def __init__(self, **kwargs):
         self.commonInitClass(**kwargs)
+
 
 class Forward(Base, Creatable):
     __tablename__ = tablePrefix + "forward"
@@ -251,10 +259,7 @@ class R_User_Create_Audio(Base, Creatable):
 
     def __init__(self, **kwargs):
         self.commonInitClass(**kwargs)
-        try:
-            self.audio_id = int(self.audio_id)
-        except:
-            raise DataFormatException("audio_id must be an integer.")
+
 
 class R_Audio_Has_AudioTag(Base, Creatable):
     __tablename__ = tablePrefix + "r_audio_has_audiotag"
@@ -271,14 +276,6 @@ class R_Audio_Has_AudioTag(Base, Creatable):
 
     def __init__(self, **kwargs):
         self.commonInitClass(**kwargs)
-        try:
-            self.audio_id = int(self.audio_id)
-        except:
-            raise DataFormatException("audio_id must be an integer.")
-        try:
-            self.audiotag_id = int(self.audiotag_id)
-        except:
-            raise DataFormatException("audiotag_id must be an integer.")
 
 class R_User_Has_Medal(Base, Creatable):
     __tablename__ = tablePrefix + "r_user_has_medal"
@@ -295,10 +292,7 @@ class R_User_Has_Medal(Base, Creatable):
 
     def __init__(self, **kwargs):
         self.commonInitClass(**kwargs)
-        try:
-            self.medal_id = int(self.medal_id)
-        except:
-            raise DataFormatException("medal_id must be an integer.")
+
 
 class R_User1_Follow_User2(Base, Creatable):
     __tablename__ = tablePrefix + "r_user1_follow_user2"
@@ -317,6 +311,7 @@ class R_User1_Follow_User2(Base, Creatable):
     def __init__(self, **kwargs):
         self.commonInitClass(**kwargs)
 
+
 class R_Audio_In_Collection(Base, Creatable):
     __tablename__ = tablePrefix + "r_audio_in_collection"
 
@@ -332,14 +327,7 @@ class R_Audio_In_Collection(Base, Creatable):
 
     def __init__(self, **kwargs):
         self.commonInitClass(**kwargs)
-        try:
-            self.audio_id = int(self.audio_id)
-        except:
-            raise DataFormatException("audio_id must be an integer.")
-        try:
-            self.collection_id = int(self.collection_id)
-        except:
-            raise DataFormatException("collection_id must be an integer.")
+
 
 class R_User_Like_Audio(Base, Creatable):
     __tablename__ = tablePrefix + "r_user_like_audio"
@@ -356,10 +344,7 @@ class R_User_Like_Audio(Base, Creatable):
 
     def __init__(self, **kwargs):
         self.commonInitClass(**kwargs)
-        try:
-            self.audio_id = int(self.audio_id)
-        except:
-            raise DataFormatException("audio_id must be an integer.")
+
 
 class R_User_Like_Comment(Base, Creatable):
     __tablename__ = tablePrefix + "r_user_like_comment"
@@ -376,10 +361,7 @@ class R_User_Like_Comment(Base, Creatable):
 
     def __init__(self, **kwargs):
         self.commonInitClass(**kwargs)
-        try:
-            self.comment_id = int(self.comment_id)
-        except:
-            raise DataFormatException("comment_id must be an integer.")
+
 
 # all tables dict
 tables = {

@@ -19,6 +19,17 @@ class API():
         base = createAllTable(engine)
         Session = sessionmaker(bind=engine)
         self.session = Session()
+        try: # create system users: system, nobody
+            for sysuser in ["system", "nobody"]:
+                User(**{
+                    "openid": sysuser,
+                    "name": sysuser,
+                    "gender": "U",
+                    "address": "inside",
+                    "birthday": "2000-1-1",
+                }).create(self.session)
+        except:
+            pass
         if DEBUG:
             try:
                 makeTestDatabase(self.session)
@@ -354,13 +365,12 @@ class API():
             del com["user_openid"]
             user = self.session.query(User).filter(User.openid == openid).first()
             com["user"] = user.toDict()
-            
-            if com["replyto"]:
-                reply_to_openid = com["replyto"]
-                del com["replyto"]
-                user = self.session.query(User).filter(User.openid == reply_to_openid).first()
-                com["replyto"] = user.toDict()
-            
+
+
+            reply_to_openid = com["replyto"]
+            user = self.session.query(User).filter(User.openid == reply_to_openid).first()
+            com["replyto"] = user.toDict()
+
             like_num = self.session.query(R_User_Like_Comment).filter(and_(
                 R_User_Like_Comment.deleted == False,
                 R_User_Like_Comment.comment_id == com["comment_id"]
@@ -399,7 +409,9 @@ class API():
 
         openid = form["openid"]
         audio_id = form["audio_id"]
-        replyto = form["reply_to_user_openid"]
+        replyro = ""
+        if "reply_to_openid" in form:
+            replyto = form["reply_to_user_openid"]
 
         Audio.checkExist(self.session, audio_id)
         
