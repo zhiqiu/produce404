@@ -4,7 +4,7 @@ from config import engine, DEBUG, PORT
 from json import dumps
 from flask import Flask, request, render_template
 from flask import Blueprint
-from sign import sign 
+from cos import sign 
 import os
 
 __all__ = ["app"]
