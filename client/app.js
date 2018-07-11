@@ -87,7 +87,6 @@ App({
         last_audio_id: ''
       },
       success: function(res) {
-        that.globalData.myData = {}
         that.globalData.myData.feeds = res.data.resp.feeds
       }
     })
@@ -98,7 +97,6 @@ App({
         last_audio_id: ''
       },
       success: function(res) {
-        that.globalData.myData = {}
         that.globalData.myData.medal = res.data.resp.medals
       }
     })
