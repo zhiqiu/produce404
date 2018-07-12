@@ -1,27 +1,27 @@
-<!--pages/communtity/community.wxml-->
+<!--pages/community/community.wxml-->
 
 <view class="timeline">
 	<view ontap="gotoRecord">
 		点击录音
 	</view>
   <view wx:for="{{feeds}}">
-    <view class="info" ontap="gotoDetail" id="{{item.audio.audio_id}}">
+    <view class="info" >
       <view class="holder">
         <view class="time">
           {{item.audio.duration}}"
         </view>
         <!--当点击的是当前正在播放的feed，-->
-        <view class="audio">
+        <view class="audio" ontap="clickPlay" id="{{index}}">
           <image src="/image/icon-sound.svg" class="audio-icon"></image>
         </view>
       </view>
-      <view class="description">
+      <view class="description" ontap="gotoDetail" id="{{item.audio.audio_id}}">
         <text class="content">{{item.audio.intro}}</text>
       </view>
 
       <view class="tags">
         <view wx:for="{{item.tags}}" class="tag">
-          <text class="tag-text">#{{item.tagname}}#</text>
+          <text class="tag-text">#{{item.tagname}}</text>
         </view>
       </view>
 
@@ -34,11 +34,11 @@
           <view class="btn-group">
             <image wx:if="{{item.audio.isliked}}" src="/image/icon-like.svg" class="icon-sm btn-up">1</image>
             <image wx:else src="/image/icon-like.svg" class="icon-sm btn-up">1</image>
-            <view class="btn-num">{{item.audio.like_num}}</view>
+            <view class="btn-num">{{item.like_num}}</view>
           </view>
           <view class="btn-group">
             <image src="/image/icon-comments.svg" class="icon-sm btn-up">btns</image>
-            <view class="btn-num">{{item.audio.comment_num}}</view>
+            <view class="btn-num">{{item.comment_num}}</view>
           </view>
           <view class="btn-group">
             <image wx:if="{{item.audio.iscollected}}" src="/image/icon-collect.svg" class="icon-sm btn-up">1</image>

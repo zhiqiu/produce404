@@ -1,0 +1,10 @@
+
+<view class="record">
+	<view wx:for="{{channels}}" class="channel" id="{{item.id}}" ontap="click">
+		{{item.text}}
+	</view>
+	
+
+	
+</view>
+

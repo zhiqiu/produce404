@@ -1,4 +1,4 @@
-/* pages/communtity/mine.wxss */
+/* pages/community/mine.wxss */
 
 .some-btn {
   float: right;
@@ -197,7 +197,7 @@
   border-radius: 14px;
 }
 
-/* pages/communtity/community.wxss */
+/* pages/community/community.wxss */
 
 .timeline {
   /* Rectangle: */

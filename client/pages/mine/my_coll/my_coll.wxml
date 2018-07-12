@@ -1,4 +1,4 @@
-<!--pages/communtity/community.wxml-->
+<!--pages/community/community.wxml-->
 
 <view class="timeline">
 	<view class="info" ontap="gotoDetail" id="detail-id">

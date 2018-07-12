@@ -1,5 +1,7 @@
 /*“我的”页面*/
 // pages/mine/mine.js
+const c = require('../../utils/c.js')
+const r = c.r;
 Page({
 
   /**
@@ -7,21 +9,63 @@ Page({
    */
   data: {
     user: {},
-    feeds: {},
-    medal: {},
-    userMsg: {},
+    feeds: [],
+    medals: [],
+    msg: [],
+    playingIdx: -1
   },
+  getData: function(refresh){
+    if(refresh){
+      this.setData({
+        feeds: []
+      })
+    }
+    var that = this;
+    r({
+      data:{
+        action: 'get_user_info'
+      },
+      success:function(res){
+        that.setData({
+          user: res.data.resp.user
+        })
+      }
+    })
+    r({
+      data: {
+        action: 'get_medal'
+      },
+      success: function(res) {
+        that.setData({
+          medals: res.data.resp.medals
+        })
+      }
+    })
 
+    var last_audio_id = '';
+    if(this.data.feeds.length !== 0){
+      last_audio_id = this.data.feeds[this.data.feeds.length - 1].audio.audio_id;
+    }
+    r({
+      data: {
+        action: 'get_my_feed',
+        last_audio_id: last_audio_id
+      },
+      success: function(res) {
+        console.log(res)
+        var newFeeds = that.data.feeds.concat(res.data.resp.feeds);
+        that.setData({
+          feeds: newFeeds
+        })
+      }
+    })
+  },
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function(options) {
-    this.setData({
-      user: getApp().globalData.myData.userInfo.resp.user,
-      feeds: getApp().globalData.myData.feeds,
-      medal: getApp().globalData.myData.medal,
-    }),
-    console.log(this.data.feeds)
+    
+    this.getData(true);
   },
 
   /**
@@ -63,7 +107,8 @@ Page({
    * 页面上拉触底事件的处理函数
    */
   onReachBottom: function() {
-
+    console.log('下拉刷新')
+    this.getData();
   },
 
   /**
@@ -98,7 +143,7 @@ Page({
     console.log(e)
     var dID = e.currentTarget.id;
     wx.navigateTo({
-      url: '/pages/communtity/detail?dID=' + dID
+      url: '/pages/community/detail?audioId=' + dID
     })
   }
 })

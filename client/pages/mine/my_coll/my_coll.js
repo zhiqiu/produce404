@@ -1,5 +1,5 @@
 /*发现页面*/
-// pages/communtity/community.js
+// pages/community/community.js
 
 const c = require('../../../utils/c.js')
 const r = c.r;
@@ -83,7 +83,7 @@ Page({
     console.log(e)
     var dID = e.currentTarget.id;
     wx.navigateTo({
-      url: '/pages/communtity/detail?dID='+dID
+      url: '/pages/community/detail?audioId='+dID
     })
   }
 })
