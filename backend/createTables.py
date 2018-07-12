@@ -138,7 +138,7 @@ class User(Base, Creatable):
         returnDict["address"] = "%s, %s" % (self.city, self.province)
         returnDict["create_time"] = str(self.create_time)
         returnDict["deleted"] = self.deleted
-        return jsonDumps(returnDict)
+        return returnDict
 
 
 class Audio(Base, Creatable):
