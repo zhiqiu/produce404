@@ -113,5 +113,6 @@ Page({
       })
       c.play(this.data.feeds[idx].audio,this.data.feeds[idx].user)
     }
-  }
+  },
+  
 })

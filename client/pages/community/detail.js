@@ -7,11 +7,11 @@ Page({
    * 页面的初始数据
    */
   data: {
-    audioId: 0,
     feed: {},
     comments: {},
     playing: false
   },
+  
   getData: function(callback){
     var that = this;
     console.log('that')
@@ -114,6 +114,37 @@ Page({
       })
       c.play(this.data.feed.audio,this.data.feed.user)
     }
-  }
+  },
+
+
+  like: function (e) {
+    var nowFeed = this.data.feed;
+    nowFeed.isliked = true;
+    nowFeed.like_num += 1;
+    this.setData({
+      feed: nowFeed
+    })
+    r({
+      data: {
+        action: 'like_audio',
+        audio_id: this.data.feed.audio.audio_id
+      }
+    })
+  },
+
+  dislike: function (e) {
+    var nowFeed = this.data.feed;
+    nowFeed.isliked = false;
+    nowFeed.like_num -= 1;
+    this.setData({
+      feed: nowFeed
+    })
+    r({
+      data: {
+        action: 'dislike_audio',
+        audio_id: this.data.feed.audio.audio_id
+      }
+    })
+  },
 
 })
