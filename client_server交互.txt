@@ -46,13 +46,14 @@ user对象:
 }
 
 {
-	openid: '',
-	name:'',
-	age: '',
-	gender: '',
-	address: '',
-	birthday: '',
-    create_time: ''
+    openid: '',
+    nickName: '',
+    gender: '',
+    language: '',
+    city: '',
+    province: '',
+    country: '',
+    avatarUrl: '',
 }
 
 feed对象:
