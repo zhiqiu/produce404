@@ -161,9 +161,9 @@ class API():
                     encryptor = Encrypt()
                     originalText = encryptor.decrypt(form["token"])
                     print(originalText)
-                    tokenObject = jsonLoads(originalText)
-                    form["openid"] = tokenObject["openid"]
-                    form["sessionKey"] = tokenObject["session_key"]
+                    # tokenObject = jsonLoads(originalText)
+                    form["openid"] = jsonLoads(originalText)
+                    # form["sessionKeu"] = tokenObject["session_key"]
                 except Exception as e:
                     raise Exception("invalid token")
             return getattr(self, API.action2API[action])(form)
@@ -278,7 +278,8 @@ class API():
 
             # 加密 openid 和 session_key 获得token
             encryptor = Encrypt()
-            token = {"openid": openID, "session_key": sessionKey}
+            # token = {"openid": openID, "session_key": sessionKey}
+            token = openID
             print("111111111111111111111111111")
             print(token)
             token = encryptor.encrypt(jsonDumps(token))
@@ -286,7 +287,7 @@ class API():
             # 查询数据库，检测是否首次登陆
             firstTime = False
             User = tables["user"]
-            if not self.session.query(User).filter(User.openid == openID):
+            if self.session.query(User).filter(User.openid == openID):
                 firstTime = True
 
             return Status.success({

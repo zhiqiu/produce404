@@ -22,7 +22,7 @@ class Config(object):
     DEBUG_COMMUNITATION = False
 
     # flask port
-    PORT = 24135
+    PORT = 80
 
     # database engine. Use sqlite3 for debug
     curdir = os.path.abspath(os.path.dirname(__file__))
@@ -37,3 +37,4 @@ class Config(object):
     appID = "wx19f70940784cb04e"
 
     appSecret = "d397d9df1ed61029259668a26b5172b8"
+
