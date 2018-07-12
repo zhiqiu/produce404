@@ -136,7 +136,7 @@ class User(Base, Creatable):
         returnDict["gender"] = ["M", "F"][self.gender]
         returnDict["img"] = self.avatarUrl
         returnDict["address"] = "%s, %s" % (self.city, self.province)
-        returnDict["create_time"] = self.create_time
+        returnDict["create_time"] = str(self.create_time)
         returnDict["deleted"] = self.deleted
         return jsonDumps(returnDict)
 
