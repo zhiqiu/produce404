@@ -3,10 +3,12 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.sql.expression import func
 from createTables import *
-from config import DEBUG, DEBUG_COMMUNITATION, appID, appSecret
+from config import Config
 from utils import DataFormatException, Status, Encrypt, jsonDumps, jsonLoads
 from testbench import makeTestDatabase
 import requests
+from cam.auth.cam_url import CamUrl
+import urllib.request
 
 
 __all__ = ["API"]
@@ -32,14 +34,15 @@ class API():
                     "avatarUrl": "none",
                 }))
             self.session.commit()
-            if DEBUG:
+            if Config.DEBUG:
                 makeTestDatabase(self.session)
         except Exception as e:
-            if DEBUG:
+            if Config.DEBUG:
                 print(e)
             self.session.rollback()
 
     action2API = {
+        "signcos": "signcos",
         "get_user_info": "getUserInfo",
         "set_user_info": "setUserInfo",
         "login": "login",
@@ -56,6 +59,7 @@ class API():
         "get_my_feed": "getMyFeeds",
         "post_audio": "postAudio",
         "get_medal": "getMedal",
+        "dislike_audio": "dislikeAudio",
     }
 
     def commonGetAPI(self, tableName, **kwargs):
@@ -149,7 +153,10 @@ class API():
             return Status.internalError("Missing form data")
         try:
             action = form["action"]
-            if action != "login" and not DEBUG_COMMUNITATION:
+            if Config.DEBUG_COMMUNITATION:
+                form["openid"] = "openid1"
+                form["session_key"] = "session_key"
+            elif action != "login":
                 try:
                     encryptor = Encrypt()
                     origialText = encryptor.decrypt(form["token"])
@@ -158,9 +165,6 @@ class API():
                     form["sessionKey"] = tokenObject["session_key"]
                 except Exception as e:
                     raise Exception("invalid token")
-            else:
-                form["openid"] = "openid1"
-                form["session_key"] = "123"
             return getattr(self, API.action2API[action])(form)
         except Exception as e:
             try:
@@ -171,6 +175,26 @@ class API():
 
 
     #############################   API   #############################
+
+    def signcos(self, form):
+        '''
+        签名服务API
+        {
+            action: 'signcos'
+        }
+        '''
+        policy = Config.POLICY
+        secret_id = Config.SECRET_ID
+        secret_key = Config.SECRET_KEY
+        duration = Config.DURATION_SECOND
+        url_generator = CamUrl(policy, duration, secret_id, secret_key)
+        real_url = url_generator.url()
+        print(real_url)
+        proxy_handler = urllib.request.ProxyHandler({'https': '10.14.87.100:8080'})
+        opener = urllib.request.build_opener()
+        r = opener.open(real_url)
+        response = r.read()
+        return jsonLoads(response.decode("utf-8"))
 
     def getUserInfo(self, form):
         '''
@@ -229,7 +253,7 @@ class API():
         }
         '''
 
-        if DEBUG_COMMUNITATION:
+        if Config.DEBUG_COMMUNITATION:
             return Status.success({
                 "token": "Iamtoken.",
                 "first_time": True
@@ -239,8 +263,8 @@ class API():
 
         url = "https://api.weixin.qq.com/sns/jscode2session"
         params = {
-            "appid": appID,
-            "secret": appSecret,
+            "appid": Config.appID,
+            "secret": Config.appSecret,
             "js_code": jsCode,
             "grant_type": "authorization_code"
         }
@@ -745,5 +769,33 @@ class API():
         user = jsonLoads(form["user"])
         user["openid"] = openid
         User(**user).merge(self.session)
+
+        return Status.success()
+    
+    def dislikeAudio(self, form):
+        '''
+        取消赞：
+        {
+            action: 'dislike_audio',
+            audio_id: ''
+        }
+        {
+            err: 'ok'
+        }
+        '''
+
+        openid = form["openid"]
+        audio_id = form["audio_id"]
+
+        Audio.checkExist(self.session, audio_id)
+
+        like = self.session.query(R_User_Like_Audio).filter(and_(
+            R_User_Like_Audio.user_openid == openid,
+            R_User_Like_Audio.audio_id == audio_id
+        )).first()
+
+        # 数据库中必定已存在记录，所以直接修改deleted列即可。
+        like.deleted = False
+        like.merge(self.session)
 
         return Status.success()

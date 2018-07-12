@@ -7,7 +7,7 @@
     <view class="info-card">
       <view class="info-group">
         <view class="avatar">
-          <image src="/image/example-avatar.svg" class="avatar-big"></image>
+          <image src="{{user.img}}" class="avatar-big"></image>
         </view>
 
         <view class="info-detail-group">

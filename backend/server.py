@@ -1,19 +1,13 @@
 from backendAPI import API
 from createTables import tables
-from config import engine, DEBUG, PORT, Config
-from json import dumps
+from config import Config
+from utils import jsonDumps
 from flask import Flask, request, render_template
-#from flask import Blueprint
-#from cos import sign 
-from cam.auth.cam_url import CamUrl
-import urllib.request
-
-
 import os
 
 __all__ = ["app"]
 
-api = API(engine)
+api = API(Config.engine)
 
 # turn the template folder and static folder to absolute path
 # so that you can start the server in any working folder
@@ -35,6 +29,7 @@ def page_not_found(_):
 def getIndex():
     return '<script>s="It works! ";for(i=0;i<11;i++) s+=s;document.write(s);</script>'
 
+<<<<<<< HEAD
 
 @app.route('/sign', methods=["GET"])
 def signcos():
@@ -55,6 +50,8 @@ def signcos():
     return response
 
 
+=======
+>>>>>>> d7bf2f7c5fb696d364f2c7ae8278f47532feaf5d
 @app.route("/api", methods=["GET", "POST"])
 def dealRequests():
     if request.method == "GET":
@@ -64,9 +61,9 @@ def dealRequests():
     else:
         return "supported method: get, post."
     result = api.postCallAPI(form)
-    return dumps(result)
+    return jsonDumps(result)
 
-if DEBUG:
+if Config.DEBUG:
     # all debug interface
     @app.route("/debugapi/", methods=["GET", "POST"])
     def queryAPIWithoutTable():
@@ -78,12 +75,12 @@ if DEBUG:
         if request.method == "GET":
             getArgs = request.args.to_dict()
             result = api.commonGetAPI(tableName, **getArgs)
-            return dumps(result)
+            return jsonDumps(result)
 
         elif request.method == "POST":
             postForm = request.form.to_dict()
             result = api.commonAddAPI(tableName, **postForm)
-            return dumps(result)
+            return jsonDumps(result)
 
     @app.route("/echo", methods=["GET"])
     def echo():
@@ -100,6 +97,10 @@ if DEBUG:
             return "Table %s not found." % tableName
         fields = tables[tableName].__requiredFields__
         return render_template("debugPage.html", fields=fields, tableName=tableName)
+    
+    @app.route('/testcos')
+    def testcos():
+        return render_template("test.html")
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=PORT)
+    app.run(host="0.0.0.0", port=Config.PORT)

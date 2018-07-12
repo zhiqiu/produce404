@@ -2,13 +2,13 @@
   "pages": [
     "pages/index_page/index_page",
     "pages/index_page/add_comment",
-    "pages/communtity/add_comment",
-    "pages/add_collection/add_collection",
+    "pages/index_page/choose_channel",
+    "pages/community/add_comment",
+    "pages/index_page/add_collection",
     "pages/record/record",
     "pages/mine/my_msg/my_msg",
-    "pages/index_page/detail",
-    "pages/communtity/community",
-    "pages/communtity/detail",
+    "pages/community/community",
+    "pages/community/detail",
     "pages/mine/mine",
     "pages/login_page/login_page",
     "pages/index/index",
@@ -40,7 +40,7 @@
       {
         "iconPath": "image/bar-faxian.png",
         "selectedIconPath": "image/bar-faxian-active.png",
-        "pagePath": "pages/communtity/community",
+        "pagePath": "pages/community/community",
         "text": "发现"
       },
       {

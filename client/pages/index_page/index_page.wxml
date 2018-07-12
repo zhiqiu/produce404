@@ -5,7 +5,7 @@
     <view wx:if="{{listentype === 'like'}}" class="btn" ontap="listenDiffToggle">听见不同</view>
     <view wx:if="{{listentype === 'diff'}}" class="btn" ontap="listenDiffToggle">我的喜好</view>
   </view>
-  <view class="btn-2 ">
+  <view class="btn-2 " ontap="gotoChannel">
     <view class="btn">频道</view>
   </view>
 </view>

@@ -267,7 +267,7 @@ medal对象:
 按用户获取feeds
 {
 	action: 'get_my_feed',
-	audio_id: ''
+	last_audio_id: ''
 }
 {
 	feeds: [

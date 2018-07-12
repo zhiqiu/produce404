@@ -1,4 +1,4 @@
-/* pages/communtity/detail.wxss */
+/* pages/community/detail.wxss */
 
 .description {
   font-family: PingFangHK-Regular;
