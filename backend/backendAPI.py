@@ -159,7 +159,8 @@ class API():
             elif action != "login":
                 try:
                     encryptor = Encrypt()
-                    origialText = encryptor.decrypt(form["token"])
+                    originalText = encryptor.decrypt(form["token"])
+                    print(originalText)
                     tokenObject = jsonLoads(originalText)
                     form["openid"] = tokenObject["openid"]
                     form["sessionKey"] = tokenObject["session_key"]
@@ -278,6 +279,8 @@ class API():
             # 加密 openid 和 session_key 获得token
             encryptor = Encrypt()
             token = {"openid": openID, "session_key": sessionKey}
+            print("111111111111111111111111111")
+            print(token)
             token = encryptor.encrypt(jsonDumps(token))
 
             # 查询数据库，检测是否首次登陆

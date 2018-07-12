@@ -19,7 +19,7 @@ class Config(object):
     DEBUG = True
 
     # debug server-client communitation
-    DEBUG_COMMUNITATION = True
+    DEBUG_COMMUNITATION = False
 
     # flask port
     PORT = 24135
@@ -34,6 +34,6 @@ class Config(object):
     # engine = create_engine("mysql+pymysql://dba:create404mysql@ladyrick.com/create404?charset=utf8mb4", pool_recycle=3600, echo=False)
 
     # app config
-    appID = "SECRET_ID"
+    appID = "wx19f70940784cb04e"
 
-    appSecret = "SECRET_KEY"
+    appSecret = "d397d9df1ed61029259668a26b5172b8"
