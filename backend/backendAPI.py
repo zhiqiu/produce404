@@ -3,7 +3,7 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.sql.expression import func
 from createTables import *
-from config import DEBUG, DEBUG_COMMUNITATION, appID, appSecret
+from config import Config
 from utils import DataFormatException, Status, Encrypt, jsonDumps, jsonLoads
 from testbench import makeTestDatabase
 import requests
@@ -32,10 +32,10 @@ class API():
                     "avatarUrl": "none",
                 }))
             self.session.commit()
-            if DEBUG:
+            if Config.DEBUG:
                 makeTestDatabase(self.session)
         except Exception as e:
-            if DEBUG:
+            if Config.DEBUG:
                 print(e)
             self.session.rollback()
 
@@ -150,7 +150,7 @@ class API():
             return Status.internalError("Missing form data")
         try:
             action = form["action"]
-            if action != "login" and not DEBUG_COMMUNITATION:
+            if action != "login" and not Config.DEBUG_COMMUNITATION:
                 try:
                     encryptor = Encrypt()
                     origialText = encryptor.decrypt(form["token"])
@@ -230,7 +230,7 @@ class API():
         }
         '''
 
-        if DEBUG_COMMUNITATION:
+        if Config.DEBUG_COMMUNITATION:
             return Status.success({
                 "token": "Iamtoken.",
                 "first_time": True
@@ -240,8 +240,8 @@ class API():
 
         url = "https://api.weixin.qq.com/sns/jscode2session"
         params = {
-            "appid": appID,
-            "secret": appSecret,
+            "appid": Config.appID,
+            "secret": Config.appSecret,
             "js_code": jsCode,
             "grant_type": "authorization_code"
         }

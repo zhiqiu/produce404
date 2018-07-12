@@ -1,4 +1,4 @@
-from config import DEBUG
+from config import Config
 import platform
 import json
 
@@ -36,7 +36,7 @@ class Status():
 
     def internalError(exception):
         return {
-            "err": str(exception) if DEBUG else "internal error occured."
+            "err": str(exception) if Config.DEBUG else "internal error occured."
         }
 
     def dataFormatError(exception):
@@ -45,7 +45,7 @@ class Status():
         }
 
 
-if platform.system() == "Windows" and DEBUG:
+if platform.system() == "Windows" and Config.DEBUG:
     class PlatformEncrypt():
         def encrypt(self, text):
             return text

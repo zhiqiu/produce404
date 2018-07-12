@@ -1,6 +1,6 @@
 from backendAPI import API
 from createTables import tables
-from config import engine, DEBUG, PORT, Config
+from config import Config
 from json import dumps
 from flask import Flask, request, render_template
 #from flask import Blueprint
@@ -13,7 +13,7 @@ import os
 
 __all__ = ["app"]
 
-api = API(engine)
+api = API(Config.engine)
 
 # turn the template folder and static folder to absolute path
 # so that you can start the server in any working folder
@@ -64,7 +64,7 @@ def dealRequests():
     result = api.postCallAPI(form)
     return dumps(result)
 
-if DEBUG:
+if Config.DEBUG:
     # all debug interface
     @app.route("/debugapi/", methods=["GET", "POST"])
     def queryAPIWithoutTable():
@@ -100,4 +100,4 @@ if DEBUG:
         return render_template("debugPage.html", fields=fields, tableName=tableName)
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=PORT)
+    app.run(host="0.0.0.0", port=Config.PORT)
