@@ -1,9 +1,9 @@
-from sqlalchemy import Column, String, Integer, Date, TIMESTAMP, BOOLEAN, ForeignKey
+from sqlalchemy import Column, String, Integer, TIMESTAMP, BOOLEAN, ForeignKey
 from sqlalchemy import and_
 from sqlalchemy.ext.declarative import declarative_base
 from utils import DataFormatException, jsonDumps
-from datetime import date, datetime
-import re, json, time
+from datetime import datetime
+import time
 
 __all__ = [
     "createAllTable",
@@ -24,7 +24,7 @@ __all__ = [
     "R_User_Like_Comment",
 ]
 
-tablePrefix = "t17_"
+tablePrefix = "t21_"
 
 def createAllTable(engine):
     try:
@@ -73,12 +73,10 @@ class Creatable():
         returnDict = {}
         for fr in self.__allFields__:
             data = getattr(self, fr)
-            if data.__class__.__name__ in ["date", "datetime"]:
+            if data.__class__.__name__ in ["datetime"]:
                 returnDict[fr] = str(data)
             else:
                 returnDict[fr] = data
-        if self.__class__.__name__ == "User":
-            returnDict["age"] = date.today().year - self.birthday.year
         return returnDict
 
     def __str__(self):
@@ -106,40 +104,30 @@ class Creatable():
                     setattr(self, f, kwargs[f])
 
 
-dateRexp = re.compile(r"([\d]{4})-([\d]{1,2})-([\d]{1,2})")
-
 # entity tables:
 
 class User(Base, Creatable):
     __tablename__ = tablePrefix + "user"
 
     openid = Column(String(28), primary_key=True)
-    name = Column(String(64))
-    gender = Column(String(1), default="U")  # M: male, F: female, U: unset
-    img = Column(String(512))
-    address = Column(String(128))
-    birthday = Column(Date)
+    nickName = Column(String(64))
+    gender = Column(Integer, default=1)  # Male: 1, Female: 0
+    language = Column(String(32), default="zh-cn")
+    city = Column(String(64))
+    province = Column(String(64))
+    country = Column(String(64))
+    avatarUrl = Column(String(512))
     create_time = Column(TIMESTAMP)
     deleted = Column(BOOLEAN, default=False)
 
     __primaryKey__ = "openid"
-    __requiredFields__ = ["openid","name","gender","img","address","birthday"]
+    __requiredFields__ = ["openid","nickName","gender","language","city","province","country","avatarUrl"]
     __allFields__ = __requiredFields__ + ["create_time", "deleted"]
 
     def __init__(self, **kwargs):
         self.commonInitClass(**kwargs)
-        if self.gender not in ["M", "F", "U"]:
-            raise DataFormatException("gender must be one of M/F/U for Male/Female/Unset")
-        m = dateRexp.match(self.birthday)
-        if not m:
-            raise DataFormatException("birthday format error: YYYY-MM-DD")
-        year = int(m.group(1))
-        month = int(m.group(2))
-        day = int(m.group(3))
-        try:
-            self.birthday = date(year, month, day)
-        except Exception as e:
-            raise DataFormatException(e)
+        if self.gender not in [0, 1]:
+            raise DataFormatException("gender must be 1 or 0 for Male/Female")
 
 
 class Audio(Base, Creatable):

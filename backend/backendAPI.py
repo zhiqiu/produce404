@@ -5,7 +5,7 @@ from sqlalchemy.sql.expression import func
 from createTables import *
 from config import DEBUG, DEBUG_COMMUNITATION, appID, appSecret
 from utils import DataFormatException, Status, Encrypt, jsonDumps, jsonLoads
-from testbench import *
+from testbench import makeTestDatabase
 import requests
 
 
@@ -15,25 +15,29 @@ __all__ = ["API"]
 class API():
     def __init__(self, engine):
         self.dbName = engine.name
-        base = createAllTable(engine)
+        createAllTable(engine)
         Session = sessionmaker(bind=engine)
         self.session = Session()
-        try: # create system users: system, nobody
+        try:
+            # create system users: system, nobody
             for sysuser in ["system", "nobody"]:
                 self.session.add(User(**{
                     "openid": sysuser,
-                    "name": sysuser,
-                    "gender": "U",
-                    "img": "no avatar",
-                    "address": "inside",
-                    "birthday": "2000-1-1",
+                    "nickName": sysuser,
+                    "gender": 1,
+                    "language": "zh-cn",
+                    "city": "Beijing",
+                    "province": "Beijing",
+                    "country": "China",
+                    "avatarUrl": "none",
                 }))
             self.session.commit()
             if DEBUG:
                 makeTestDatabase(self.session)
-        except:
+        except Exception as e:
+            if DEBUG:
+                print(e)
             self.session.rollback()
-            print("Session has rollback.")
 
     action2API = {
         "get_user_info": "getUserInfo",
@@ -738,7 +742,7 @@ class API():
 
         print(form)
         openid = form["openid"]
-        user = jsonLoads(form["user"], encoding="utf-8")
+        user = jsonLoads(form["user"])
         user["openid"] = openid
         User(**user).merge(self.session)
 

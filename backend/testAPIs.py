@@ -30,11 +30,13 @@ test({
 test({
     "action": "set_user_info",
     "user": jsonDumps({
-        "name": "zhangruotian",
-        "gender": "F",
-        "img": "http://y.gtimg.cn/music/photo_new/T002R300x300M000003rsKF44GyaSk.jpg?max_age=2592000",
-        "address": "维也纳酒店",
-        "birthday": "1998-9-8",
+        "nickName": "张若天😂",
+        "gender": 1,
+        "language": "en",
+        "city": "Shijiazhuang",
+        "province": "Hebei",
+        "country": "China",
+        "avatarUrl": "https://wx.qlogo.cn/mmopen/vi_32/Q0j4TwGTfTLJ1VBQSSEkJyDiaO6JZjic7VCmnmwfZWeDGJ2Bt4zV3dT8NkB8BdpSrw9DOlgxUguWZfcHDj7hlULQ/132"
     })
 })
 
