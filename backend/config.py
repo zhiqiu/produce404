@@ -10,7 +10,6 @@ class Config(object):
 
     COMMON_POLICY = r'''{"statement": [{"action": ["name/cos:*"],"effect": "allow","resource":"*"}],"version": "2.0"}'''
 
-
     POLICY = COMMON_POLICY
     DURATION_SECOND = 1800
     SECRET_ID = 'AKIDhHfrSwvKEwSnz1AVxJZifQzSmtpYpqiP'
@@ -32,9 +31,9 @@ class Config(object):
 
     # use mysql for production environment.
     engine = create_engine("mysql+pymysql://root:create404mysql@172.16.16.7/create404?charset=utf8mb4", pool_recycle=3600, echo=False)
-    # engine = create_engine("mysql+pymysql://dba:create404mysql@ladyrick.com/create404?charset=utf8", pool_recycle=3600, echo=False)
+    # engine = create_engine("mysql+pymysql://dba:create404mysql@ladyrick.com/create404?charset=utf8mb4", pool_recycle=3600, echo=False)
 
     # app config
-    appID = SECRET_ID
+    appID = "SECRET_ID"
 
-    appSecret = SECRET_KEY
+    appSecret = "SECRET_KEY"

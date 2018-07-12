@@ -1,14 +1,8 @@
 from backendAPI import API
 from createTables import tables
 from config import Config
-from json import dumps
+from utils import jsonDumps
 from flask import Flask, request, render_template
-#from flask import Blueprint
-#from cos import sign 
-from cam.auth.cam_url import CamUrl
-import urllib.request
-
-
 import os
 
 __all__ = ["app"]
@@ -35,24 +29,6 @@ def page_not_found(_):
 def getIndex():
     return '<script>s="It works! ";for(i=0;i<11;i++) s+=s;document.write(s);</script>'
 
-
-@app.route('/sign', methods=["GET"])
-def signcos():
-    policy = Config.POLICY
-    secret_id = Config.SECRET_ID
-    secret_key = Config.SECRET_KEY
-    duration = Config.DURATION_SECOND
-    url_generator = CamUrl(policy, duration, secret_id, secret_key)
-    real_url = url_generator.url()
-    print(real_url)
-    proxy_handler = urllib.request.ProxyHandler({'https': '10.14.87.100:8080'})
-    opener = urllib.request.build_opener()
-    r = opener.open(real_url)
-    response = r.read()
-    #print(response)
-    return response
-
-
 @app.route("/api", methods=["GET", "POST"])
 def dealRequests():
     if request.method == "GET":
@@ -62,7 +38,7 @@ def dealRequests():
     else:
         return "supported method: get, post."
     result = api.postCallAPI(form)
-    return dumps(result)
+    return jsonDumps(result)
 
 if Config.DEBUG:
     # all debug interface
@@ -76,12 +52,12 @@ if Config.DEBUG:
         if request.method == "GET":
             getArgs = request.args.to_dict()
             result = api.commonGetAPI(tableName, **getArgs)
-            return dumps(result)
+            return jsonDumps(result)
 
         elif request.method == "POST":
             postForm = request.form.to_dict()
             result = api.commonAddAPI(tableName, **postForm)
-            return dumps(result)
+            return jsonDumps(result)
 
     @app.route("/echo", methods=["GET"])
     def echo():
@@ -98,6 +74,10 @@ if Config.DEBUG:
             return "Table %s not found." % tableName
         fields = tables[tableName].__requiredFields__
         return render_template("debugPage.html", fields=fields, tableName=tableName)
+    
+    @app.route('/testcos')
+    def testcos():
+        return render_template("test.html")
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=Config.PORT)

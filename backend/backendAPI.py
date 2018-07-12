@@ -7,6 +7,8 @@ from config import Config
 from utils import DataFormatException, Status, Encrypt, jsonDumps, jsonLoads
 from testbench import makeTestDatabase
 import requests
+from cam.auth.cam_url import CamUrl
+import urllib.request
 
 
 __all__ = ["API"]
@@ -40,6 +42,7 @@ class API():
             self.session.rollback()
 
     action2API = {
+        "signcos": "signcos",
         "get_user_info": "getUserInfo",
         "set_user_info": "setUserInfo",
         "login": "login",
@@ -150,7 +153,10 @@ class API():
             return Status.internalError("Missing form data")
         try:
             action = form["action"]
-            if action != "login" and not Config.DEBUG_COMMUNITATION:
+            if Config.DEBUG_COMMUNITATION:
+                form["openid"] = "openid1"
+                form["session_key"] = "session_key"
+            elif action != "login":
                 try:
                     encryptor = Encrypt()
                     origialText = encryptor.decrypt(form["token"])
@@ -159,9 +165,6 @@ class API():
                     form["sessionKey"] = tokenObject["session_key"]
                 except Exception as e:
                     raise Exception("invalid token")
-            else:
-                form["openid"] = "openid1"
-                form["session_key"] = "123"
             return getattr(self, API.action2API[action])(form)
         except Exception as e:
             try:
@@ -172,6 +175,26 @@ class API():
 
 
     #############################   API   #############################
+
+    def signcos(self, form):
+        '''
+        签名服务API
+        {
+            action: 'signcos'
+        }
+        '''
+        policy = Config.POLICY
+        secret_id = Config.SECRET_ID
+        secret_key = Config.SECRET_KEY
+        duration = Config.DURATION_SECOND
+        url_generator = CamUrl(policy, duration, secret_id, secret_key)
+        real_url = url_generator.url()
+        print(real_url)
+        proxy_handler = urllib.request.ProxyHandler({'https': '10.14.87.100:8080'})
+        opener = urllib.request.build_opener()
+        r = opener.open(real_url)
+        response = r.read()
+        return jsonLoads(response.decode("utf-8"))
 
     def getUserInfo(self, form):
         '''
