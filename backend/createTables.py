@@ -128,6 +128,17 @@ class User(Base, Creatable):
         self.commonInitClass(**kwargs)
         if self.gender not in [0, 1]:
             raise DataFormatException("gender must be 1 or 0 for Male/Female")
+    
+    def toDict(self):
+        returnDict = {}
+        returnDict["openid"] = self.openid
+        returnDict["name"] = self.nickName
+        returnDict["gender"] = ["M", "F"][self.gender]
+        returnDict["img"] = self.avatarUrl
+        returnDict["address"] = "%s, %s" % (self.city, self.province)
+        returnDict["create_time"] = self.create_time
+        returnDict["deleted"] = self.deleted
+        return jsonDumps(returnDict)
 
 
 class Audio(Base, Creatable):
