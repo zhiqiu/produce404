@@ -46,40 +46,7 @@ App({
 
   initGlobalData: function() {
     var that = this;
-    r({
-      data: {
-        action: 'get_index',
-        listentype: 'diff',
-        channel: 'unset'
-      },
-      success: function(res) {
-        that.globalData.indexData = {}
-        that.globalData.indexData.feed = res.data.resp.feed
-        that.globalData.indexData.feed_next = res.data.resp.feed_next
-        wx.setStorageSync("index_feed_data", that.globalData.indexData.feed)
-      }
-    })
 
-    r({
-      data: {
-        action: 'get_explore',
-        last_audio_id: ''
-      },
-      success: function(res) {
-        that.globalData.exploreData = {}
-        that.globalData.exploreData.feeds = res.data.resp.feeds
-      }
-    })
-
-    r({
-      data: {
-        action: 'get_user_info',
-      },
-      success: function(res) {
-        that.globalData.myData = {}
-        that.globalData.myData.userInfo = res.data
-      }
-    })
 
     r({
       data: {
@@ -91,15 +58,7 @@ App({
       }
     })
 
-    r({
-      data: {
-        action: 'get_medal',
-        last_audio_id: ''
-      },
-      success: function(res) {
-        that.globalData.myData.medal = res.data.resp.medals
-      }
-    })
+    
 
     log(that.globalData)
   }

@@ -10,7 +10,7 @@ Page({
   data: {
     feed: {},
     listentype: 'like', // diff or like
-    channel: 'unset', // unset or channelname
+    channel: wx.getStorageSync('channel') || 'unset', // unset or channelname
     dataloaded: false
   },
 
@@ -43,12 +43,8 @@ Page({
     if (!c.check()) return; // check login
     var that = this;
     this.getData(function(){
+      c.play(that.data.feed.audio,that.data.feed.user);
       const player = wx.getBackgroundAudioManager();
-      player.title = that.data.feed.audio.name
-      player.epname = that.data.feed.audio.intro
-      player.singer = that.data.feed.user.name
-      player.coverImgUrl = that.data.feed.audio.img
-      player.src = that.fixUrl(that.data.feed.audio.url) // 设置了 src 之后会自动播放
       player.onTimeUpdate(function() {
         that.setData({
           audioProgress: parseInt(100 * player.currentTime / player.duration)
@@ -69,7 +65,9 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function() {
-
+    this.setData({
+      channel: wx.getStorageSync('channel') || 'unset'
+    })
   },
 
   /**
@@ -111,13 +109,7 @@ Page({
     }
   },
   playorpause: function() {
-    const player = wx.getBackgroundAudioManager()
-    if (player.paused) {
-      player.play()
-    } else {
-      player.pause()
-    }
-
+    c.playorpause();
   },
   listenDiffToggle: function() {
     this.setData({
@@ -155,7 +147,7 @@ Page({
   gotoComments: function() {
     var audioId = this.data.feed.audio.audio_id;
     wx.navigateTo({
-      url: '/pages/index_page/detail?audioId=' + audioId
+      url: '/pages/community/detail?audioId=' + audioId
     })
   },
 
@@ -166,12 +158,10 @@ Page({
       url: '/pages/add_collection/add_collection?dID=' + dID
     })
   },
-  fixUrl: function(s){
-    if(s.startsWith('http')){
-      return s;
-    }else{
-      return c.COSBase + s;
-    }
+  gotoChannel: function(){
+    wx.navigateTo({
+      url: '/pages/index_page/choose_channel'
+    })
   }
 
 })

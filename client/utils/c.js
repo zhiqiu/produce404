@@ -46,7 +46,29 @@ const check = function(){
   }
   return true;
 }
-
+const fixUrl = function(s){
+	if(s.startsWith('http')){
+		return s;
+	}else{
+		return COSBase + s;
+	}
+}
+const play = function(audio,user){
+	const player = wx.getBackgroundAudioManager();
+	player.title = audio.name
+	player.epname = audio.intro
+	player.singer = user.name
+	player.coverImgUrl = audio.img
+	player.src = fixUrl(audio.url) // 设置了 src 之后会自动播放
+}
+const playorpause= function() {
+	const player = wx.getBackgroundAudioManager()
+	if (player.paused) {
+		player.play()
+	} else {
+		player.pause()
+	}
+}
 
 const login = function(){
 	var code = wx.login({
@@ -91,5 +113,7 @@ module.exports = {
   baseUrl:baseUrl,
   token:token,
   check:check,
-  COSBase: COSBase
+  COSBase: COSBase,
+  playorpause: playorpause,
+  play: play
 }
