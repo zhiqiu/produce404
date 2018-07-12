@@ -8,47 +8,54 @@ Page({
    * 页面的初始数据
    */
   data: {
-    feed: wx.getStorageSync("index_feed_data") || {},
+    feed: {},
+    listentype: 'like', // diff or like
+    channel: 'unset', // unset or channelname
     dataloaded: false
   },
 
+  getData: function(callback){
+    var that = this;
+    console.log('that')
+    console.log(that)
+    r({
+      data: {
+        action: 'get_index',
+        listentype: that.data.listentype,
+        channel: that.data.channel
+      },
+      success: function(res) {
+        console.log(res)
+        that.setData({
+          feed: res.data.resp.feed,
+          dataloaded: true
+        })
+        // TODO: feed_next
+        callback();
+      }
+    })
+    console.log(that)
+  },
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function(options) {
-    if (!c.check()) return;
-
-    if (getApp().globalData.indexData.feed.audio){
-      console.log(getApp().globalData.indexData.feed);
-      this.setData({
-        feed: getApp().globalData.indexData.feed,
-        dataloaded: true
+    if (!c.check()) return; // check login
+    var that = this;
+    this.getData(function(){
+      const player = wx.getBackgroundAudioManager();
+      player.title = that.data.feed.audio.name
+      player.epname = that.data.feed.audio.intro
+      player.singer = that.data.feed.user.name
+      player.coverImgUrl = that.data.feed.audio.img
+      player.src = that.fixUrl(that.data.feed.audio.url) // 设置了 src 之后会自动播放
+      player.onTimeUpdate(function() {
+        that.setData({
+          audioProgress: parseInt(100 * player.currentTime / player.duration)
+        })
       })
-    }else{
-      this.setData({
-        feed: wx.getStorageSync("index_feed_data"),
-        dataloaded: true
-      })
-      
-    }
-    console.log(this.data)
-      
-    while(!this.data.dataloaded){ console.log('wait')}
-    console.log('aaaa')
-    console.log(this.data)
-    const player = wx.getBackgroundAudioManager()
-    player.title = this.data.feed.audio.name
-    player.epname = this.data.feed.audio.intro
-    player.singer = this.data.feed.user.name
-    player.coverImgUrl = this.data.feed.audio.img
-    player.src = this.data.feed.audio.url // 设置了 src 之后会自动播放
-    let page = this;
-    player.onTimeUpdate(function() {
-      page.setData({
-        audioProgress: parseInt(100 * player.currentTime / player.duration)
-      })
-    })
-    console.log(this.data)
+    });
+    
   },
 
   /**
@@ -83,14 +90,14 @@ Page({
    * 页面相关事件处理函数--监听用户下拉动作
    */
   onPullDownRefresh: function() {
-    console.log('下拉切歌')
+
   },
 
   /**
    * 页面上拉触底事件的处理函数
    */
   onReachBottom: function() {
-    console.log('上拉切歌')
+
   },
 
   /**
@@ -114,23 +121,41 @@ Page({
   },
   listenDiffToggle: function() {
     this.setData({
-      listenDiff: !this.data.listenDiff
+      listentype: this.data.listentype === 'like' ? 'diff' : 'like'
     })
   },
   like: function() {
+    var nowFeed = this.data.feed;
+    nowFeed.isliked = true;
+    nowFeed.like_num += 1;
     this.setData({
-      currentLike: true
+      feed: nowFeed
+    })
+    r({
+      data:{
+        action: 'like_audio',
+        audio_id: this.data.feed.audio.audio_id
+      }
     })
   },
   dislike: function() {
+    var nowFeed = this.data.feed;
+    nowFeed.isliked = false;
+    nowFeed.like_num -= 1;
     this.setData({
-      currentLike: false
+      feed: nowFeed
+    })
+    r({
+      data:{
+        action: 'dislike_audio',
+        audio_id: this.data.feed.audio.audio_id
+      }
     })
   },
   gotoComments: function() {
-    var audioInfo = ''
+    var audioId = this.data.feed.audio.audio_id;
     wx.navigateTo({
-      url: '/pages/comments/comments?' + audioInfo
+      url: '/pages/index_page/detail?audioId=' + audioId
     })
   },
 
@@ -141,6 +166,12 @@ Page({
       url: '/pages/add_collection/add_collection?dID=' + dID
     })
   },
-
+  fixUrl: function(s){
+    if(s.startsWith('http')){
+      return s;
+    }else{
+      return c.COSBase + s;
+    }
+  }
 
 })

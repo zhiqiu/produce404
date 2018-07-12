@@ -1,6 +1,7 @@
 'use strict'
 
 const baseUrl = 'https://404.ladyrick.com/';
+const COSBase = 'https://cos.ladyrick.com/';
 var token = wx.getStorageSync('token') || '';
 
 const r = function(option,api){
@@ -11,8 +12,8 @@ const r = function(option,api){
 	option.url = baseUrl + api;
 	option.method = 'GET';
 	option.dataType = 'json';
-	option.data.token = token;
-if(wx.getStorageSync('server_first_time')){
+	option.data.token = wx.getStorageSync('token');
+	if(wx.getStorageSync('server_first_time')){
       wx.setStorageSync('server_first_time',false);
       r({
         data:{
@@ -89,5 +90,6 @@ module.exports = {
   r:r,
   baseUrl:baseUrl,
   token:token,
-  check:check
+  check:check,
+  COSBase: COSBase
 }

@@ -157,6 +157,15 @@ medal对象:
 	err: 'ok'
 }
 
+取消赞：
+{
+	action: 'dislike_audio',
+	audio_id: ''
+}
+{
+	err: 'ok'
+}
+
 
 觅声_获取评论
 

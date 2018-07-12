@@ -1,19 +1,24 @@
-/*内容详情页*/
-// pages/comments/comments.js
+/*评论页面*/
+// pages/record/record.js
+const c = require('../../utils/c.js');
+const r = c.r;
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-  
+    audioId: 0,
+    content: ''
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-  
+    this.setData({
+      audioId: options.audioId
+    })
   },
 
   /**
@@ -63,5 +68,23 @@ Page({
    */
   onShareAppMessage: function () {
   
+  },
+  onTextChange: function(e){
+    this.setData({
+      content: e.detail.value
+    })
+    console.log(e)
+    console.log(this.data.content)
+  },
+  submit: function(){
+    r({
+      data:{
+        action: 'post_comment',
+        audio_id: this.data.audioId,
+        reply_to_user_openid: '', // todo
+        text: this.data.content
+      }
+    })
+    wx.navigateBack()
   }
 })

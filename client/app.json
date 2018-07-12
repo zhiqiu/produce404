@@ -1,6 +1,7 @@
 {
   "pages": [
     "pages/index_page/index_page",
+    "pages/index_page/add_comment",
     "pages/communtity/add_comment",
     "pages/add_collection/add_collection",
     "pages/record/record",
@@ -15,7 +16,6 @@
     "pages/mine/my_agreement/my_agreement",
     "pages/mine/my_coll/my_coll",
     "pages/player_test/player",
-    "pages/comments/comments",
     "pages/mine/sys_msg/sys_msg",
     "pages/record_test/record_test",
     "pages/mine/my_coll/single_coll/single_coll"

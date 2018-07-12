@@ -1,18 +1,53 @@
 // pages/communtity/detail.js
+const c = require('../../utils/c.js');
+const r = c.r;
 Page({
 
   /**
    * 页面的初始数据
    */
   data: {
-  
+    audioId: 0,
+    feed: {},
+    comments: {}
+  },
+  getData: function(callback){
+    var that = this;
+    console.log('that')
+    console.log(that)
+    r({
+      data: {
+        action: 'get_one_feed',
+        audio_id: this.data.audioId
+      },
+      success: function(res) {
+        console.log(res)
+        that.setData({
+          feed: res.data.resp.feed
+        })
+      }
+    })
+    r({
+      data:{
+        action: 'get_comments',
+        audio_id: this.data.audioId
+      },
+      success: function(res){
+        console.log(res)
+        that.setData({
+          comments: res.data.resp.comments
+        })
+      }
+    })
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-  
+    this.setData({
+      audioId: options.audioId
+    })
   },
 
   /**
@@ -26,7 +61,7 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-  
+    this.getData();
   },
 
   /**
@@ -63,5 +98,11 @@ Page({
   onShareAppMessage: function () {
   
   },
+  gotoComment: function(){
+    var audioId = this.data.audioId;
+    wx.navigateTo({
+      url: '/pages/index_page/add_comment?audioId=' + audioId
+    })
+  }
 
 })

@@ -2,8 +2,8 @@
 
 <view class="headbar">
   <view class="btn-1">
-    <view wx:if="{{!listenDiff}}" class="btn" ontap="listenDiffToggle">听见不同</view>
-    <view wx:if="{{listenDiff}}" class="btn" ontap="listenDiffToggle">我的喜好</view>
+    <view wx:if="{{listentype === 'like'}}" class="btn" ontap="listenDiffToggle">听见不同</view>
+    <view wx:if="{{listentype === 'diff'}}" class="btn" ontap="listenDiffToggle">我的喜好</view>
   </view>
   <view class="btn-2 ">
     <view class="btn">频道</view>
@@ -22,11 +22,11 @@
 <view class="control">
   <view class="btns">
     <view class="btn-group">
-      <image wx:if="{{feed.isliked}}" src="/image/icon-like.svg" class="icon-md btn-up">btns</image>
-      <image wx:else src="/image/icon-like.svg" class="icon-md btn-up">btns</image>
+      <image wx:if="{{!feed.isliked}}" src="/image/icon-like.svg" class="icon-md btn-up" ontap="like">btns</image>
+      <image wx:else src="/image/icon-like-active.svg" class="icon-md btn-up" ontap="dislike">btns</image>
       <view class="btn-num">{{feed.like_num}}</view>
     </view>
-    <view class="btn-group">
+    <view class="btn-group" ontap="gotoComments">
       <image src="/image/icon-comments.svg" class="icon-md btn-up">btns</image>
       <view class="btn-num">{{feed.comment_num}}</view>
     </view>
@@ -35,7 +35,8 @@
       <!-- <view class="btn-num"> 10</view> -->
     </view>
     <view class="btn-group">
-      <image src="/image/icon-share.svg" class="icon-md btn-up">btns</image>
+      <button open-type="share"><image src="/image/icon-share.svg" class="icon-md btn-up" ></image></button>
+      
       <!-- <view class="btn-num"> 10</view> -->
     </view>
   </view>

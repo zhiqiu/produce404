@@ -1,0 +1,14 @@
+
+<view class="record">
+	<textarea class="text" placeholder="请输入评论" bindinput="onTextChange"/>
+		
+	<!-- <view class="holder">
+		<view class="pos">点击定位</view>
+		<view class="tag">#标签</view>
+	</view> -->
+
+	<view	class="submit" ontap="submit">
+		发  送
+	</view>
+</view>
+

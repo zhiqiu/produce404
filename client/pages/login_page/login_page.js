@@ -1,4 +1,6 @@
 // pages/login_page/login_page.js
+const c = require('../../utils/c.js');
+const r = c.r;
 Page({
 
   /**
