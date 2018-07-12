@@ -38,6 +38,8 @@ def getIndex():
 
 @app.route('/sign', methods=["GET"])
 def signcos():
+
+    return 'abc'
     policy = Config.POLICY
     secret_id = Config.SECRET_ID
     secret_key = Config.SECRET_KEY
