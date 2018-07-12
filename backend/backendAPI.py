@@ -56,6 +56,7 @@ class API():
         "get_my_feed": "getMyFeeds",
         "post_audio": "postAudio",
         "get_medal": "getMedal",
+        "dislike_audio": "dislikeAudio",
     }
 
     def commonGetAPI(self, tableName, **kwargs):
@@ -745,5 +746,33 @@ class API():
         user = jsonLoads(form["user"])
         user["openid"] = openid
         User(**user).merge(self.session)
+
+        return Status.success()
+    
+    def dislikeAudio(self, form):
+        '''
+        取消赞：
+        {
+            action: 'dislike_audio',
+            audio_id: ''
+        }
+        {
+            err: 'ok'
+        }
+        '''
+
+        openid = form["openid"]
+        audio_id = form["audio_id"]
+
+        Audio.checkExist(self.session, audio_id)
+
+        like = self.session.query(R_User_Like_Audio).filter(and_(
+            R_User_Like_Audio.user_openid == openid,
+            R_User_Like_Audio.audio_id == audio_id
+        )).first()
+
+        # 数据库中必定已存在记录，所以直接修改deleted列即可。
+        like.deleted = False
+        like.merge(self.session)
 
         return Status.success()
