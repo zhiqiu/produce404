@@ -21,7 +21,7 @@ Page({
       feeds: getApp().globalData.myData.feeds,
       medal: getApp().globalData.myData.medal,
     }),
-    console.log(this.data)
+    console.log(this.data.feeds)
   },
 
   /**
@@ -91,6 +91,14 @@ Page({
     var audioInfo = ''
     wx.navigateTo({
       url: '/pages/mine/my_agreement/my_agreement?' + audioInfo
+    })
+  },
+
+  gotoDetail: function(e){
+    console.log(e)
+    var dID = e.currentTarget.id;
+    wx.navigateTo({
+      url: '/pages/communtity/detail?dID=' + dID
     })
   }
 })

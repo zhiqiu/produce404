@@ -17,8 +17,8 @@
         </view>
       </view>
       <view class="some-btn">
-        <view class="btn">我的消息</view>
-        <view class="btn">我的收藏</view>
+        <view class="btn" ontap="gotoMyMsg">我的消息</view>
+        <view class="btn" ontap="gotoMyColl">我的收藏</view>
       </view>
     </view>
   </view>
@@ -36,7 +36,7 @@
   <!-- </view> -->
   <view class="timeline">
       <view wx:for="{{feeds}}">
-      <view class="info" ontap="gotoDetail" id="detail-id">
+      <view class="info" ontap="gotoDetail" id="{{item.audio.audio_id}}">
         <view class="holder">
           <view class="time">
             45"

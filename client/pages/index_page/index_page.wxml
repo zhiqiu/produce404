@@ -24,13 +24,13 @@
     <view class="btn-group">
       <image wx:if="{{feed.isliked}}" src="/image/icon-like.svg" class="icon-md btn-up">btns</image>
       <image wx:else src="/image/icon-like.svg" class="icon-md btn-up">btns</image>
-      <view class="btn-num">{{feed.audio.like_num}}</view>
+      <view class="btn-num">{{feed.like_num}}</view>
     </view>
     <view class="btn-group">
       <image src="/image/icon-comments.svg" class="icon-md btn-up">btns</image>
       <view class="btn-num">{{feed.comment_num}}</view>
     </view>
-    <view class="btn-group">
+    <view class="btn-group" ontap="gotoAddCollection" id="{{feed.audio.audio_id}}" >
       <image src="/image/icon-collect.svg" class="icon-md btn-up">btns</image>
       <!-- <view class="btn-num"> 10</view> -->
     </view>

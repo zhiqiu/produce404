@@ -76,7 +76,7 @@ const test = function(){
 	r({
 		data:{
 			action: 'get_one_feed',
-			audio_id: test_audio_id
+			audio_id: 16
 		},
 		success: function(res){
 			log('get_one_feed')

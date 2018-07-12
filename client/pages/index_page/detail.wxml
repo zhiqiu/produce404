@@ -1,5 +1,4 @@
 <!--pages/communtity/detail.wxml-->
-
 <view class="wholepage">
 	<view class="info-card-out">
 		<image class="background" src="{{feed.audio.img}}" width="100%" height="100%">

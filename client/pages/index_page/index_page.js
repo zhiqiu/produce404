@@ -133,11 +133,14 @@ Page({
       url: '/pages/comments/comments?' + audioInfo
     })
   },
-  gotoCollect: function() {
-    var audioInfo = ''
+
+  gotoAddCollection: function (e) {
+    console.log(e)
+    var dID = e.currentTarget.id;
     wx.navigateTo({
-      url: '/pages/collection/add_collection?' + audioInfo
+      url: '/pages/add_collection/add_collection?dID=' + dID
     })
-  }
+  },
+
 
 })
