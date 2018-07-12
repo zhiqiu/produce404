@@ -45,7 +45,7 @@ class Status():
         }
 
 
-if platform.system() == "Windows" and Config.DEBUG:
+if platform.system() == "Windows" or Config.DEBUG:
     class PlatformEncrypt():
         def encrypt(self, text):
             return text
