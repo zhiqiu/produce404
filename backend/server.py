@@ -29,29 +29,6 @@ def page_not_found(_):
 def getIndex():
     return '<script>s="It works! ";for(i=0;i<11;i++) s+=s;document.write(s);</script>'
 
-<<<<<<< HEAD
-
-@app.route('/sign', methods=["GET"])
-def signcos():
-
-    return 'abc'
-    policy = Config.POLICY
-    secret_id = Config.SECRET_ID
-    secret_key = Config.SECRET_KEY
-    duration = Config.DURATION_SECOND
-    url_generator = CamUrl(policy, duration, secret_id, secret_key)
-    real_url = url_generator.url()
-    print(real_url)
-    proxy_handler = urllib.request.ProxyHandler({'https': '10.14.87.100:8080'})
-    opener = urllib.request.build_opener()
-    r = opener.open(real_url)
-    response = r.read()
-    #print(response)
-    return response
-
-
-=======
->>>>>>> d7bf2f7c5fb696d364f2c7ae8278f47532feaf5d
 @app.route("/api", methods=["GET", "POST"])
 def dealRequests():
     if request.method == "GET":
