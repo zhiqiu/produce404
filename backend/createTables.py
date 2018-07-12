@@ -133,7 +133,7 @@ class User(Base, Creatable):
         returnDict = {}
         returnDict["openid"] = self.openid
         returnDict["name"] = self.nickName
-        returnDict["gender"] = ["M", "F"][self.gender]
+        returnDict["gender"] = ["F", "M"][self.gender]
         returnDict["img"] = self.avatarUrl
         returnDict["address"] = "%s, %s" % (self.city, self.province)
         returnDict["create_time"] = str(self.create_time)
