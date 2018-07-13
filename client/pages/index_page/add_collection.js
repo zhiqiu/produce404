@@ -1,6 +1,6 @@
 /*添加到我的收藏页面*/
 // pages/collection/add_collection.js
-const c = require('/utils/c.js')
+const c = require('../../utils/c.js')
 const r = c.r;
 Page({
 
