@@ -59,7 +59,7 @@
 						<view class="btn-num">{{feed.comment_num}}</view>
 					</view>
 					<view class="btn-group">
-						<image wx:if="{{feed.iscollected}}" src="/image/icon-collect.svg" class="icon-sm btn-up">btns</image>
+						<image wx:if="{{!feed.iscollected}}" src="/image/icon-collect.svg" class="icon-sm btn-up">btns</image>
             <image wx:else src="/image/icon-collect-active.svg" class="icon-sm btn-up">btns</image>
 						<!-- <view class="btn-num"> 10</view> -->
 					</view>

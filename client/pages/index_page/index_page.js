@@ -2,6 +2,8 @@
 // pages/index_page/index_page.js
 const c = require('../../utils/c.js');
 const r = c.r;
+
+let animationShowHeight = 300;
 Page({
 
   /**
@@ -9,15 +11,50 @@ Page({
    */
   data: {
     feed: {},
+    last_feed: {},
     listentype: 'like', // diff or like
     channel: wx.getStorageSync('channel') || 'unset', // unset or channelname
-    dataloaded: false
+    dataloaded: false,
+    tags: [{
+      text: '风声',
+      ischoosen: false
+    }, {
+      text: '雨声',
+      ischoosen: false
+    }, {
+      text: '读书声',
+      ischoosen: false
+    }, {
+      text: '鸟声',
+      ischoosen: false
+    }, {
+      text: '汽笛声',
+      ischoosen: false
+    }, {
+      text: '海浪声',
+      ischoosen: false
+    }, {
+      text: '白噪声',
+      ischoosen: false
+    }, {
+      text: '琴声',
+      ischoosen: false
+    }, {
+      text: '娃娃声',
+      ischoosen: false
+    }],
+
+    animationData: "",
+    showModalStatus: false,
+    imageHeight: 0,
+    imageWidth: 0,
   },
 
-  getData: function(callback){
+  getData: function(callback) {
+    this.setData({
+      last_feed: this.data.feed
+    })
     var that = this;
-    console.log('that')
-    console.log(that)
     r({
       data: {
         action: 'get_index',
@@ -42,8 +79,8 @@ Page({
   onLoad: function(options) {
     if (!c.check()) return; // check login
     var that = this;
-    this.getData(function(){
-      c.play(that.data.feed.audio,that.data.feed.user);
+    this.getData(function() {
+      c.play(that.data.feed.audio, that.data.feed.user);
       const player = wx.getBackgroundAudioManager();
       player.onTimeUpdate(function() {
         that.setData({
@@ -51,7 +88,7 @@ Page({
         })
       })
     });
-    
+    console.log(this)
   },
 
   /**
@@ -115,6 +152,16 @@ Page({
     this.setData({
       listentype: this.data.listentype === 'like' ? 'diff' : 'like'
     })
+    var that = this;
+    this.getData(function() {
+      c.play(that.data.feed.audio, that.data.feed.user);
+      const player = wx.getBackgroundAudioManager();
+      player.onTimeUpdate(function() {
+        that.setData({
+          audioProgress: parseInt(100 * player.currentTime / player.duration)
+        })
+      })
+    });
   },
   like: function() {
     var nowFeed = this.data.feed;
@@ -124,7 +171,7 @@ Page({
       feed: nowFeed
     })
     r({
-      data:{
+      data: {
         action: 'like_audio',
         audio_id: this.data.feed.audio.audio_id
       }
@@ -138,13 +185,13 @@ Page({
       feed: nowFeed
     })
     r({
-      data:{
+      data: {
         action: 'dislike_audio',
         audio_id: this.data.feed.audio.audio_id
       }
     })
   },
-  
+
   gotoComments: function() {
     var audioId = this.data.feed.audio.audio_id;
     wx.navigateTo({
@@ -152,17 +199,96 @@ Page({
     })
   },
 
-  gotoAddCollection: function (e) {
+  gotoAddCollection: function(e) {
     console.log(e)
     var dID = e.currentTarget.id;
     wx.navigateTo({
       url: '/pages/index_page/add_collection?dID=' + dID
     })
   },
-  gotoChannel: function(){
+  gotoChannel: function() {
     wx.navigateTo({
       url: '/pages/index_page/choose_channel'
     })
-  }
+  },
+
+  gotoPrevious: function() {
+    var that = this
+    if (this.data.last_feed.audio) {
+      console.log(this.data.feed)
+      this.setData({
+        feed: that.data.last_feed,
+        last_feed: {}
+      })
+      c.play(that.data.feed.audio, that.data.feed.user)
+    }
+  },
+
+  gotoNext: function() {
+    var that = this;
+    this.getData(function() {
+      c.play(that.data.feed.audio, that.data.feed.user);
+      const player = wx.getBackgroundAudioManager();
+      player.onTimeUpdate(function() {
+        that.setData({
+          audioProgress: parseInt(100 * player.currentTime / player.duration)
+        })
+      })
+    });
+  },
+
+  showModal: function () {
+    // 显示遮罩层
+    var animation = wx.createAnimation({
+      duration: 200,
+      timingFunction: "linear",
+      delay: 0
+    })
+    console.log(animation)
+    this.animation = animation
+    animation.translateY(-animationShowHeight).step()
+    this.setData({
+      animationData: animation.export(),
+      showModalStatus: true
+    })
+
+    setTimeout(function () {
+      animation.translateY(100).step()
+      this.setData({
+        animationData: animation.export()
+      })
+    }.bind(this), 200)
+  },
+
+  hideModal: function () {
+    // 隐藏遮罩层
+    var animation = wx.createAnimation({
+      duration: 200,
+      timingFunction: "linear",
+      delay: 0
+    })
+    this.animation = animation;
+    animation.translateY(animationShowHeight).step()
+    this.setData({
+      animationData: animation.export(),
+    })
+    setTimeout(function () {
+      animation.translateY(0).step()
+      this.setData({
+        animationData: animation.export(),
+        showModalStatus: false
+      })
+    }.bind(this), 200)
+  },
+
+  onShow: function () {
+    let that = this;
+    wx.getSystemInfo({
+      success: function (res) {
+        animationShowHeight = res.windowHeight;
+      }
+    })
+  },
+
 
 })

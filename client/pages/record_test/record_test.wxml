@@ -1,2 +1,15 @@
-<!--pages/record_test/record_test.wxml-->
-<text>pages/record_test/record_test.wxml</text>
+<!--index.wxml-->
+<view class="container-column">
+
+  <view animation="{{animationData}}" class="container-column buydes-dialog-container" wx:if="{{showModalStatus}}">
+    <view class="buydes-dialog-container-top" bindtap="hideModal"></view>
+    <view class="container-column buydes-dialog-container-bottom">
+      <block wx:for="{{['操作1','操作2','操作3','取消']}}" wx:for-index="index" wx:key="key" wx:for-item="item">
+        <view bindtap="hideModal" class="buydes-dialog-container-bottom-item">{{item}}</view>
+      </block>
+    </view>
+  </view>
+
+  <image bindtap="showModal" bindload="imageLoad" style="width:{{imageWidth}}px;;height:{{imageHeight}}px;" src="../pro1.jpg" />
+
+</view>
