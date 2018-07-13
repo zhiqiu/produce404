@@ -17,8 +17,8 @@ const r = function(option,api){
       wx.setStorageSync('server_first_time',false);
       r({
         data:{
-          action: 'post_userinfo',
-          data: wx.getStorageSync('userInfo')
+          action: 'set_user_info',
+          user: wx.getStorageSync('userInfo')
         }
       })
     }
@@ -39,8 +39,8 @@ const check = function(){
     wx.setStorageSync('server_first_time',false);
     r({
       data:{
-        action: 'post_userinfo',
-        data: wx.getStorageSync('userInfo')
+        action: 'set_user_info',
+        user: wx.getStorageSync('userInfo')
       }
     })
   }
@@ -88,8 +88,8 @@ const login = function(){
 							if(userInfo){
 								r({
 									data:{
-										action: 'post_userinfo',
-										data: userInfo
+										action: 'set_user_info',
+										user: userInfo
 									}
 								})
 							}else{
