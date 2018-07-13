@@ -8,7 +8,7 @@ import os
 __all__ = ["app"]
 
 DEBUG = True
-PORT = 80
+PORT = 24135
 
 api = API(Config.engine)
 

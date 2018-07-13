@@ -21,9 +21,6 @@ class Config(object):
     # debug server-client communitation
     DEBUG_COMMUNITATION = False
 
-    # flask port
-    PORT = 80
-
     # database engine. Use sqlite3 for debug
     curdir = os.path.abspath(os.path.dirname(__file__))
     databaseFile = os.path.join(curdir, "..", "foo.db")
