@@ -89,10 +89,12 @@ else:
             # 因为AES加密时候得到的字符串不一定是ascii字符集的，输出到终端或者保存时候可能存在问题
             # 所以这里统一把加密后的字符串转化为16进制字符串
             cipherText = base64.b64encode(cipherBytes).decode("utf-8")
+            cipherText = cipherText.replace("+","-").replace("/","_")
             return cipherText
 
         # 解密后，去掉补足的空格用strip() 去掉
         def decrypt(self, cipherText):
+            cipherText = cipherText.replace("_","/").replace("-","+")
             cipherBytes = base64.b64decode(cipherText.encode("utf-8"))
             textBytes = AES.new(self.key, self.mode, self.key).decrypt(cipherBytes)
             text = textBytes.rstrip(b'\0').decode("utf-8")

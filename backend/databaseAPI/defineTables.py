@@ -25,7 +25,7 @@ __all__ = [
     "Message",
 ]
 
-tablePrefix = "t40_"
+tablePrefix = "t41_"
 
 # common super class
 
