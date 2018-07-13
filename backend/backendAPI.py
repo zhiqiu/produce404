@@ -95,8 +95,6 @@ class API():
 
             newContent = tableClass(**kwargs)
             newContent.create(self.session)
-        except DataFormatException as e:
-            return Status.dataFormatError(e)
         except Exception as e:
             return Status.internalError(e)
         else:
@@ -164,7 +162,7 @@ class API():
                     form["openid"] = tokenObject["openid"]
                     form["sessionKeu"] = tokenObject["session_key"]
                 except Exception as e:
-                        raise Exception("invalid token.")
+                    return internalError(e, "invalid token.")
             return getattr(self, API.action2API[action])(form)
         except Exception as e:
             try:
@@ -268,7 +266,7 @@ class API():
             openid = resJson["openid"]
             sessionKey = resJson["session_key"]
         except Exception as e:
-            return Status.internalError("invalid code. response: " + res.text)
+            return Status.internalError(e, "invalid code. response: " + res.text)
 
         # 加密 openid 和 session_key 获得token
         encryptor = Encrypt(Config.appSecret)

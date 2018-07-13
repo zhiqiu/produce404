@@ -23,7 +23,7 @@ app = Flask("create404", template_folder=template_folder, static_folder=static_f
 
 @app.errorhandler(404)
 def page_not_found(_):
-    return "Page not found."
+    return "Page not found.", 404
 
 @app.route("/", methods=["GET"])
 def getIndex():
@@ -44,7 +44,7 @@ if Config.DEBUG:
     # all debug interface
     @app.route("/debugapi/", methods=["GET", "POST"])
     def queryAPIWithoutTable():
-        return "Page not found. Url format: /debugapi/tablename"
+        return "Table not found. Url format: /debugapi/tablename"
 
     @app.route("/debugapi/<table>", methods=["GET", "POST"])
     def queryAPI(table):
@@ -65,7 +65,7 @@ if Config.DEBUG:
 
     @app.route("/debug/", methods=["GET", "POST"])
     def debugPageWithoutTable():
-        return "Page not found. Url format: /debug/tablename"
+        return "Table not found. Url format: /debug/tablename"
 
     @app.route("/debug/<table>")
     def debugPage(table):

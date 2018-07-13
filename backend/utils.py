@@ -34,15 +34,27 @@ class Status():
             "err": "not found"
         }
 
-    def internalError(exception):
-        return {
-            "err": str(exception) if Config.DEBUG else "internal error occured."
-        }
+    def internalError(*args):
+        if len(args) > 1:
+            exception = args[0]
+            errormsg = args[1]
+        elif isinstance(args[0], Exception):
+            exception = args[0]
+            errormsg = ""
+        else:
+            exception = ""
+            errormsg = args[0]
 
-    def dataFormatError(exception):
-        return {
-            "err": "DataFormatError: " + str(exception)
-        }
+        errormsg = errormsg or "internal error occured."
+
+        if Config.DEBUG or isinstance(exception, DataFormatException):
+            return {
+                "err": "%s %s" % (errormsg, str(exception))
+            }
+        else:
+            return {
+                "err": errormsg
+            }
 
 
 if platform.system() == "Windows" and Config.DEBUG:
