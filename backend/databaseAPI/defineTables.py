@@ -25,7 +25,7 @@ __all__ = [
     "Message",
 ]
 
-tablePrefix = "t34_"
+tablePrefix = "t41_"
 
 # common super class
 
@@ -146,12 +146,13 @@ class Audio(Base, Creatable):
     img = Column(String(512))
     location = Column(String(64))
     create_time = Column(TIMESTAMP)
+    reviewed = Column(BOOLEAN, default=False)
     deleted = Column(BOOLEAN, default=False)
     duration = Column(Integer)
 
     __primaryKey__ = "audio_id"
     __requiredFields__ = ["url", "name", "intro", "img", "location", "duration"]
-    __allFields__ = ["audio_id"] + __requiredFields__ + ["create_time", "deleted"]
+    __allFields__ = ["audio_id"] + __requiredFields__ + ["create_time", "deleted", "reviewed"]
 
     def __init__(self, **kwargs):
         self.commonInitClass(**kwargs)
