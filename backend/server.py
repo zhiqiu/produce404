@@ -1,5 +1,5 @@
 from backendAPI import API
-from createTables import tables
+from defineTables import tables
 from config import Config
 from utils import jsonDumps
 from flask import Flask, request, render_template

@@ -1,4 +1,4 @@
-from createTables import *
+from defineTables import *
 
 def makeTestDatabase(session):
 
@@ -90,6 +90,15 @@ def makeTestDatabase(session):
         R_User_Like_Comment(**{
             "user_openid": "openid%d"%i,
             "comment_id": i,
+        }).create(session)
+
+    for i in range(1, 100):
+        Message(**{
+            "user_openid": "openid%d" % (i % 9 + 1),
+            "msg_src": "system" if i % 5 == 0 else "openid%d" % ((i+1) % 9 + 1),
+            "action": i % 5,
+            "sysmsg": "这是一条系统消息",
+            "audio_id": i,
         }).create(session)
 
     print("All test objects created successfully.")

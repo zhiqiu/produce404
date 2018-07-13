@@ -308,6 +308,7 @@ medal对象:
 
 msg{}:
 {
+    msg_id: '',
     user: user{},
     text: '用户A给你点赞了',
     isread: bool,
@@ -323,4 +324,13 @@ msg{}:
 
 {
     msgs: [msg{}]
+}
+
+消息标记为已读
+{
+    action: 'read_msg',
+    msg_id: ''
+}
+{
+    err: 'ok'
 }
