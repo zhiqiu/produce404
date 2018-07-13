@@ -158,14 +158,13 @@ class API():
                 form["session_key"] = "session_key"
             elif action != "login":
                 try:
-                    encryptor = Encrypt()
+                    encryptor = Encrypt(Config.appSecret)
                     originalText = encryptor.decrypt(form["token"])
-                    print(originalText)
-                    # tokenObject = jsonLoads(originalText)
-                    form["openid"] = jsonLoads(originalText)
-                    # form["sessionKeu"] = tokenObject["session_key"]
+                    tokenObject = jsonLoads(originalText)
+                    form["openid"] = tokenObject["openid"]
+                    form["sessionKeu"] = tokenObject["session_key"]
                 except Exception as e:
-                    raise Exception("invalid token")
+                    raise Exception("invalid token.")
             return getattr(self, API.action2API[action])(form)
         except Exception as e:
             try:
@@ -253,13 +252,6 @@ class API():
             "errmsg": "invalid code"
         }
         '''
-
-        if Config.DEBUG_COMMUNITATION:
-            return Status.success({
-                "token": "Iamtoken.",
-                "first_time": True
-            })
-
         jsCode = form["code"]
 
         url = "https://api.weixin.qq.com/sns/jscode2session"
@@ -273,21 +265,17 @@ class API():
         try:
             res = requests.get(url, params=params)
             resJson = jsonLoads(res.text)
-            openID = resJson["openid"]
+            openid = resJson["openid"]
             sessionKey = resJson["session_key"]
 
             # 加密 openid 和 session_key 获得token
-            encryptor = Encrypt()
-            # token = {"openid": openID, "session_key": sessionKey}
-            token = openID
-            print("111111111111111111111111111")
-            print(token)
+            encryptor = Encrypt(Config.appSecret)
+            token = {"openid": openid, "session_key": sessionKey}
             token = encryptor.encrypt(jsonDumps(token))
 
             # 查询数据库，检测是否首次登陆
             firstTime = False
-            User = tables["user"]
-            if self.session.query(User).filter(User.openid == openID):
+            if not self.session.query(User.openid).filter(User.openid == openid).count():
                 firstTime = True
 
             return Status.success({
