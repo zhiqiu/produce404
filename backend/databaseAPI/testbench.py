@@ -1,4 +1,4 @@
-from defineTables import *
+from .defineTables import *
 
 def makeTestDatabase(session):
 

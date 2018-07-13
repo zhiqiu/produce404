@@ -1,9 +1,9 @@
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
-from defineTables import Base, User
-from testbench import makeTestDatabase
-from config import Config
 import time
+from .defineTables import Base, User
+from .testbench import makeTestDatabase
+from .config import Config
 
 __all__ = ["initializeTables"]
 

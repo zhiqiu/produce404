@@ -2,13 +2,13 @@ from sqlalchemy import and_
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.sql.expression import func
-from defineTables import *
-from initializeTables import initializeTables
-from config import Config
-from utils import DataFormatException, Status, Encrypt, jsonDumps, jsonLoads
-import requests
-from cam.auth.cam_url import CamUrl
 import urllib.request
+import requests
+from .defineTables import *
+from .initializeTables import initializeTables
+from .config import Config
+from .utils import DataFormatException, Status, Encrypt, jsonDumps, jsonLoads
+from cam.auth.cam_url import CamUrl
 
 
 __all__ = ["API"]

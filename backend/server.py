@@ -1,11 +1,14 @@
-from backendAPI import API
-from defineTables import tables
-from config import Config
-from utils import jsonDumps
+from databaseAPI.backendAPI import API
+from databaseAPI.defineTables import tables
+from databaseAPI.config import Config
+from databaseAPI.utils import jsonDumps
 from flask import Flask, request, render_template
 import os
 
 __all__ = ["app"]
+
+DEBUG = True
+PORT = 80
 
 api = API(Config.engine)
 
@@ -16,10 +19,6 @@ template_folder = os.path.join(curdir, "templates")
 static_folder = os.path.join(curdir, "static")
 
 app = Flask("create404", template_folder=template_folder, static_folder=static_folder)
-
-# the sign and upload file blueprint
-#app.register_blueprint(sign, url_prefix='/sign', template_folder=template_folder, static_folder=static_folder)
-
 
 @app.errorhandler(404)
 def page_not_found(_):
@@ -40,7 +39,7 @@ def dealRequests():
     result = api.postCallAPI(form)
     return jsonDumps(result)
 
-if Config.DEBUG:
+if DEBUG:
     # all debug interface
     @app.route("/debugapi/", methods=["GET", "POST"])
     def queryAPIWithoutTable():
@@ -80,4 +79,4 @@ if Config.DEBUG:
         return render_template("test.html")
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=Config.PORT)
+    app.run(host="0.0.0.0", port=PORT)

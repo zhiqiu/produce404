@@ -2,8 +2,8 @@ from sqlalchemy import Column, String, Integer, TIMESTAMP, BOOLEAN, ForeignKey
 from sqlalchemy import and_
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
-from utils import DataFormatException, jsonDumps
 from datetime import datetime
+from .utils import DataFormatException, jsonDumps
 
 __all__ = [
     "Base",

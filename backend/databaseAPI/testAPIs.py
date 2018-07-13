@@ -1,6 +1,6 @@
 import requests
-from utils import jsonDumps, jsonLoads
-from config import Config
+from .utils import jsonDumps, jsonLoads
+from .config import Config
 
 url = "http://127.0.0.1:%d/api" % Config.PORT
 debugurl = "http://127.0.0.1:%d/debugapi/" % Config.PORT
