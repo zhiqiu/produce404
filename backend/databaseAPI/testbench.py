@@ -5,7 +5,7 @@ def makeTestDatabase(session):
     for i in range(1, 10):
         User(**{
             "openid": "openid%d" % i,
-            "nickName": "张若天🤣%d号" % i,
+            "nickName": "张若天😂%d号" % i,
             "gender": 1,
             "language": "en",
             "city": "Shijiazhuang",
