@@ -164,7 +164,7 @@ class API():
                     form["openid"] = tokenObject["openid"]
                     form["sessionKeu"] = tokenObject["session_key"]
                 except Exception as e:
-                    raise Exception("invalid token.")
+                        raise Exception("invalid token.")
             return getattr(self, API.action2API[action])(form)
         except Exception as e:
             try:
@@ -267,23 +267,23 @@ class API():
             resJson = jsonLoads(res.text)
             openid = resJson["openid"]
             sessionKey = resJson["session_key"]
-
-            # 加密 openid 和 session_key 获得token
-            encryptor = Encrypt(Config.appSecret)
-            token = {"openid": openid, "session_key": sessionKey}
-            token = encryptor.encrypt(jsonDumps(token))
-
-            # 查询数据库，检测是否首次登陆
-            firstTime = False
-            if not self.session.query(User.openid).filter(User.openid == openid).count():
-                firstTime = True
-
-            return Status.success({
-                "token": token,
-                "first_time": firstTime
-            })
         except Exception as e:
-            return Status.internalError("invalid code")
+            return Status.internalError("invalid code. response: " + res.text)
+
+        # 加密 openid 和 session_key 获得token
+        encryptor = Encrypt(Config.appSecret)
+        token = {"openid": openid, "session_key": sessionKey}
+        token = encryptor.encrypt(jsonDumps(token))
+
+        # 查询数据库，检测是否首次登陆
+        firstTime = False
+        if not self.session.query(User.openid).filter(User.openid == openid).count():
+            firstTime = True
+
+        return Status.success({
+            "token": token,
+            "first_time": firstTime
+        })
 
     def getIndex(self, form):
         '''
