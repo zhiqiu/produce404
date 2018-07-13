@@ -50,9 +50,9 @@
 
 				<view class="btns">
 					<view class="btn-group">
-						<image wx:if="{{feed.isliked}}" src="/image/icon-like.svg" class="icon-sm btn-up">btns</image>
-            <image wx:else src="/image/icon-like.svg" class="icon-sm btn-up">btns</image>
-						<view class="btn-num">{{feed.like_num}}</view>
+						<image wx:if="{{!feed.isliked}}" src="/image/icon-like.svg" class="icon-sm btn-up" ontap="like" Id="{{feed.audio.audio_id}}">1</image>
+            <image wx:else src="/image/icon-like-active.svg" class="icon-sm btn-up" ontap="dislike" Id="{{feed.audio.audio_id}}">2</image>
+            <view class="btn-num">{{feed.like_num}}</view>
 					</view>
 					<view class="btn-group">
 						<image src="/image/icon-comments.svg" class="icon-sm btn-up">btns</image>
@@ -60,7 +60,7 @@
 					</view>
 					<view class="btn-group">
 						<image wx:if="{{feed.iscollected}}" src="/image/icon-collect.svg" class="icon-sm btn-up">btns</image>
-            <image wx:else src="/image/icon-collect.svg" class="icon-sm btn-up">btns</image>
+            <image wx:else src="/image/icon-collect-active.svg" class="icon-sm btn-up">btns</image>
 						<!-- <view class="btn-num"> 10</view> -->
 					</view>
 				</view>

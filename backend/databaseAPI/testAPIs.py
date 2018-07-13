@@ -1,8 +1,9 @@
 import requests
-from utils import jsonDumps, jsonLoads
+from .utils import jsonDumps, jsonLoads
+from .config import Config
 
-url = "http://127.0.0.1:24135/api"
-debugurl = "http://127.0.0.1:24135/debugapi/"
+url = "http://127.0.0.1:%d/api" % Config.PORT
+debugurl = "http://127.0.0.1:%d/debugapi/" % Config.PORT
 
 def test(params):
     print("#"*100)

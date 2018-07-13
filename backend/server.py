@@ -1,17 +1,14 @@
-from backendAPI import API
-from createTables import tables
-from config import Config
-from json import dumps
+from databaseAPI.backendAPI import API
+from databaseAPI.defineTables import tables
+from databaseAPI.config import Config
+from databaseAPI.utils import jsonDumps
 from flask import Flask, request, render_template
-#from flask import Blueprint
-#from cos import sign 
-from cam.auth.cam_url import CamUrl
-import urllib.request
-
-
 import os
 
 __all__ = ["app"]
+
+DEBUG = True
+PORT = 24135
 
 api = API(Config.engine)
 
@@ -23,35 +20,13 @@ static_folder = os.path.join(curdir, "static")
 
 app = Flask("create404", template_folder=template_folder, static_folder=static_folder)
 
-# the sign and upload file blueprint
-#app.register_blueprint(sign, url_prefix='/sign', template_folder=template_folder, static_folder=static_folder)
-
-
 @app.errorhandler(404)
 def page_not_found(_):
-    return "Page not found."
+    return "Page not found.", 404
 
 @app.route("/", methods=["GET"])
 def getIndex():
     return '<script>s="It works! ";for(i=0;i<11;i++) s+=s;document.write(s);</script>'
-
-
-@app.route('/sign', methods=["GET"])
-def signcos():
-    policy = Config.POLICY
-    secret_id = Config.SECRET_ID
-    secret_key = Config.SECRET_KEY
-    duration = Config.DURATION_SECOND
-    url_generator = CamUrl(policy, duration, secret_id, secret_key)
-    real_url = url_generator.url()
-    print(real_url)
-    proxy_handler = urllib.request.ProxyHandler({'https': '10.14.87.100:8080'})
-    opener = urllib.request.build_opener()
-    r = opener.open(real_url)
-    response = r.read()
-    #print(response)
-    return response
-
 
 @app.route("/api", methods=["GET", "POST"])
 def dealRequests():
@@ -62,13 +37,13 @@ def dealRequests():
     else:
         return "supported method: get, post."
     result = api.postCallAPI(form)
-    return dumps(result)
+    return jsonDumps(result)
 
-if Config.DEBUG:
+if DEBUG:
     # all debug interface
     @app.route("/debugapi/", methods=["GET", "POST"])
     def queryAPIWithoutTable():
-        return "Page not found. Url format: /debugapi/tablename"
+        return "Table not found. Url format: /debugapi/tablename"
 
     @app.route("/debugapi/<table>", methods=["GET", "POST"])
     def queryAPI(table):
@@ -76,12 +51,12 @@ if Config.DEBUG:
         if request.method == "GET":
             getArgs = request.args.to_dict()
             result = api.commonGetAPI(tableName, **getArgs)
-            return dumps(result)
+            return jsonDumps(result)
 
         elif request.method == "POST":
             postForm = request.form.to_dict()
             result = api.commonAddAPI(tableName, **postForm)
-            return dumps(result)
+            return jsonDumps(result)
 
     @app.route("/echo", methods=["GET"])
     def echo():
@@ -89,7 +64,7 @@ if Config.DEBUG:
 
     @app.route("/debug/", methods=["GET", "POST"])
     def debugPageWithoutTable():
-        return "Page not found. Url format: /debug/tablename"
+        return "Table not found. Url format: /debug/tablename"
 
     @app.route("/debug/<table>")
     def debugPage(table):
@@ -98,6 +73,10 @@ if Config.DEBUG:
             return "Table %s not found." % tableName
         fields = tables[tableName].__requiredFields__
         return render_template("debugPage.html", fields=fields, tableName=tableName)
+    
+    @app.route('/testcos')
+    def testcos():
+        return render_template("test.html")
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=Config.PORT)
+    app.run(host="0.0.0.0", port=PORT)

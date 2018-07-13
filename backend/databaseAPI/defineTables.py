@@ -1,12 +1,12 @@
 from sqlalchemy import Column, String, Integer, TIMESTAMP, BOOLEAN, ForeignKey
 from sqlalchemy import and_
 from sqlalchemy.ext.declarative import declarative_base
-from utils import DataFormatException, jsonDumps
+from sqlalchemy.orm import sessionmaker
 from datetime import datetime
-import time
+from .utils import DataFormatException, jsonDumps
 
 __all__ = [
-    "createAllTable",
+    "Base",
     "tables",
     "User",
     "Audio",
@@ -22,17 +22,10 @@ __all__ = [
     "R_Audio_In_Collection",
     "R_User_Like_Audio",
     "R_User_Like_Comment",
+    "Message",
 ]
 
-tablePrefix = "t21_"
-
-def createAllTable(engine):
-    try:
-        Base.metadata.create_all(engine)
-    except:
-        print("Create failed. Try again in 5 seconds.")
-        time.sleep(5)
-        createAllTable(engine)
+tablePrefix = "t40_"
 
 # common super class
 
@@ -123,6 +116,8 @@ class User(Base, Creatable):
     __primaryKey__ = "openid"
     __requiredFields__ = ["openid","nickName","gender","language","city","province","country","avatarUrl"]
     __allFields__ = __requiredFields__ + ["create_time", "deleted"]
+
+    __systemUser__ = ["system", "nobody", "deleted"]
 
     def __init__(self, **kwargs):
         self.commonInitClass(**kwargs)
@@ -373,6 +368,45 @@ class R_User_Like_Comment(Base, Creatable):
         self.commonInitClass(**kwargs)
 
 
+class Message(Base, Creatable):
+    __tablename__ = tablePrefix + "message"
+    __actionDict__ = {
+        "system": 0,
+        "like audio": 1,
+        "post comment": 2,
+        "follow": 3,
+        "reply comment": 4,
+    }
+
+    msg_id = Column(Integer, primary_key=True, autoincrement=True)
+    user_openid = Column(ForeignKey(tablePrefix + "user.openid"))
+    msg_src = Column(ForeignKey(tablePrefix + "user.openid"))
+    action = Column(Integer)
+    sysmsg = Column(String(64), default="")
+    audio_id = Column(ForeignKey(tablePrefix + "audio.audio_id"))
+    isread = Column(BOOLEAN, default=False)
+    create_time = Column(TIMESTAMP)
+    deleted = Column(BOOLEAN, default=False)
+
+    __primaryKey__ = ["msg_id"]
+    __requiredFields__ = ["user_openid","msg_src","sysmsg","action","audio_id"]
+    __allFields__ = ["msg_id"] + __requiredFields__ + ["isread","create_time", "deleted"]
+
+    def __init__(self, **kwargs):
+        if "action" not in kwargs or kwargs["action"] not in self.__actionDict__.values():
+            raise DataFormatException("action is required. " + jsonDumps(self.__actionDict__))
+        self.commonInitClass(**kwargs)
+    
+    def getTextFormat(self):
+        return {
+            0: self.sysmsg,
+            1: "{}点赞了你发布的声音{}",
+            2: "{}评论了你发布的声音{}",
+            3: "{}关注了你",
+            4: "{}回复了你在声音{}下的评论",
+        }[self.action]
+
+
 # all tables dict
 tables = {
     "user": User,
@@ -389,4 +423,5 @@ tables = {
     "r_audio_in_collection": R_Audio_In_Collection,
     "r_user_like_audio": R_User_Like_Audio,
     "r_user_like_comment": R_User_Like_Comment,
+    "message": Message,
 }

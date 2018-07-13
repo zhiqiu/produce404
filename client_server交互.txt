@@ -303,11 +303,34 @@ medal对象:
 	names: [];
 }
 
-获取用户所有消息
-{
-	action: 'get_my_msg',
-}
-{
 	
 }
+
+msg{}:
+{
+    msg_id: '',
+    user: user{},
+    text: '用户A给你点赞了',
+    isread: bool,
+    deleted: bool,
+    audio_id: '',
+}
+
 获取用户所有系统消息
+{
+    action: 'get_msg',
+    last_msg_id: ''
+}
+
+{
+    msgs: [msg{}]
+}
+
+消息标记为已读
+{
+    action: 'read_msg',
+    msg_id: ''
+}
+{
+    err: 'ok'
+}

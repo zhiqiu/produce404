@@ -10,7 +10,6 @@ class Config(object):
 
     COMMON_POLICY = r'''{"statement": [{"action": ["name/cos:*"],"effect": "allow","resource":"*"}],"version": "2.0"}'''
 
-
     POLICY = COMMON_POLICY
     DURATION_SECOND = 1800
     SECRET_ID = 'AKIDhHfrSwvKEwSnz1AVxJZifQzSmtpYpqiP'
@@ -20,10 +19,7 @@ class Config(object):
     DEBUG = True
 
     # debug server-client communitation
-    DEBUG_COMMUNITATION = True
-
-    # flask port
-    PORT = 24135
+    DEBUG_COMMUNITATION = False
 
     # database engine. Use sqlite3 for debug
     curdir = os.path.abspath(os.path.dirname(__file__))
@@ -31,10 +27,11 @@ class Config(object):
     # engine = create_engine("sqlite:///%s?check_same_thread=False" % databaseFile, echo=False)
 
     # use mysql for production environment.
-    engine = create_engine("mysql+pymysql://root:create404mysql@172.16.16.7/create404?charset=utf8mb4", pool_recycle=3600, echo=False)
-    # engine = create_engine("mysql+pymysql://dba:create404mysql@ladyrick.com/create404?charset=utf8", pool_recycle=3600, echo=False)
+    engine = create_engine("mysql+pymysql://root:create404mysql@172.16.16.7/produce404?charset=utf8mb4", pool_recycle=3600, echo=False)
+    # engine = create_engine("mysql+pymysql://dba:create404mysql@ladyrick.com/create404?charset=utf8mb4", pool_recycle=3600, echo=False)
 
     # app config
-    appID = SECRET_ID
+    appID = "wx19f70940784cb04e"
 
-    appSecret = SECRET_KEY
+    appSecret = "d397d9df1ed61029259668a26b5172b8"
+

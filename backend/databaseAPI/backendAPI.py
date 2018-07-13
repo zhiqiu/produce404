@@ -2,44 +2,26 @@ from sqlalchemy import and_
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.sql.expression import func
-from createTables import *
-from config import Config
-from utils import DataFormatException, Status, Encrypt, jsonDumps, jsonLoads
-from testbench import makeTestDatabase
+import urllib.request
 import requests
+from .defineTables import *
+from .initializeTables import initializeTables
+from .config import Config
+from .utils import DataFormatException, Status, Encrypt, jsonDumps, jsonLoads
+from cam.auth.cam_url import CamUrl
 
 
 __all__ = ["API"]
 
-
 class API():
     def __init__(self, engine):
         self.dbName = engine.name
-        createAllTable(engine)
+        initializeTables(engine)
         Session = sessionmaker(bind=engine)
         self.session = Session()
-        try:
-            # create system users: system, nobody
-            for sysuser in ["system", "nobody"]:
-                self.session.add(User(**{
-                    "openid": sysuser,
-                    "nickName": sysuser,
-                    "gender": 1,
-                    "language": "zh-cn",
-                    "city": "Beijing",
-                    "province": "Beijing",
-                    "country": "China",
-                    "avatarUrl": "none",
-                }))
-            self.session.commit()
-            if Config.DEBUG:
-                makeTestDatabase(self.session)
-        except Exception as e:
-            if Config.DEBUG:
-                print(e)
-            self.session.rollback()
 
     action2API = {
+        "signcos": "signcos",
         "get_user_info": "getUserInfo",
         "set_user_info": "setUserInfo",
         "login": "login",
@@ -57,6 +39,8 @@ class API():
         "post_audio": "postAudio",
         "get_medal": "getMedal",
         "dislike_audio": "dislikeAudio",
+        "get_msg": "getMessage",
+        "read_msg": "readMsg"
     }
 
     def commonGetAPI(self, tableName, **kwargs):
@@ -92,8 +76,6 @@ class API():
 
             newContent = tableClass(**kwargs)
             newContent.create(self.session)
-        except DataFormatException as e:
-            return Status.dataFormatError(e)
         except Exception as e:
             return Status.internalError(e)
         else:
@@ -150,18 +132,20 @@ class API():
             return Status.internalError("Missing form data")
         try:
             action = form["action"]
-            if action != "login" and not Config.DEBUG_COMMUNITATION:
+            if action not in API.action2API:
+                return Status.internalError("invalid action: " + action)
+            if Config.DEBUG_COMMUNITATION:
+                form["openid"] = "openid1"
+                form["session_key"] = "session_key"
+            elif action != "login":
                 try:
-                    encryptor = Encrypt()
-                    origialText = encryptor.decrypt(form["token"])
+                    encryptor = Encrypt(Config.appSecret)
+                    originalText = encryptor.decrypt(form["token"])
                     tokenObject = jsonLoads(originalText)
                     form["openid"] = tokenObject["openid"]
-                    form["sessionKey"] = tokenObject["session_key"]
+                    form["sessionKeu"] = tokenObject["session_key"]
                 except Exception as e:
-                    raise Exception("invalid token")
-            else:
-                form["openid"] = "openid1"
-                form["session_key"] = "123"
+                    return Status.internalError(e, "invalid token.")
             return getattr(self, API.action2API[action])(form)
         except Exception as e:
             try:
@@ -172,6 +156,26 @@ class API():
 
 
     #############################   API   #############################
+
+    def signcos(self, form):
+        '''
+        签名服务API
+        {
+            action: 'signcos'
+        }
+        '''
+        policy = Config.POLICY
+        secret_id = Config.SECRET_ID
+        secret_key = Config.SECRET_KEY
+        duration = Config.DURATION_SECOND
+        url_generator = CamUrl(policy, duration, secret_id, secret_key)
+        real_url = url_generator.url()
+        print(real_url)
+        proxy_handler = urllib.request.ProxyHandler({'https': '10.14.87.100:8080'})
+        opener = urllib.request.build_opener()
+        r = opener.open(real_url)
+        response = r.read()
+        return jsonLoads(response.decode("utf-8"))
 
     def getUserInfo(self, form):
         '''
@@ -232,9 +236,9 @@ class API():
 
         if Config.DEBUG_COMMUNITATION:
             return Status.success({
-                "token": "Iamtoken.",
-                "first_time": True
-            })
+            "token": "iamtoken",
+            "first_time": True
+        })
 
         jsCode = form["code"]
 
@@ -249,26 +253,26 @@ class API():
         try:
             res = requests.get(url, params=params)
             resJson = jsonLoads(res.text)
-            openID = resJson["openid"]
+            openid = resJson["openid"]
             sessionKey = resJson["session_key"]
-
-            # 加密 openid 和 session_key 获得token
-            encryptor = Encrypt()
-            token = {"openid": openID, "session_key": sessionKey}
-            token = encryptor.encrypt(jsonDumps(token))
-
-            # 查询数据库，检测是否首次登陆
-            firstTime = False
-            User = tables["user"]
-            if not self.session.query(User).filter(User.openid == openID):
-                firstTime = True
-
-            return Status.success({
-                "token": token,
-                "first_time": firstTime
-            })
         except Exception as e:
-            return Status.internalError("invalid code")
+            return Status.internalError(e, "invalid code. response: " + res.text)
+
+        # 加密 openid 和 session_key 获得token
+        encryptor = Encrypt(Config.appSecret)
+        token = {"openid": openid, "session_key": sessionKey}
+        token = encryptor.encrypt(jsonDumps(token))
+
+        # 查询数据库，检测是否首次登陆
+        firstTime = False
+        if not self.session.query(User.openid).filter(User.openid == openid).count():
+            firstTime = True
+
+        return Status.success({
+            "token": token,
+            # "first_time": firstTime
+            "first_time": True
+        })
 
     def getIndex(self, form):
         '''
@@ -339,6 +343,18 @@ class API():
         else:
             like = R_User_Like_Audio(user_openid=openid, audio_id=audio_id)
         like.merge(self.session)
+
+        msg_src = self.session.query(R_User_Create_Audio.user_openid).filter(and_(
+            R_User_Create_Audio.audio_id == audio_id
+        )).first()[0]
+
+        # 为audio创建者发送一条提醒消息
+        Message(
+            user_openid=msg_src,
+            msg_src=openid,
+            action=Message.__actionDict__["like audio"],
+            audio_id=audio_id,
+        ).create(self.session)
 
         return Status.success()
     
@@ -432,7 +448,29 @@ class API():
                 replyto=replyto,
                 text=form["text"]
                 ).create(self.session)
-        
+
+
+        msg_src = self.session.query(R_User_Create_Audio.user_openid).filter(and_(
+            R_User_Create_Audio.audio_id == audio_id
+        )).first()[0]
+
+        # 为audio创建者发送一条提醒消息
+        Message(
+            user_openid=msg_src,
+            msg_src=openid,
+            action=Message.__actionDict__["post comment"],
+            audio_id=audio_id,
+        ).create(self.session)
+
+        # 如果是回复别人，则为被回复者也发送一条提醒消息
+        if replyto and replyto not in User.__systemUser__:
+            Message(
+                user_openid=replyto,
+                msg_src=openid,
+                action=Message.__actionDict__["post comment"],
+                audio_id=audio_id,
+            ).create(self.session)
+
         return Status.success()
     
     def getCollections(self, form):
@@ -578,7 +616,7 @@ class API():
                 if last_audio_id:
                     last_audio_id = int(last_audio_id)
             except:
-                raise DataFormatException("last_audio_id must be an integer or empty string")
+                raise DataFormatException("last_audio_id must be an integer or empty.")
 
         findAudios = self.session.query(User, Audio).filter(and_(
             User.openid != openid,
@@ -589,7 +627,7 @@ class API():
             R_User_Create_Audio.audio_id == Audio.audio_id,
         ))
 
-        if last_audio_id != "":
+        if last_audio_id:
             findAudios = findAudios.filter(Audio.audio_id < last_audio_id)
 
         # 每次显示10条
@@ -655,7 +693,7 @@ class API():
                 if last_audio_id:
                     last_audio_id = int(last_audio_id)
             except:
-                raise DataFormatException("last_audio_id must be an integer or empty string")
+                raise DataFormatException("last_audio_id must be an integer or empty.")
         findAudios = self.session.query(User, Audio).filter(and_(
             User.openid == openid,
             Audio.deleted == False,
@@ -664,7 +702,7 @@ class API():
             R_User_Create_Audio.audio_id == Audio.audio_id,
         ))
 
-        if last_audio_id != "":
+        if last_audio_id:
             findAudios = findAudios.filter(Audio.audio_id < last_audio_id)
 
         # 每次显示10条
@@ -776,3 +814,79 @@ class API():
         like.merge(self.session)
 
         return Status.success()
+
+    def getMessage(self, form):
+        '''
+        获取用户所有系统消息
+        {
+            action: 'get_msg',
+            last_msg_id: ''
+        }
+
+        {
+            msgs: [msg{}]
+        }
+        '''
+        openid = form["openid"]
+        last_msg_id = ""
+        if "last_msg_id" in form:
+            last_msg_id = form["last_msg_id"]
+            try:
+                if last_msg_id:
+                    last_msg_id = int(last_msg_id)
+            except:
+                raise DataFormatException("last_msg_id must be an integer or empty.")
+
+        findMessages = self.session.query(User, Message, Audio.name, Audio.audio_id).filter(and_(
+            Audio.audio_id == Message.audio_id,
+            User.openid == Message.msg_src,
+            Message.user_openid == openid,
+            Message.isread == False
+        ))
+
+        if last_msg_id:
+            findMessages = findMessages.filter(Message.msg_id < last_msg_id)
+
+        # 每次显示20条
+        findMessages = findMessages.order_by(Message.msg_id.desc()).limit(20).all()
+
+        msgs = []
+        for user, msg, audioName, audio_id in findMessages:
+            msg_ = {
+                "msg_id": msg.msg_id,
+                "user": user.toDict(),
+                "text": msg.getTextFormat().format(user.nickName, audioName),
+                "isread": msg.isread,
+                "deleted": msg.deleted,
+                "audio_id": audio_id, 
+            }
+            msgs.append(msg_)
+
+        return Status.success({
+            "msgs": msgs
+        })
+    
+    def readMsg(self, form):
+        '''
+        消息标记为已读
+        {
+            action: 'read_msg',
+            msg_id: ''
+        }
+        {
+            err: 'ok'
+        }
+        '''
+        openid = form["openid"]
+        msg_id = form["msg_id"]
+        msg = self.session.query(Message).filter(and_(
+            Message.msg_id == msg_id,
+            Message.user_openid == openid
+        )).first()
+
+        if msg:
+            msg.isread = True
+            msg.merge(self.session)
+            return Status.success()
+        else:
+            return Status.internalError("It's not your msg or msg doesn't exists.")

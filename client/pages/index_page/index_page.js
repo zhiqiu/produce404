@@ -144,6 +144,7 @@ Page({
       }
     })
   },
+  
   gotoComments: function() {
     var audioId = this.data.feed.audio.audio_id;
     wx.navigateTo({
@@ -155,7 +156,7 @@ Page({
     console.log(e)
     var dID = e.currentTarget.id;
     wx.navigateTo({
-      url: '/pages/add_collection/add_collection?dID=' + dID
+      url: '/pages/index_page/add_collection?dID=' + dID
     })
   },
   gotoChannel: function(){

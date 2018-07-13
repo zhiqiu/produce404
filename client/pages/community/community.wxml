@@ -32,8 +32,8 @@
 
         <view class="btns">
           <view class="btn-group">
-            <image wx:if="{{item.audio.isliked}}" src="/image/icon-like.svg" class="icon-sm btn-up">1</image>
-            <image wx:else src="/image/icon-like.svg" class="icon-sm btn-up">1</image>
+            <image wx:if="{{!item.audio.isliked}}" src="/image/icon-like.svg" class="icon-sm btn-up" ontap="like" Id="{{item.audio.audio_id}}">1</image>
+            <image wx:else src="/image/icon-like-active.svg" class="icon-sm btn-up" ontap="dislike" Id="{{item.audio.audio_id}}">2</image>
             <view class="btn-num">{{item.like_num}}</view>
           </view>
           <view class="btn-group">
