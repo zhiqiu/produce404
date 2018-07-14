@@ -1,92 +1,75 @@
-// pages/record_test/record_test.js
+//index.js
+var app = getApp();
+
+let animationShowHeight = 300;
+
 Page({
-
-  /**
-   * 页面的初始数据
-   */
   data: {
-  
+    animationData: "",
+    showModalStatus: false,
+    imageHeight: 0,
+    imageWidth: 0,
+    tags:[
+      { text: '风声', ischoosen: false }, { text: '雨声', ischoosen: false }, { text: '读书声', ischoosen: false }, { text: '鸟声', ischoosen: false }, { text: '汽笛声', ischoosen: false }, { text: '海浪声', ischoosen: false }, { text: '白噪声', ischoosen: false }, { text: '琴声', ischoosen: false }, { text: '娃娃声', ischoosen: false }
+    ]
   },
-
-  /**
-   * 生命周期函数--监听页面加载
-   */
-  onLoad: function (options) {
-    const recorderManager = wx.getRecorderManager()
-
-    recorderManager.onStart(() => {
-      console.log('recorder start')
+  imageLoad: function(e) {
+    this.setData({
+      imageHeight: e.detail.height,
+      imageWidth: e.detail.width
+    });
+  },
+  
+  showModal: function() {
+    // 显示遮罩层
+    var animation = wx.createAnimation({
+      duration: 200,
+      timingFunction: "linear",
+      delay: 0
     })
-    recorderManager.onPause(() => {
-      console.log('recorder pause')
-    })
-    recorderManager.onStop((res) => {
-      console.log('recorder stop', res)
-      const { tempFilePath } = res
-    })
-    recorderManager.onFrameRecorded((res) => {
-      const { frameBuffer } = res
-      console.log('frameBuffer.byteLength', frameBuffer.byteLength)
+    this.animation = animation
+    animation.translateY(-animationShowHeight).step()
+    this.setData({
+      animationData: animation.export(),
+      showModalStatus: true
     })
 
-    const optionsa = {
-      duration: 10000,
-      sampleRate: 44100,
-      numberOfChannels: 1,
-      encodeBitRate: 192000,
-      format: 'aac',
-      frameSize: 50
-    }
-
-    recorderManager.start(optionsa)
+    setTimeout(function() {
+      animation.translateY(100).step()
+      this.setData({
+        animationData: animation.export()
+      })
+    }.bind(this), 200)
   },
 
-  /**
-   * 生命周期函数--监听页面初次渲染完成
-   */
-  onReady: function () {
-  
+  hideModal: function() {
+    // 隐藏遮罩层
+    var animation = wx.createAnimation({
+      duration: 200,
+      timingFunction: "linear",
+      delay: 0
+    })
+    this.animation = animation;
+    animation.translateY(animationShowHeight).step()
+    this.setData({
+      animationData: animation.export(),
+    })
+    setTimeout(function() {
+      animation.translateY(0).step()
+      this.setData({
+        animationData: animation.export(),
+        showModalStatus: false
+      })
+    }.bind(this), 200)
   },
 
-  /**
-   * 生命周期函数--监听页面显示
-   */
-  onShow: function () {
-  
+  onShow: function() {
+    let that = this;
+    wx.getSystemInfo({
+      success: function(res) {
+        animationShowHeight = res.windowHeight;
+      }
+    })
   },
 
-  /**
-   * 生命周期函数--监听页面隐藏
-   */
-  onHide: function () {
-  
-  },
-
-  /**
-   * 生命周期函数--监听页面卸载
-   */
-  onUnload: function () {
-  
-  },
-
-  /**
-   * 页面相关事件处理函数--监听用户下拉动作
-   */
-  onPullDownRefresh: function () {
-  
-  },
-
-  /**
-   * 页面上拉触底事件的处理函数
-   */
-  onReachBottom: function () {
-  
-  },
-
-  /**
-   * 用户点击右上角分享
-   */
-  onShareAppMessage: function () {
-  
-  }
 })
