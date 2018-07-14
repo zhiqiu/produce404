@@ -170,7 +170,7 @@ class API():
         '''
         self.audioVec = {}
         curdir = os.path.dirname(os.path.abspath(__file__))
-        with open(os.path.join(curdir, "audioVector.json"),"r") as f:
+        with open(os.path.join(curdir, "audioVector.json"),"r", encoding="utf-8") as f:
             jsonObj = jsonLoads(f.read())
 
         recommandTags = jsonObj["recommandTags"]
@@ -185,6 +185,7 @@ class API():
 
         for u in users:
             self.userVec[u.openid] = [0] * tagsNum
+            self.session.query()
 
 
         print(self.audioVec)
