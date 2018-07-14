@@ -5,6 +5,8 @@ from databaseAPI.utils import jsonDumps
 from flask import Flask, request, render_template
 import os
 
+from flask import send_file, send_from_directory
+
 __all__ = ["app"]
 
 DEBUG = True
@@ -18,7 +20,7 @@ curdir = os.path.abspath(os.path.dirname(__file__))
 template_folder = os.path.join(curdir, "templates")
 static_folder = os.path.join(curdir, "static")
 
-app = Flask("create404", template_folder=template_folder, static_folder=static_folder)
+app = Flask("create404", template_folder=template_folder, static_folder=static_folder, static_url_path='/')
 
 @app.errorhandler(404)
 def page_not_found(_):
@@ -27,6 +29,13 @@ def page_not_found(_):
 @app.route("/", methods=["GET"])
 def getIndex():
     return '<script>s="It works! ";for(i=0;i<11;i++) s+=s;document.write(s);</script>'
+
+
+@app.route('/<filename>')
+def send_file(filename):
+    directory = os.getcwd()
+    return send_from_directory(directory, filename, as_attachment=True)
+
 
 @app.route("/api", methods=["GET", "POST"])
 def dealRequests():
