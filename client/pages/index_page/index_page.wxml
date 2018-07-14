@@ -11,7 +11,7 @@
 </view>
 
 <view class="player">
-  <image class="img" src="https://enj0.com/img-player.png" mode="aspectFill" ontap="playorpause"></image>
+  <image class="img" src="http://cos.ladyrick.com/img-player.png" mode="aspectFill" ontap="playorpause"></image>
   <view class="text">
     <view>{{feed.audio.name}}</view>
     <view>{{feed.audio.intro}}</view>

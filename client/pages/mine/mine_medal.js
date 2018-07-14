@@ -148,10 +148,7 @@ Page({
     })
   },
 
-
-  gotoMedal: function(){
-    wx.navigateTo({
-      url: '/pages/mine/mine_medal'
-    })
+  gotoMine: function(){
+    wx.navigateBack();
   }
 })
