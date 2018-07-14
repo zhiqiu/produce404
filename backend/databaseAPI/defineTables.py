@@ -26,7 +26,7 @@ __all__ = [
     "Message",
 ]
 
-tablePrefix = "t46_"
+tablePrefix = "t50_"
 
 # common super class
 
@@ -78,6 +78,8 @@ class Creatable():
 
 
     def commonInitClass(self, **kwargs):
+        if not kwargs:
+            return
         missedFields = []
         for rf in self.__requiredFields__:
             if rf not in kwargs:
@@ -114,6 +116,9 @@ class CMSUser(Base, Creatable):
     __requiredFields__ = ["email", "password"]
     __allFields__ = ["id"] + __requiredFields__
 
+    def get_id(self):
+        return str(self.id)
+
 
 class User(Base, Creatable):
     __tablename__ = tablePrefix + "user"
@@ -121,7 +126,7 @@ class User(Base, Creatable):
     user_id = Column(Integer, autoincrement=True)
     openid = Column(String(28), primary_key=True)
     nickName = Column(String(64))
-    gender = Column(Integer, default=1)  # Male: 1, Female: 0
+    gender = Column(Integer, default=1)  # Male: 1, Female: 2
     language = Column(String(32), default="zh-cn")
     city = Column(String(64))
     province = Column(String(64))
@@ -138,8 +143,8 @@ class User(Base, Creatable):
 
     def __init__(self, **kwargs):
         self.commonInitClass(**kwargs)
-        if self.gender not in [0, 1]:
-            raise DataFormatException("gender must be 1 or 0 for Male/Female")
+        if kwargs and self.gender not in [1, 2]:
+            raise DataFormatException("gender must be 1 or 2 for Male/Female")
     
     def toDict(self):
         returnDict = {}
@@ -226,7 +231,7 @@ class Comment(Base, Creatable):
     __allFields__ = ["comment_id"] + __requiredFields__ + ["create_time", "deleted"]
 
     def __init__(self, **kwargs):
-        if "replyto" not in kwargs or kwargs["replyto"] == "":
+        if kwargs and "replyto" not in kwargs or kwargs["replyto"] == "":
             kwargs["replyto"] = "nobody"
         self.commonInitClass(**kwargs)
 
@@ -411,7 +416,7 @@ class Message(Base, Creatable):
     __allFields__ = ["msg_id"] + __requiredFields__ + ["isread","create_time", "deleted"]
 
     def __init__(self, **kwargs):
-        if "action" not in kwargs or kwargs["action"] not in self.__actionDict__.values():
+        if kwargs and "action" not in kwargs or kwargs["action"] not in self.__actionDict__.values():
             raise DataFormatException("action is required. " + jsonDumps(self.__actionDict__))
         self.commonInitClass(**kwargs)
     

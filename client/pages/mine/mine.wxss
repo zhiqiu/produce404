@@ -1,5 +1,40 @@
 /* pages/community/mine.wxss */
 
+page{
+  background: #ffdd40;
+}
+
+.medals {
+  /* Rectangle: */
+  background: #ffdd40;
+  border: 1px solid #ffdd40;
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:space-around;
+  padding-top: 30px;
+}
+.medal-text{
+  font-family:PingFangSC-Regular;
+font-size:12px;
+color:#666666;
+letter-spacing:1.11px;
+text-align:center;
+}
+.medal-not{
+  -webkit-filter: grayscale(1); /* Webkit */
+  filter: gray; /* IE6-9 */  
+  filter: grayscale(1); /* W3C */
+}
+.medal {
+  width: 40%;
+  overflow: hidden;
+  display: inline-block;
+  text-align: center;
+}
+.medal-img{
+  width: 100%;
+}
+
 .some-btn {
   float: right;
 }
@@ -88,16 +123,6 @@
   overflow: hidden;
 }
 
-.btns {
-  float: right;
-  font-family: PingFangHK-Thin;
-  font-size: 10px;
-  color: #999;
-  letter-spacing: 0.37px;
-  text-align: left;
-  margin-top: 10px;
-  margin-right: 20px;
-}
 
 .btn-group {
   display: inline-flex;
@@ -113,6 +138,7 @@
 .avatar-big {
   width: 57px;
   height: 57px;
+  border-radius: 50%;
 }
 
 .btn-num {
@@ -121,10 +147,9 @@
 }
 
 .info-card {
-  border-radius: 14px;
+  background: white;
   position: relative;
   overflow: hidden;
-  padding-top: 30px;
   padding-left: 20px;
   margin-left: 0;
   margin-right: 0;
@@ -149,7 +174,7 @@
   overflow: hidden;
   display: inline-flex;
   align-items: center;
-  width: 60%;
+  width: 50%;
   padding-left: 0px;
   padding-top: 20px;
 }
@@ -294,6 +319,7 @@
 }
 
 .holder {
+  background: white;
   overflow: hidden;
 }
 
@@ -329,7 +355,8 @@
   display: inline-block;
   width: 50%;
   text-align: center;
-  height: 30px;
+  height: 40px;
+  border-radius: 10px 10px 0px 0px;
 }
 
 .cont2 {
@@ -337,7 +364,8 @@
   display: inline-block;
   width: 50%;
   text-align: center;
-  height: 30px;
+  height: 40px;
+  border-radius: 10px 10px 0px 0px;
 }
 
 .conttext {

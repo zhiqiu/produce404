@@ -71,8 +71,10 @@ const playorpause= function() {
 }
 
 const login = function(){
+	if(wx.getStorageSync('login')) return;
 	var code = wx.login({
 		success: function(res){
+			wx.setStorageSync('login',true);
 			if(res.code){
 				r({
 					data:{

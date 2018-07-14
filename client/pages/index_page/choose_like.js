@@ -15,9 +15,18 @@ Page({
     onrecord: false,
     recordPath: '',
     duration: 0,
-    recordingAnimation: {},
     array: [
       '风声', '雨声', '读书声'
+    ],
+    items: [
+      {name: '0', value: '动物植物'},
+      {name: '1', value: '海浪瀑布'},
+      {name: '2', value: '山水林间'},
+      {name: '3', value: '自然气候'},
+      {name: '4', value: '机器轰鸣'},
+      {name: '5', value: '交通工具'},
+      {name: '6', value: '古典艺术'},
+      {name: '7', value: '现代乐器'},
     ]
   },
 
@@ -25,7 +34,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function(options) {
-    
+
   },
 
   /**
@@ -114,43 +123,7 @@ Page({
     var Bucket = 'create404-cos-1253746840';
     var Region = 'ap-guangzhou';
     var cos = new COS({
-<<<<<<< HEAD
-      getAuthorization: function(options, callback) {
-        wx.request({
-          method: 'GET',
-          url: c.baseUrl + '/sign', // 服务端签名，参考 server 目录下的两个签名例子
-          dataType: 'json',
-          success: function(result) {
-            var data = result.data.data;
-            // console.log(data)
-            callback({
-              TmpSecretId: data.credentials && data.credentials.tmpSecretId,
-              TmpSecretKey: data.credentials && data.credentials.tmpSecretKey,
-              XCosSecurityToken: data.credentials && data.credentials.sessionToken,
-              ExpiredTime: data.expiredTime,
-            });
-          }
-        });
-      },
 
-      getAuthorization: function(options, callback) {
-        r({
-          data: {
-            action: 'signcos'
-          },
-          success: function(res) {
-            var data = res.data.data;
-            // console.log(data)
-            callback({
-              TmpSecretId: data.credentials && data.credentials.tmpSecretId,
-              TmpSecretKey: data.credentials && data.credentials.tmpSecretKey,
-              XCosSecurityToken: data.credentials && data.credentials.sessionToken,
-              ExpiredTime: data.expiredTime,
-            });
-          }
-        })
-      },
-=======
         getAuthorization: function (options, callback) {
           r({
             data:{
@@ -168,7 +141,6 @@ Page({
             }
           })
         },
->>>>>>> 2937fe79f6c902a42da428f1c29c7d61834ff35c
     });
 
     var filepath = this.data.recordPath;
@@ -224,30 +196,7 @@ Page({
       })
     })
   },
-
-  bindPickerChange: function(e) {
-    console.log('picker发送选择改变，携带值为', e.detail.value)
-    this.setData({
-      index: e.detail.value
-    })
-  },
-
-  getLocation: function() {
-    wx.getLocation({
-      type: 'wgs84',
-      success: function (res) {
-        //2、根据坐标获取当前位置名称，显示在顶部:腾讯地图逆地址解析
-        qqmapsdk.reverseGeocoder({
-          location: {
-            latitude: res.latitude,
-            longitude: res.longitude
-          },
-          success: function (addressRes) {
-            var address = addressRes.result.formatted_addresses.recommend;
-            console.log(address)
-          }
-        })
-      }
-    })
+  checkboxChange: function(e) {
+    console.log('checkbox发生change事件，携带value值为：', e.detail.value)
   }
 })

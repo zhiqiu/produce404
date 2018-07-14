@@ -11,6 +11,7 @@ from .utils import DataFormatException, Status, Encrypt, jsonDumps, jsonLoads
 from cam.auth.cam_url import CamUrl
 from .defineMedals import allMedalClasses
 import os
+import math
 
 __all__ = ["API"]
 
@@ -169,23 +170,34 @@ class API():
         }
         '''
         self.audioVec = {}
+        self.userVec = {}
         curdir = os.path.dirname(os.path.abspath(__file__))
         with open(os.path.join(curdir, "audioVector.json"),"r", encoding="utf-8") as f:
             jsonObj = jsonLoads(f.read())
 
         recommandTags = jsonObj["recommandTags"]
         tagsNum = len(recommandTags)
+
         for k, v in jsonObj["audioHasTags"].items():
             self.audioVec[int(k)] = [0] * tagsNum
+            sumsquare = math.sqrt(len(v))
             for i in v:
-                self.audioVec[int(k)][i] = 1
+                self.audioVec[int(k)][i] = 1/sumsquare
 
-        self.userVec = {}
-        users = self.session.query(User).all()
 
-        for u in users:
-            self.userVec[u.openid] = [0] * tagsNum
-            self.session.query()
+        for i in range(10):
+            # 查询点赞用户
+            for audio_id in self.audioVec:
+                users = [t[0] for t in self.session.query(User.openid).filter(and_(
+                    R_User_Like_Audio.audio_id == audio_id,
+                    R_User_Like_Audio.deleted == False
+                )).all()]
+                print(users)
+
+                for user in users:
+                    self.userVec[user] = [0] * tagsNum
+                    likedVideos = []
+
 
 
         print(self.audioVec)
@@ -220,20 +232,28 @@ class API():
         '''
         获取自己的信息
         {
-            token:
+            action: 'get_user_info
         }
         {
             user: user{}
         }
         '''
+        openid = form["openid"]
         user = self.session.query(User).filter(and_(
             User.deleted == False,
-            User.openid == form["openid"]
+            User.openid == openid
         )).first()
+
+        unread_msg_num = self.session.query(Message.msg_id).filter(and_(
+            Message.user_openid == openid,
+            Message.isread == False,
+            Message.deleted == False
+        )).count()
 
         if user:
             return Status.success({
-                "user": user.toDict()
+                "user": user.toDict(),
+                "unread_msg_num": unread_msg_num
                 })
         else:
             raise Exception("User does't exists.")
@@ -386,12 +406,13 @@ class API():
         msg_src = self.session.query(R_User_Create_Audio.user_openid).filter(and_(
             R_User_Create_Audio.audio_id == audio_id
         )).first()[0]
-
+        print(msg_src)
         # 为audio创建者发送一条提醒消息
         Message(
             user_openid=msg_src,
             msg_src=openid,
             action=Message.__actionDict__["like audio"],
+            sysmsg="",
             audio_id=audio_id,
         ).create(self.session)
 
@@ -498,6 +519,7 @@ class API():
             user_openid=msg_src,
             msg_src=openid,
             action=Message.__actionDict__["post comment"],
+            sysmsg="",
             audio_id=audio_id,
         ).create(self.session)
 
@@ -506,6 +528,7 @@ class API():
             Message(
                 user_openid=replyto,
                 msg_src=openid,
+                sysmsg="",
                 action=Message.__actionDict__["post comment"],
                 audio_id=audio_id,
             ).create(self.session)
@@ -532,6 +555,8 @@ class API():
             Collection.deleted == False,
             Collection.user_openid == openid
         )).all()
+
+        self.session.commit()
 
         return Status.success({
             "collections": [c.toDict() for c in collections]
@@ -603,6 +628,32 @@ class API():
 
         return Status.success()
 
+    def deleteCollection(self, form):
+        '''
+        觅声_收藏_删除收藏夹
+        {
+            action: 'delete_collection',
+            collection_id: ''
+        }
+        {
+            err: 'ok'
+        }
+        '''
+
+        openid = form["openid"]
+        collection_id = form["collection_id"]
+        collection = self.session.query(Collection.collection_id).filter(and_(
+            Collection.deleted == False,
+            Collection.user_openid == openid,
+            Collection.collection_id == collection_id
+        )).first()
+        if not collection:
+            raise Exception("It's not your collection.")
+        
+        collection.deleted = True
+        collection.merge(self.session)
+        return Status.success()
+
     def addIntoCollection(self, form):
         '''
         觅声_收藏_增加收藏
@@ -623,6 +674,7 @@ class API():
         Collection.checkExist(self.session, collection_id)
 
         if not self.session.query(Collection.collection_id).filter(and_(
+            Collection.deleted == False,
             Collection.user_openid == openid,
             Collection.collection_id == collection_id
         )).first():
@@ -660,7 +712,6 @@ class API():
                 raise DataFormatException("last_audio_id must be an integer or empty.")
 
         findAudios = self.session.query(User, Audio).filter(and_(
-            User.openid != openid,
             User.deleted == False,
             Audio.deleted == False,
             R_User_Create_Audio.deleted == False,
@@ -888,8 +939,7 @@ class API():
         findMessages = self.session.query(User, Message, Audio.name, Audio.audio_id).filter(and_(
             Audio.audio_id == Message.audio_id,
             User.openid == Message.msg_src,
-            Message.user_openid == openid,
-            Message.isread == False
+            Message.user_openid == openid
         ))
 
         if last_msg_id:

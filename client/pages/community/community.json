@@ -1,3 +1,8 @@
 {
-	"enablePullDownRefresh": true
+	"navigationBarTitleText":"发现",
+	"navigationBarBackgroundColor": "#fff",
+	"backgroundColor": "#ffdd40",
+	"navigationBarTextStyle": "black",
+	"enablePullDownRefresh": true,
+	"disableScroll": false
 }
