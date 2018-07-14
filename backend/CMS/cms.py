@@ -159,7 +159,7 @@ def index():
         return U.redirect('admin')
 
 @app.route('/logout', methods=['GET', 'POST'])
-def logout(lang):
+def logout():
     if current_user.is_authenticated:
         logout_user()
         return render_template('login.html')

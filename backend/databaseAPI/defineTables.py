@@ -8,6 +8,7 @@ from .utils import DataFormatException, jsonDumps
 __all__ = [
     "Base",
     "tables",
+    "CMSUser",
     "User",
     "Audio",
     "AudioTag",
@@ -98,6 +99,21 @@ class Creatable():
 
 
 # entity tables:
+
+class CMSUser(Base, Creatable):
+    __tablename__ =  tablePrefix + "cmsuser"
+
+    id = Column(Integer, primary_key = True)
+    email = Column(String(0x100))
+    password = Column(String(0x100))
+    is_authenticated = True
+    is_active = True
+    is_anonymous = False
+
+    __primaryKey__ = "id"
+    __requiredFields__ = ["email", "password"]
+    __allFields__ = ["id"] + __requiredFields__
+
 
 class User(Base, Creatable):
     __tablename__ = tablePrefix + "user"
@@ -411,6 +427,7 @@ class Message(Base, Creatable):
 
 # all tables dict
 tables = {
+    "cmsuser": CMSUser,
     "user": User,
     "audio": Audio,
     "audiotag": AudioTag,
