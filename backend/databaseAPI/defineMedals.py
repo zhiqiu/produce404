@@ -21,7 +21,7 @@ class Medal1(metaclass=medalmeta):
     @classmethod
     def check(cls, user, session):
         requiredNum = 1
-        if not hasattr(user, likenum):
+        if not hasattr(user, "likenum"):
             user.likenum = session.query(User.openid).filter(and_(
                 R_User_Like_Audio.deleted == False,
                 User.openid == R_User_Like_Audio.user_openid,
@@ -43,7 +43,7 @@ class Medal2(metaclass=medalmeta):
     @classmethod
     def check(cls, user, session):
         requiredNum = 30
-        if not hasattr(user, likenum):
+        if not hasattr(user, "likenum"):
             user.likenum = session.query(User.openid).filter(and_(
                 R_User_Like_Audio.deleted == False,
                 User.openid == R_User_Like_Audio.user_openid,

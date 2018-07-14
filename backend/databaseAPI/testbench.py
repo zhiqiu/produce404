@@ -33,7 +33,7 @@ def makeTestDatabase(session):
         Medal(**{
             "name": "name%d"%i,
             "img_url": "img_url%d"%i,
-            "condition": i,
+            "condition": str(i),
         }).create(session)
     
     for i in range(1, 9):
