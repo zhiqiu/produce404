@@ -141,8 +141,8 @@ class User(Base, Creatable):
 
     def __init__(self, **kwargs):
         self.commonInitClass(**kwargs)
-        if kwargs and self.gender not in [1, 2]:
-            raise DataFormatException("gender must be 1 or 2 for Male/Female")
+        if kwargs and self.gender not in [0, 1, 2]:
+            raise DataFormatException("gender must be 0, 1 or 2 for Unset/Male/Female")
     
     def toDict(self):
         if self.openid in ["system", "nobody", "deleted"]:
@@ -231,9 +231,9 @@ class Comment(Base, Creatable):
     __allFields__ = ["comment_id"] + __requiredFields__ + ["create_time", "deleted"]
 
     def __init__(self, **kwargs):
-        if kwargs and "replyto" not in kwargs or kwargs["replyto"] == "":
-            kwargs["replyto"] = "nobody"
         self.commonInitClass(**kwargs)
+        if kwargs and self.replyto == "":
+            self.replyto = "nobody"
 
 
 class Collection(Base, Creatable):
@@ -417,10 +417,10 @@ class Message(Base, Creatable):
     __allFields__ = ["msg_id"] + __requiredFields__ + ["isread","create_time", "deleted"]
 
     def __init__(self, **kwargs):
-        if kwargs and "action" not in kwargs or kwargs["action"] not in self.__actionDict__.values():
-            raise DataFormatException("action is required. " + jsonDumps(self.__actionDict__))
         self.commonInitClass(**kwargs)
-    
+        if kwargs and self.action not in self.__actionDict__.values():
+            raise DataFormatException("action must be integer for: " + jsonDumps(self.__actionDict__))
+
     def getTextFormat(self):
         return {
             0: self.sysmsg,
