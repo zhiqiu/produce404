@@ -5,7 +5,19 @@
     <view wx:if="{{listentype === 'like'}}" class="btn" ontap="listenDiffToggle">听见不同</view>
     <view wx:if="{{listentype === 'diff'}}" class="btn" ontap="listenDiffToggle">我的喜好</view>
   </view>
-  <view class="btn-2 " ontap="gotoChannel">
+
+  <view animation="{{animationData}}" class="container-column buydes-dialog-container" wx:if="{{showModalStatus}}">
+    <view class="buydes-dialog-container-top" bindtap="hideModal"></view>
+    <view class="container-column buydes-dialog-container-bottom">
+      <block wx:for="{{tags}}" wx:for-index="index" wx:key="key" wx:for-item="item">
+        <view class="single_tag" bindtap="hideModal">
+          <view class="buydes-dialog-container-bottom-item">{{item.text}}</view>
+        </view>
+      </block>
+    </view>
+  </view>
+
+  <view class="btn-2 " bindtap="showModal">
     <view class="btn">频道</view>
   </view>
 </view>
@@ -15,6 +27,14 @@
   <view class="text">
     <view>{{feed.audio.name}}</view>
     <view>{{feed.audio.intro}}</view>
+  </view>
+  <view class="switch">
+    <view class="preFeed" ontap="gotoPrevious">
+      上一首
+    </view>
+    <view class="nextFeed" ontap="gotoNext">
+      下一首
+    </view>
   </view>
   <progress percent="{{audioProgress}}"></progress>
 </view>
@@ -30,14 +50,16 @@
       <image src="/image/icon-comments.svg" class="icon-md btn-up">btns</image>
       <view class="btn-num">{{feed.comment_num}}</view>
     </view>
-    <view class="btn-group" ontap="gotoAddCollection" id="{{feed.audio.audio_id}}" >
-      <image wx:if="{{!feed.isliked}}" src="/image/icon-collect.svg" class="icon-md btn-up">btns</image>
+    <view class="btn-group" ontap="gotoAddCollection" id="{{feed.audio.audio_id}}">
+      <image wx:if="{{!feed.iscollected}}" src="/image/icon-collect.svg" class="icon-md btn-up">btns</image>
       <image wx:else src="/image/icon-collect-active.svg" class="icon-md btn-up">btns</image>
       <!-- <view class="btn-num"> 10</view> -->
     </view>
     <view class="btn-group">
-      <button open-type="share"><image src="/image/icon-share.svg" class="icon-md btn-up" ></image></button>
-      
+      <button open-type="share">
+        <image src="/image/icon-share.svg" class="icon-md btn-up"></image>
+      </button>
+
       <!-- <view class="btn-num"> 10</view> -->
     </view>
   </view>

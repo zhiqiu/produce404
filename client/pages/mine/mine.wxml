@@ -24,11 +24,11 @@
   </view>
   <!-- <view class="holder"> -->
   <view class="cont1">
-    <view class="conttext">
+    <view class="conttext" ontap="gotoMyFeed">
       声音日迹
     </view>
   </view>
-  <view class="cont2" ontap="gotoMedal">
+  <view class="cont2" ontap="gotoMyMedal">
     <view class="conttext">
       我的勋章
     </view>

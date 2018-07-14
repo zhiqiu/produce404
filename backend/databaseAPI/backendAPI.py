@@ -138,6 +138,7 @@ class API():
                 form["openid"] = "openid1"
                 form["session_key"] = "session_key"
             elif action != "login":
+            elif action not in ["login", "signcos"]:
                 try:
                     encryptor = Encrypt(Config.appSecret)
                     originalText = encryptor.decrypt(form["token"])
