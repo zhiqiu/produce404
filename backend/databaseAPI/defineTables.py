@@ -26,7 +26,7 @@ __all__ = [
     "Message",
 ]
 
-tablePrefix = "t46_"
+tablePrefix = "t47_"
 
 # common super class
 
@@ -113,6 +113,9 @@ class CMSUser(Base, Creatable):
     __primaryKey__ = "id"
     __requiredFields__ = ["email", "password"]
     __allFields__ = ["id"] + __requiredFields__
+
+    def get_id(self):
+        return str(self.id)
 
 
 class User(Base, Creatable):
@@ -205,8 +208,8 @@ class Medal(Base, Creatable):
     __requiredFields__ = ["name", "img_url", "condition"]
     __allFields__ = ["medal_id"] + __requiredFields__ + ["create_time", "deleted"]
 
-    def __init__(self, **kwargs):
-        self.commonInitClass(**kwargs)
+    # def __init__(self, **kwargs):
+    #     self.commonInitClass(**kwargs)
 
 
 class Comment(Base, Creatable):
