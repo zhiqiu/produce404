@@ -54,3 +54,47 @@ class Medal2(metaclass=medalmeta):
         state = user.likenum >= requiredNum
         text = cls.__medal_name__ if state else cls.__text__%user.likenum
         return state, text
+
+
+class Medal3(metaclass=medalmeta):
+    # 点赞数达到100
+    __medal_name__ = "获得100个点赞"
+    __text__ = "获得%d/100个点赞"
+    __img_url__ = "http://cos.ladyrick.com/medal3.png"
+
+    @classmethod
+    def check(cls, user, session):
+        requiredNum = 100
+        if not hasattr(user, "likenum"):
+            user.likenum = session.query(User.openid).filter(and_(
+                R_User_Like_Audio.deleted == False,
+                User.openid == R_User_Like_Audio.user_openid,
+                R_User_Like_Audio.audio_id == Audio.audio_id,
+                R_User_Create_Audio.user_openid == user.openid,
+                R_User_Create_Audio.audio_id == Audio.audio_id
+            )).count()
+        state = user.likenum >= requiredNum
+        text = cls.__medal_name__ if state else cls.__text__%user.likenum
+        return state, text
+
+
+class Medal4(metaclass=medalmeta):
+    # 点赞数达到500
+    __medal_name__ = "获得500个点赞"
+    __text__ = "获得%d/500个点赞"
+    __img_url__ = "http://cos.ladyrick.com/medal3.png"
+
+    @classmethod
+    def check(cls, user, session):
+        requiredNum = 500
+        if not hasattr(user, "likenum"):
+            user.likenum = session.query(User.openid).filter(and_(
+                R_User_Like_Audio.deleted == False,
+                User.openid == R_User_Like_Audio.user_openid,
+                R_User_Like_Audio.audio_id == Audio.audio_id,
+                R_User_Create_Audio.user_openid == user.openid,
+                R_User_Create_Audio.audio_id == Audio.audio_id
+            )).count()
+        state = user.likenum >= requiredNum
+        text = cls.__medal_name__ if state else cls.__text__%user.likenum
+        return state, text

@@ -25,7 +25,7 @@ __all__ = [
     "Message",
 ]
 
-tablePrefix = "t41_"
+tablePrefix = "t46_"
 
 # common super class
 
@@ -116,7 +116,7 @@ class User(Base, Creatable):
 
     __primaryKey__ = "openid"
     __requiredFields__ = ["openid","nickName","gender","language","city","province","country","avatarUrl"]
-    __allFields__ = __requiredFields__ + ["create_time", "deleted"]
+    __allFields__ = ["user_id"] + __requiredFields__ + ["create_time", "deleted"]
 
     __systemUser__ = ["system", "nobody", "deleted"]
 
