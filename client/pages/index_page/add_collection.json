@@ -1,3 +1,8 @@
 {
-  "navigationBarTitleText": "添加到收藏"
+	"navigationBarTitleText":"添加到收藏",
+	"navigationBarBackgroundColor": "#ffdd40",
+	"backgroundColor": "#ffdd40",
+	"navigationBarTextStyle": "white",
+	"enablePullDownRefresh": false,
+	"disableScroll": false
 }

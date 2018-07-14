@@ -1,8 +1,10 @@
 {
   "pages": [
+    "pages/mine/my_coll/my_coll",
+    "pages/mine/my_coll/single_coll/single_coll",
+    "pages/index_page/index_page",
     "pages/login_page/login_page",
     "pages/mine/mine_msg",
-    "pages/index_page/index_page",
     "pages/record/record",
     "pages/mine/mine",
     "pages/community/community",
@@ -15,10 +17,8 @@
     "pages/index/index",
     "pages/logs/logs",
     "pages/mine/my_agreement/my_agreement",
-    "pages/mine/my_coll/my_coll",
     "pages/player_test/player",
-    "pages/record_test/record_test",
-    "pages/mine/my_coll/single_coll/single_coll"
+    "pages/record_test/record_test"
   ],
   "window": {
     "backgroundTextStyle": "light",
