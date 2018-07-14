@@ -78,6 +78,8 @@ class Creatable():
 
 
     def commonInitClass(self, **kwargs):
+        if not kwargs:
+            return
         missedFields = []
         for rf in self.__requiredFields__:
             if rf not in kwargs:
@@ -141,7 +143,7 @@ class User(Base, Creatable):
 
     def __init__(self, **kwargs):
         self.commonInitClass(**kwargs)
-        if self.gender not in [0, 1]:
+        if kwargs and self.gender not in [0, 1]:
             raise DataFormatException("gender must be 1 or 0 for Male/Female")
     
     def toDict(self):
@@ -208,8 +210,8 @@ class Medal(Base, Creatable):
     __requiredFields__ = ["name", "img_url", "condition"]
     __allFields__ = ["medal_id"] + __requiredFields__ + ["create_time", "deleted"]
 
-    # def __init__(self, **kwargs):
-    #     self.commonInitClass(**kwargs)
+    def __init__(self, **kwargs):
+        self.commonInitClass(**kwargs)
 
 
 class Comment(Base, Creatable):
@@ -229,7 +231,7 @@ class Comment(Base, Creatable):
     __allFields__ = ["comment_id"] + __requiredFields__ + ["create_time", "deleted"]
 
     def __init__(self, **kwargs):
-        if "replyto" not in kwargs or kwargs["replyto"] == "":
+        if kwargs and "replyto" not in kwargs or kwargs["replyto"] == "":
             kwargs["replyto"] = "nobody"
         self.commonInitClass(**kwargs)
 
@@ -414,7 +416,7 @@ class Message(Base, Creatable):
     __allFields__ = ["msg_id"] + __requiredFields__ + ["isread","create_time", "deleted"]
 
     def __init__(self, **kwargs):
-        if "action" not in kwargs or kwargs["action"] not in self.__actionDict__.values():
+        if kwargs and "action" not in kwargs or kwargs["action"] not in self.__actionDict__.values():
             raise DataFormatException("action is required. " + jsonDumps(self.__actionDict__))
         self.commonInitClass(**kwargs)
     
