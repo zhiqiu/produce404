@@ -1,0 +1,36 @@
+<!--pages/mine/mine.wxml-->
+<view class="background">
+  <view class="timeline" >
+      <view wx:for="{{msg}}">
+      <view class="info" ontap="gotoDetail" id="{{item.audio_id}}">
+        <view class="info-card-out">
+
+          <view class="info-card">
+            <view class="info-group">
+              <view class="avatar">
+                <image src="{{item.user.img}}" class="avatar-md"></image>
+              </view>
+
+              <view class="info-detail-group">
+                <view class="info-name">
+                  <text>{{item.user.name}}</text>
+                </view>
+                <view class="info-date">
+                  <text>{{item.create_time}}</text>
+                </view>
+              </view>
+            </view>
+            
+
+            <view class="description">
+              <text class="content">{{item.text}}</text>
+            </view>
+
+          </view>
+        </view>
+
+        
+      </view>
+    </view>
+  </view>
+</view>

@@ -22,19 +22,19 @@
       </view>
     </view>
   </view>
-  <!-- <view class="holder"> -->
-  <view class="cont1">
-    <view class="conttext" ontap="gotoMyFeed">
+  <view class="holder">
+  <view class="cont1" style="background: {{status === 0?'#ffdd40':'#fff'}};" ontap="gotoMyFeed">
+    <view class="conttext">
       声音日迹
     </view>
   </view>
-  <view class="cont2" ontap="gotoMyMedal">
+  <view class="cont2" ontap="gotoMyMedal"  style="background: {{status === 1?'#ffdd40':'#fff'}};">
     <view class="conttext">
       我的勋章
     </view>
   </view>
-  <!-- </view> -->
-  <view class="timeline">
+  </view>
+  <view class="timeline" wx:if="{{status === 0}}">
       <view wx:for="{{feeds}}">
       <view class="info" ontap="gotoDetail" id="{{item.audio.audio_id}}">
         <view class="holder">
@@ -54,7 +54,7 @@
         <view class="tags">
           <view wx:for="{{item.tags}}">
             <view class="tag">
-              <text class="tag-text">{{item.test}}</text>
+              <text class="tag-text">#{{item.tagname}}</text>
             </view>
           </view>
         </view>
@@ -66,7 +66,6 @@
 
           <view class="btns">
             <view class="btn-group">
-              <view></view>
               <image wx:if="{{item.audio.isliked}}" src="/image/icon-like.svg" class="icon-sm btn-up">btns</image>
               <image wx:else src="/image/icon-like.svg" class="icon-sm btn-up">btns</image>
               <view class="btn-num">{{item.like_num}}</view>
@@ -83,5 +82,24 @@
         </view>
       </view>
     </view>
+  </view>
+  <view class="medals" wx:if="{{status === 1}}">
+    <view class="medal">
+      <image class="medal-img" mode="widthFix" src="http://cos.ladyrick.com/medal1.png"></image>
+      <text class="medal-text">获得     /30个赞</text>
+    </view>
+    <view class="medal">
+      <image class="medal-img medal-not" mode="widthFix"  src="http://cos.ladyrick.com/medal1.png"></image>
+      <text class="medal-text">获得     /30个赞</text>
+    </view>
+    <view class="medal">
+      <image class="medal-img" mode="widthFix" src="http://cos.ladyrick.com/medal2.png"></image>
+      <text class="medal-text">获得     /30个赞</text>
+    </view>
+    <view class="medal">
+      <image class="medal-img medal-not" mode="widthFix" src="http://cos.ladyrick.com/medal2.png"></image>
+      <text class="medal-text">获得     /30个赞</text>
+    </view>
+
   </view>
 </view>

@@ -1,0 +1,21 @@
+<!-- <image class="background" mode="widthFix" src="http://cos.ladyrick.com/background.png"></image> -->
+
+<view class="background">
+  <view class="show">
+    
+    <view class="holder labels">
+      <checkbox-group bindchange="checkboxChange">
+        <view  wx:for="{{items}}" class="label">
+          <label class="checkbox" >
+            <checkbox value="{{item.name}}" checked="{{item.checked}}"/>{{item.value}}
+          </label>
+        </view>
+      </checkbox-group>
+    </view>
+
+    <view class="submit" ontap="upload">
+      进 入
+    </view>
+
+  </view>
+</view>
