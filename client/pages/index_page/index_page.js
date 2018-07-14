@@ -105,6 +105,18 @@ Page({
     this.setData({
       channel: wx.getStorageSync('channel') || 'unset'
     })
+    r({
+      data: {
+        action: 'get_one_feed',
+        audio_id: this.data.feed.audio.audio_id
+      },
+      success: function(res){
+        console.log(res)
+        this.setData({
+          feed: res.data.resp.feed
+        })
+      }
+    })
   },
 
   /**

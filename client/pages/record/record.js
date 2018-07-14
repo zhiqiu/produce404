@@ -153,23 +153,23 @@ Page({
         });
       },
 
-        getAuthorization: function (options, callback) {
-          r({
-            data:{
-              action: 'signcos'
-            },
-            success: function(res){
-              var data = res.data.data;
-              // console.log(data)
-              callback({
-                  TmpSecretId: data.credentials && data.credentials.tmpSecretId,
-                  TmpSecretKey: data.credentials && data.credentials.tmpSecretKey,
-                  XCosSecurityToken: data.credentials && data.credentials.sessionToken,
-                  ExpiredTime: data.expiredTime,
-              });
-            }
-          })
-        },
+      getAuthorization: function(options, callback) {
+        r({
+          data: {
+            action: 'signcos'
+          },
+          success: function(res) {
+            var data = res.data.data;
+            // console.log(data)
+            callback({
+              TmpSecretId: data.credentials && data.credentials.tmpSecretId,
+              TmpSecretKey: data.credentials && data.credentials.tmpSecretKey,
+              XCosSecurityToken: data.credentials && data.credentials.sessionToken,
+              ExpiredTime: data.expiredTime,
+            });
+          }
+        })
+      },
     });
 
     var filepath = this.data.recordPath;
@@ -232,4 +232,23 @@ Page({
       index: e.detail.value
     })
   },
+
+  getLocation: function() {
+    wx.getLocation({
+      type: 'wgs84',
+      success: function (res) {
+        //2、根据坐标获取当前位置名称，显示在顶部:腾讯地图逆地址解析
+        qqmapsdk.reverseGeocoder({
+          location: {
+            latitude: res.latitude,
+            longitude: res.longitude
+          },
+          success: function (addressRes) {
+            var address = addressRes.result.formatted_addresses.recommend;
+            console.log(address)
+          }
+        })
+      }
+    })
+  }
 })

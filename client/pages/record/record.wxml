@@ -5,14 +5,14 @@
   <textarea class="text">请输入文字
   </textarea>
   <view class="holder">
-    <view class="pos">点击定位</view>
+    <view class="pos" ontap="getLocation">点击定位</view>
     <view class="tag">
       <picker bindchange="bindPickerChange" value="{{index}}" range="{{array}}">
         <view class="picker">
           当前选择：{{array[index]}}
         </view>
       </picker>
-    </view>
+    </view> 
   </view>
 
   <view class="submit" ontap="upload">
