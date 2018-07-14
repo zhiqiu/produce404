@@ -135,7 +135,6 @@ Page({
     var Bucket = 'create404-cos-1253746840';
     var Region = 'ap-guangzhou';
     var cos = new COS({
-<<<<<<< HEAD
       getAuthorization: function(options, callback) {
         wx.request({
           method: 'GET',
@@ -153,9 +152,7 @@ Page({
           }
         });
       },
-=======
 
->>>>>>> 23052b56bc14181d6473855ef702c4ce4c24eb20
         getAuthorization: function (options, callback) {
           r({
             data:{

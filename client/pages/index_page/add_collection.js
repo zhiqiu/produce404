@@ -25,6 +25,7 @@ Page({
         action: 'get_collections',
       },
       success: function(res) {
+        console.log(that.data)
         that.setData({
           collectionFolders: res.data.resp.collections,
           feedId: options
@@ -119,7 +120,7 @@ Page({
         collection_name: this.data.input
       },
       success: function(res) {
-        console.log(that.data.feedId)
+        console.log(1122)
         that.onLoad(that.data.feedId)
       },
       fail: function(res){
@@ -135,13 +136,13 @@ Page({
   },
 
   addToCollection: function(e){
-    var that = this
-    console.log(that)
+    var feedId = this.data.feedId.dID
+    console.log(e)
     r({
       data: {
         action: 'add_into_collection',
-        audio_id: that.feedId,
-        collection_id: e
+        audio_id: feedId,
+        collection_id: e.currentTarget.id
       },
       complete: function() {
         wx.navigateBack({
