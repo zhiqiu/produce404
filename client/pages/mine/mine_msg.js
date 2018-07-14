@@ -1,4 +1,3 @@
-/*“我的”页面*/
 // pages/mine/mine.js
 const c = require('../../utils/c.js')
 const r = c.r;
@@ -8,54 +7,29 @@ Page({
    * 页面的初始数据
    */
   data: {
-    user: {},
-    feeds: [],
-    medals: [],
     msg: [],
-    playingIdx: -1
   },
   getData: function(refresh){
     if(refresh){
       this.setData({
-        feeds: []
+        msg: []
       })
     }
     var that = this;
-    r({
-      data:{
-        action: 'get_user_info'
-      },
-      success:function(res){
-        that.setData({
-          user: res.data.resp.user
-        })
-      }
-    })
-    r({
-      data: {
-        action: 'get_medal'
-      },
-      success: function(res) {
-        that.setData({
-          medals: res.data.resp.medals
-        })
-      }
-    })
-
-    var last_audio_id = '';
-    if(this.data.feeds.length !== 0){
-      last_audio_id = this.data.feeds[this.data.feeds.length - 1].audio.audio_id;
+    var last_msg_id = '';
+    if(this.data.msg.length !== 0){
+      last_msg_id = this.data.msg[this.data.msg.length - 1].msg_id;
     }
     r({
       data: {
-        action: 'get_my_feed',
-        last_audio_id: last_audio_id
+        action: 'get_msg',
+        last_msg_id: last_msg_id
       },
       success: function(res) {
         console.log(res)
-        var newFeeds = that.data.feeds.concat(res.data.resp.feeds);
+        var newMsg = that.data.msg.concat(res.data.resp.msgs);
         that.setData({
-          feeds: newFeeds
+          msg: newMsg
         })
       }
     })
@@ -64,7 +38,6 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function(options) {
-    
     this.getData(true);
   },
 
@@ -108,8 +81,8 @@ Page({
    * 页面上拉触底事件的处理函数
    */
   onReachBottom: function() {
-    console.log('下拉刷新')
-    this.getData();
+    if(this.data.status === 0)
+      this.getData();
   },
 
   /**
@@ -148,7 +121,16 @@ Page({
     })
   },
 
-  gotoMine: function(){
-    wx.navigateBack();
-  }
+  gotoMyFeed: function(){
+    this.setData({
+      status: 0
+    })
+  },
+
+  gotoMyMedal: function(){
+    this.setData({
+      status: 1
+    })
+  },
+
 })

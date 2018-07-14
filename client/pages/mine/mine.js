@@ -109,7 +109,8 @@ Page({
    */
   onReachBottom: function() {
     console.log('下拉刷新')
-    this.getData();
+    if(this.data.status === 0)
+      this.getData();
   },
 
   /**
@@ -120,9 +121,8 @@ Page({
   },
 
   gotoMyMsg: function() {
-    var audioInfo = ''
     wx.navigateTo({
-      url: '/pages/mine/my_msg/my_msg?' + audioInfo
+      url: '/pages/mine/mine_msg'
     })
   },
 
@@ -157,9 +157,6 @@ Page({
   gotoMyMedal: function(){
     this.setData({
       status: 1
-    })
-    wx.navigateTo({
-      url: '/pages/mine/mine_medal'
     })
   },
 

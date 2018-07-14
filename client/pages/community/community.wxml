@@ -1,11 +1,11 @@
 <!--pages/community/community.wxml-->
 
+<view class="background">
 <view class="timeline">
-	<view ontap="gotoRecord">
-		点击录音
-	</view>
+  <image src="/image/icon-add.svg" class="add-btn" ontap="gotoRecord"></image>
   <view wx:for="{{feeds}}">
-    <view class="info" >
+    <view class="info" ontap="gotoDetail"  id="{{item.audio.audio_id}}">
+      <image class="background-inner" mode="widthFix" src="http://cos.ladyrick.com/img-background{{index%16}}.png" width="100%" height="100%"></image>
       <view class="holder">
         <view class="time">
           {{item.audio.duration}}"
@@ -15,7 +15,7 @@
           <image src="/image/icon-sound.svg" class="audio-icon"></image>
         </view>
       </view>
-      <view class="description" ontap="gotoDetail" id="{{item.audio.audio_id}}">
+      <view class="description" >
         <text class="content">{{item.audio.intro}}</text>
       </view>
 
@@ -49,4 +49,5 @@
       </view>
     </view>
   </view>
+</view>
 </view>

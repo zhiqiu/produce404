@@ -1,6 +1,7 @@
-<view class="record">
+<view class="record background">
   <view class="cir">
-    <image src="/image/icon-mac.svg" class="icon-mac" ontap="touch"> </image>
+    <image wx:if="{{!onrecord}}" src="/image/icon-mac.svg" class="icon-mac" ontap="touch"> </image>
+    <image animation="{{recordingAnimation}}" wx:if="{{onrecord}}" src="/image/icon-mac-active.svg" class="icon-mac" ontap="touch"> </image>
   </view>
   <textarea class="text">请输入文字
   </textarea>

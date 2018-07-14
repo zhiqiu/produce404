@@ -1,5 +1,41 @@
 /* pages/community/mine.wxss */
 
+page{
+  background: #ffdd40;
+}
+
+
+.medals {
+  /* Rectangle: */
+  background: #ffdd40;
+  border: 1px solid #ffdd40;
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:space-around;
+  padding-top: 30px;
+}
+.medal-text{
+  font-family:PingFangSC-Regular;
+font-size:12px;
+color:#666666;
+letter-spacing:1.11px;
+text-align:center;
+}
+.medal-not{
+  -webkit-filter: grayscale(1); /* Webkit */
+  filter: gray; /* IE6-9 */  
+  filter: grayscale(1); /* W3C */
+}
+.medal {
+  width: 40%;
+  overflow: hidden;
+  display: inline-block;
+  text-align: center;
+}
+.medal-img{
+  width: 100%;
+}
+
 .some-btn {
   float: right;
 }
@@ -88,16 +124,6 @@
   overflow: hidden;
 }
 
-.btns {
-  float: right;
-  font-family: PingFangHK-Thin;
-  font-size: 10px;
-  color: #999;
-  letter-spacing: 0.37px;
-  text-align: left;
-  margin-top: 10px;
-  margin-right: 20px;
-}
 
 .btn-group {
   display: inline-flex;
@@ -113,6 +139,7 @@
 .avatar-big {
   width: 57px;
   height: 57px;
+  border-radius: 50%;
 }
 
 .btn-num {
@@ -121,11 +148,9 @@
 }
 
 .info-card {
-  border-radius: 14px;
+  background: white;
   position: relative;
   overflow: hidden;
-  padding-top: 30px;
-  padding-left: 20px;
   margin-left: 0;
   margin-right: 0;
 }
@@ -150,8 +175,6 @@
   display: inline-flex;
   align-items: center;
   width: 60%;
-  padding-left: 0px;
-  padding-top: 20px;
 }
 
 .info-name {
@@ -185,50 +208,20 @@
   position: relative;
 }
 
-.background {
-  position: absolute;
-  left: 0;
-  /*right: 0;*/
-  top: 0;
-  /*bottom: 0;*/
-  opacity: 0.1;
-  height: 100%;
-  width: 100%;
-  border-radius: 14px;
+.background{
+  background-image: url(http://cos.ladyrick.com/background.png);
+  background-repeat: repeat-y;
+  background-size: 100% auto;
 }
 
 /* pages/community/community.wxss */
 
-.medals {
+.timeline {
   /* Rectangle: */
-  background: #ffdd40;
+  /*background: #ffdd40;*/
   border: 1px solid #ffdd40;
-  display:flex;
-  flex-wrap:wrap;
-  justify-content:space-around;
-  padding-top: 30px;
 }
-.medal-text{
-  font-family:PingFangSC-Regular;
-font-size:12px;
-color:#666666;
-letter-spacing:1.11px;
-text-align:center;
-}
-.medal-not{
-  -webkit-filter: grayscale(1); /* Webkit */
-  filter: gray; /* IE6-9 */  
-  filter: grayscale(1); /* W3C */
-}
-.medal {
-  width: 40%;
-  overflow: hidden;
-  display: inline-block;
-  text-align: center;
-}
-.medal-img{
-  width: 100%;
-}
+
 .info {
   background: #fff;
   border-radius: 14px;
@@ -247,7 +240,6 @@ text-align:center;
   letter-spacing: 0.57px;
   line-height: 20px;
   text-align: left;
-  margin: 10px 20px;
 }
 
 /* */
@@ -318,6 +310,7 @@ text-align:center;
 }
 
 .holder {
+  background: white;
   overflow: hidden;
 }
 
@@ -353,7 +346,8 @@ text-align:center;
   display: inline-block;
   width: 50%;
   text-align: center;
-  height: 30px;
+  height: 40px;
+  border-radius: 10px 10px 0px 0px;
 }
 
 .cont2 {
@@ -361,7 +355,8 @@ text-align:center;
   display: inline-block;
   width: 50%;
   text-align: center;
-  height: 30px;
+  height: 40px;
+  border-radius: 10px 10px 0px 0px;
 }
 
 .conttext {
@@ -372,4 +367,192 @@ text-align:center;
   color: #333;
   letter-spacing: 0.37px;
   text-align: center;
+}
+
+/* pages/community/detail.wxss */
+
+.description {
+  font-family: PingFangHK-Regular;
+  font-size: 17px;
+  color: #969696;
+  letter-spacing: 0.57px;
+  line-height: 20px;
+  text-align: left;
+  margin: 10px 20px;
+}
+.comments{
+  margin-bottom: 60px;
+}
+
+.audio {
+  background: #fff;
+  border-radius: 13px;
+  height: 30px;
+  margin-top: 0px;
+  margin-right: 15px;
+  display: inline-flex;
+  float: right;
+  width: 75%;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.audio-icon {
+  /*float:right;*/
+  height: 25px;
+  width: 25px;
+  align-items: center;
+  padding-right: 10px;
+}
+
+.tags {
+  text-align: right;
+  margin-right: 15px;
+}
+
+.tag {
+  background: #d7d7d7;
+  border-radius: 10px;
+  height: 25px;
+  font-family: PingFangHK-Regular;
+  font-size: 15px;
+  color: #fff;
+  letter-spacing: 0;
+  text-align: left;
+  margin: 4px;
+  display: inline;
+  padding: 1px 6px;
+}
+
+.time {
+  display: inline;
+  float: left;
+  font-family: PingFangHK-Regular;
+  font-size: 13px;
+  color: #999;
+  letter-spacing: 0;
+  text-align: left;
+  height: 30px;
+  margin-top: 5px;
+  margin-left: 16px;
+  width: 15%;
+}
+
+.holder {
+  overflow: hidden;
+}
+
+.btns {
+  float: right;
+  font-family: PingFangHK-Thin;
+  font-size: 10px;
+  color: #999;
+  letter-spacing: 0.37px;
+  text-align: left;
+  margin-top: 10px;
+  margin-right: 20px;
+}
+
+.btn-group {
+  display: inline-flex;
+  align-items: center;
+  margin-right: 8px;
+  font-family:PingFangHK-Regular;
+font-size:14px;
+color:#999999;
+letter-spacing:1.63px;
+text-align:center;
+}
+
+.icon-sm {
+  width: 20px;
+  height: 20px;
+}
+.icon-big {
+  width: 40px;
+  height: 40px;
+}
+
+.avatar-big {
+  width: 57px;
+  height: 57px;
+  border-radius:50%;
+}
+.avatar-md {
+  width: 39px;
+  height: 39px;
+  border-radius:50%;
+}
+
+.btn-num {
+  height: 20px;
+  line-height: 20px;
+}
+
+.info-detail-group {
+  float: left;
+}
+
+.avatar {
+  float: left;
+  margin: 5px;
+  border-radius:50%;
+}
+
+.share-btn {
+  float: right;
+  padding-top: 25px;
+  padding-right: 15px;
+}
+
+.info-group {
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  width: 80%;
+  padding-left: 10px;
+}
+
+.info-name {
+  font-family: PingFangHK-Medium;
+  font-size: 20px;
+  color: #999;
+  letter-spacing: 0.42px;
+  text-align: left;
+}
+
+.info-date {
+  font-family: PingFangHK-Regular;
+  font-size: 11px;
+  color: #b4b4b4;
+  letter-spacing: 0;
+  text-align: left;
+}
+
+.location {
+  font-family: PingFangHK-Regular;
+  font-size: 12px;
+  color: #b4b4b4;
+  letter-spacing: 0;
+  text-align: left;
+  padding-left: 20px;
+  float: left;
+  height: 35px;
+}
+
+.info-card-out {
+  position: relative;
+}
+.tail-bar{
+  position: fixed;
+  width: 100%;
+  height: 55px;
+  background:#f6f6f6;
+  bottom: 0;
+  z-index: 1000;
+}
+.tail-bar-b{
+  display: inline-flex;
+  width: 33%;
+  justify-content: center;
 }
