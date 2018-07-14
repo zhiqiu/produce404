@@ -186,10 +186,14 @@ class API():
         for i in range(10):
             # 查询点赞用户
             for audio_id in self.audioVec:
-                self.session.query(User.openid).filter(and_(
+                users = [t[0] for t in self.session.query(User.openid).filter(and_(
                     R_User_Like_Audio.audio_id == audio_id,
                     R_User_Like_Audio.deleted == False
-                ))
+                )).all()]
+                print(users)
+
+                for user in users:
+                    self.userVec[user] = []
 
 
 
@@ -692,7 +696,6 @@ class API():
                 raise DataFormatException("last_audio_id must be an integer or empty.")
 
         findAudios = self.session.query(User, Audio).filter(and_(
-            User.openid != openid,
             User.deleted == False,
             Audio.deleted == False,
             R_User_Create_Audio.deleted == False,
