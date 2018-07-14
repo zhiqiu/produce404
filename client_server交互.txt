@@ -334,3 +334,12 @@ msg{}:
 {
     err: 'ok'
 }
+
+觅声_收藏_删除收藏夹
+{
+    action: 'delete_collection',
+    collection_id: ''
+}
+{
+    err: 'ok'
+}
