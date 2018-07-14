@@ -20,7 +20,7 @@ curdir = os.path.abspath(os.path.dirname(__file__))
 template_folder = os.path.join(curdir, "templates")
 static_folder = os.path.join(curdir, "static")
 
-app = Flask("create404", template_folder=template_folder, static_folder=static_folder, static_url_path='/')
+app = Flask("create404", template_folder=template_folder, static_folder=static_folder)
 
 @app.errorhandler(404)
 def page_not_found(_):
