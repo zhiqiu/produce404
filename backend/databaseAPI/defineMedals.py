@@ -82,7 +82,7 @@ class Medal4(metaclass=medalmeta):
     # 点赞数达到500
     __medal_name__ = "获得500个点赞"
     __text__ = "获得%d/500个点赞"
-    __img_url__ = "http://cos.ladyrick.com/medal3.png"
+    __img_url__ = "http://cos.ladyrick.com/medal4.png"
 
     @classmethod
     def check(cls, user, session):
