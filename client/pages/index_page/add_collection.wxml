@@ -1,18 +1,39 @@
 <!--pages/collection/add_collection.wxml-->
 <view class="collections">
-  <view class="add_collection" ontap="modalinput">
-    <view>添加收藏集</view>
-  </view>
 
+  
+
+  <view class="myCollections">
+    <view wx:for="{{collectionFolders}}">
+      
+    </view>
+  </view>
+</view>
+
+<!--pages/community/community.wxml-->
+
+<view class="background">
+  <view class="add-btn" ontap="modalinput">
+    创建收藏集
+  </view>
+<view class="timeline">
+  
   <modal hidden="{{hiddenmodalput}}" confirm-text="确定" cancel-text="取消" bindcancel="cancel" bindconfirm="confirm">
     <input type='text' placeholder="请输入收藏夹名称" bindinput="bindKeyInput" />
   </modal>
 
-  <view class="myCollections">
-    <view wx:for="{{collectionFolders}}">
-      <view class="singleCollection" ontap="addToCollection" id="{{item.collection_id}}">
-        {{item.name}}
+  <view wx:for="{{collectionFolders}}">
+    <view class="info" >
+      
+      <view class="description" >
+        <view class="content">
+          <view class="singleCollection" ontap="addToCollection" id="{{item.collection_id}}">
+          {{item.name}}
       </view>
+        </view>
+      </view>
+
     </view>
   </view>
+</view>
 </view>
