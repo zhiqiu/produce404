@@ -1,113 +1,119 @@
 /* pages/index_page/index_page.wxss */
 
-.btn-1{
-	float: left;
+.btn-1 {
+  float: left;
 }
 
-.btn-2{
-	float: right;
+.btn-2 {
+  float: right;
 }
 
-.btn{
-	background:#ffdd40;
-border-radius:14px;
-width:85px;
-height:31px;
-overflow: hidden;
-font-family:PingFangSC-Regular;
-font-size:16px;
-color:#666666;
-letter-spacing:0.44px;
-text-align:center;
-line-height:31px;
-width:100px;
-margin: 20px;
-}
-.headbar{
-	overflow: hidden;
-}
-.img{
-	border-radius:14px;
-	width: 400px;
-	height: 400px;
-	max-width: 100%;
-	margin-top: -10px;
+.btn {
+  background: #ffdd40;
+  border-radius: 14px;
+  width: 85px;
+  height: 31px;
+  overflow: hidden;
+  font-family: PingFangSC-Regular;
+  font-size: 16px;
+  color: #666;
+  letter-spacing: 0.44px;
+  text-align: center;
+  line-height: 31px;
+  width: 100px;
+  margin: 20px;
 }
 
-.holder{
-	overflow: hidden;
-}
-.btns{
-	/*float:right;*/
-	font-family:PingFangHK-Thin;
-font-size:18px;
-color:#999999;
-letter-spacing:0.37px;
-text-align:center;
-margin-top:5px;
-margin-left: 40px;
-/*margin-right:20px;*/
-
-}
-.btn-group{
-	display: inline-flex;
-	align-items:center;
-	/*margin-right:8px;*/
-	width: 25%;
-}
-.icon-md{
-	width: 20px;
-	height: 20px;
+.headbar {
+  overflow: hidden;
 }
 
-.btn-num{
-	font-size: 15px;
-	height: 15px;
-	line-height:15px;
-	margin-left: 10px;
-}
-.control{
-	margin-top:20px;
-}
-.text{
-	align-items: center;
-	font-family:PingFangSC-Regular;
-	font-size:14px;
-	color:#333333;
-	letter-spacing:0.52px;
-	text-align:center;
-	position:absolute;
-	top:0;
-	width: 100%;
-	margin-top:10px;
-
+.img {
+  border-radius: 14px;
+  width: 400px;
+  height: 400px;
+  max-width: 100%;
+  margin-top: -10px;
 }
 
-.player{
-	position:relative;
+.holder {
+  overflow: hidden;
 }
 
-.buydes-dialog-container{
-    width: 100%;
-    height: 100%;
-    justify-content: space-between;
-    background-color:rgba(15, 15, 26, 0.7);
-    position: fixed;
-    z-index: 999;
+.btns {
+  /*float:right;*/
+  font-family: PingFangHK-Thin;
+  font-size: 18px;
+  color: #999;
+  letter-spacing: 0.37px;
+  text-align: center;
+  margin-top: 5px;
+  margin-left: 40px;
+  /*margin-right:20px;*/
 }
- 
-.buydes-dialog-container-top{
-    flex-grow: 1;
+
+.btn-group {
+  display: inline-flex;
+  align-items: center;
+  /*margin-right:8px;*/
+  width: 25%;
 }
- 
-.buydes-dialog-container-bottom{
-    display: flex;
-    flex-grow: 0;
+
+.icon-md {
+  width: 20px;
+  height: 20px;
 }
- 
-.buydes-dialog-container-bottom-item{
-    padding:24rpx;
-    display: flex;
-    justify-content: center;
-    border-bottom: 1rpx solid #eeeeee;
+
+.btn-num {
+  font-size: 15px;
+  height: 15px;
+  line-height: 15px;
+  margin-left: 10px;
+}
+
+.control {
+  margin-top: 20px;
+}
+
+.text {
+  align-items: center;
+  font-family: PingFangSC-Regular;
+  font-size: 14px;
+  color: #333;
+  letter-spacing: 0.52px;
+  text-align: center;
+  position: absolute;
+  top: 0;
+  width: 100%;
+  margin-top: 10px;
+}
+
+.player {
+  position: relative;
+}
+
+.buydes-dialog-container {
+  width: 100%;
+  height: 100%;
+  justify-content: space-between;
+  background-color: rgba(15, 15, 26, 0.7);
+  position: fixed;
+  z-index: 999;
+}
+
+.buydes-dialog-container-top {
+  flex-grow: 1;
+  display: flex;
+}
+
+.buydes-dialog-container-bottom {
+  display: flex;
+  flex-grow: 0;
+}
+
+.buydes-dialog-container-bottom-item {
+  padding: 24rpx;
+  display: flex;
+  justify-content: center;
+  border-bottom: 1rpx solid #eee;
 }
