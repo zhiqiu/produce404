@@ -229,20 +229,28 @@ class API():
         '''
         获取自己的信息
         {
-            token:
+            action: 'get_user_info
         }
         {
             user: user{}
         }
         '''
+        openid = form["openid"]
         user = self.session.query(User).filter(and_(
             User.deleted == False,
-            User.openid == form["openid"]
+            User.openid == openid
         )).first()
+
+        unread_msg_num = self.session.query(Message.msg_id).filter(and_(
+            Message.user_openid == openid,
+            Message.isread == False,
+            Message.deleted == False
+        )).count()
 
         if user:
             return Status.success({
-                "user": user.toDict()
+                "user": user.toDict(),
+                "unread_msg_num": unread_msg_num
                 })
         else:
             raise Exception("User does't exists.")
@@ -923,8 +931,7 @@ class API():
         findMessages = self.session.query(User, Message, Audio.name, Audio.audio_id).filter(and_(
             Audio.audio_id == Message.audio_id,
             User.openid == Message.msg_src,
-            Message.user_openid == openid,
-            Message.isread == False
+            Message.user_openid == openid
         ))
 
         if last_msg_id:

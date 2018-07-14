@@ -114,7 +114,8 @@ medal对象:
 }
 
 {
-    user: user{}
+    user: user{},
+    unread_msg_num: 123
 }
 
 设置用户信息
