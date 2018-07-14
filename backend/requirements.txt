@@ -3,3 +3,5 @@ sqlalchemy
 flask
 pycrypto
 pymysql
+flask_admin
+flask_login
