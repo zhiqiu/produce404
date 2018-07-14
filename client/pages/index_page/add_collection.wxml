@@ -1,17 +1,18 @@
 <!--pages/collection/add_collection.wxml-->
-<view>
-audio info
-</view>
-
 <view class="collections">
-	<view class="collection">
-		<text>收藏列表名称</text>
-	</view>
-	<view class="collection">
-		<text>收藏列表名称</text>
-	</view>
-	<view class="collection">
-		<text>收藏列表名称</text>
-	</view>
+  <view class="add_collection" ontap="modalinput">
+    <view>添加收藏集</view>
+  </view>
 
+  <modal hidden="{{hiddenmodalput}}" confirm-text="确定" cancel-text="取消" bindcancel="cancel" bindconfirm="confirm">
+    <input type='text' placeholder="请输入收藏夹名称" bindinput="bindKeyInput" />
+  </modal>
+
+  <view class="myCollections">
+    <view wx:for="{{collectionFolders}}">
+      <view class="singleCollection" ontap="addToCollection" id="{{item.collection_id}}">
+        {{item.name}}
+      </view>
+    </view>
+  </view>
 </view>
