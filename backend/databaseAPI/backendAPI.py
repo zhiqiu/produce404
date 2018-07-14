@@ -180,8 +180,9 @@ class API():
 
         for k, v in jsonObj["audioHasTags"].items():
             self.audioVec[int(k)] = [0] * tagsNum
+            sumsquare = math.sqrt(len(v))
             for i in v:
-                self.audioVec[int(k)][i] = 1
+                self.audioVec[int(k)][i] = 1/sumsquare
 
 
         for i in range(10):
@@ -194,7 +195,8 @@ class API():
                 print(users)
 
                 for user in users:
-                    self.userVec[user] = []
+                    self.userVec[user] = [0] * tagsNum
+                    likedVideos = []
 
 
 
@@ -553,6 +555,8 @@ class API():
             Collection.deleted == False,
             Collection.user_openid == openid
         )).all()
+
+        self.session.commit()
 
         return Status.success({
             "collections": [c.toDict() for c in collections]
