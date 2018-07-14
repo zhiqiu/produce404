@@ -22,8 +22,8 @@ class Config(object):
     DEBUG_COMMUNITATION = False
 
     # use mysql for production environment.
-    # engine = create_engine("mysql+pymysql://root:create404mysql@172.16.16.7/produce404?charset=utf8mb4", pool_recycle=3600, echo=False, isolation_level="AUTOCOMMIT")
-    engine = create_engine("mysql+pymysql://dba:create404mysql@ladyrick.com/create404?charset=utf8mb4", pool_recycle=3600, echo=False, isolation_level="AUTOCOMMIT")
+    engine = create_engine("mysql+pymysql://root:create404mysql@172.16.16.7/produce404?charset=utf8mb4", pool_recycle=3600, echo=False, isolation_level="AUTOCOMMIT")
+    # engine = create_engine("mysql+pymysql://dba:create404mysql@ladyrick.com/create404?charset=utf8mb4", pool_recycle=3600, echo=False, isolation_level="AUTOCOMMIT")
 
     # app config
     appID = "wx19f70940784cb04e"
