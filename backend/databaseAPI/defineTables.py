@@ -428,6 +428,7 @@ class Message(Base, Creatable):
             2: "{}评论了你发布的声音{}",
             3: "{}关注了你",
             4: "{}回复了你在声音{}下的评论",
+            5: self.sysmsg,
         }[self.action]
 
 
