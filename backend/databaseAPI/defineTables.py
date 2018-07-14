@@ -126,7 +126,7 @@ class User(Base, Creatable):
     user_id = Column(Integer, autoincrement=True)
     openid = Column(String(28), primary_key=True)
     nickName = Column(String(64))
-    gender = Column(Integer, default=1)  # Male: 1, Female: 0
+    gender = Column(Integer, default=1)  # Male: 1, Female: 2
     language = Column(String(32), default="zh-cn")
     city = Column(String(64))
     province = Column(String(64))
@@ -143,8 +143,8 @@ class User(Base, Creatable):
 
     def __init__(self, **kwargs):
         self.commonInitClass(**kwargs)
-        if kwargs and self.gender not in [0, 1]:
-            raise DataFormatException("gender must be 1 or 0 for Male/Female")
+        if kwargs and self.gender not in [1, 2]:
+            raise DataFormatException("gender must be 1 or 2 for Male/Female")
     
     def toDict(self):
         returnDict = {}
