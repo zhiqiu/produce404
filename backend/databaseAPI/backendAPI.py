@@ -9,7 +9,7 @@ from .initializeTables import initializeTables
 from .config import Config
 from .utils import DataFormatException, Status, Encrypt, jsonDumps, jsonLoads
 from cam.auth.cam_url import CamUrl
-
+from .defineMedals import allMedalClasses
 
 __all__ = ["API"]
 
@@ -143,7 +143,7 @@ class API():
                     originalText = encryptor.decrypt(form["token"])
                     tokenObject = jsonLoads(originalText)
                     form["openid"] = tokenObject["openid"]
-                    form["sessionKeu"] = tokenObject["session_key"]
+                    form["sessionKey"] = tokenObject["session_key"]
                 except Exception as e:
                     return Status.internalError(e, "invalid token.")
             return getattr(self, API.action2API[action])(form)
@@ -755,16 +755,23 @@ class API():
         }
         '''
 
-        openid = form["openid"]
-        medals = self.session.query(Medal).filter(and_(
-            Medal.deleted == False,
-            R_User_Has_Medal.deleted == False,
-            R_User_Has_Medal.user_openid == openid,
-            R_User_Has_Medal.medal_id == Medal.medal_id
-        )).all()
+        user = self.session.query(User).filter(User.openid == form["openid"]).first()
+
+        medals = []
+        for m in allMedalClasses:
+            name = m.__medal_name__
+            img_url = m.__img_url__
+            achieved, text = m.check(user, self.session)
+            medal = {
+                "name": name,
+                "img_url": img_url,
+                "text": text,
+                "achieved": achieved
+            }
+            medals.append(medal)
 
         return Status.success({
-            "medals": [m.toDict() for m in medals]
+            "medals": medals
         })
 
     def setUserInfo(self, form):

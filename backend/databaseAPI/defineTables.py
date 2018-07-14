@@ -172,7 +172,7 @@ class AudioTag(Base, Creatable):
 
     def __init__(self, **kwargs):
         self.commonInitClass(**kwargs)
-        
+
 
 class Medal(Base, Creatable):
     __tablename__ = tablePrefix + "medal"
@@ -180,7 +180,7 @@ class Medal(Base, Creatable):
     medal_id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(64))
     img_url = Column(String(512))  # oss url
-    condition = Column(Integer)
+    condition = Column(String(128))
     create_time = Column(TIMESTAMP)
     deleted = Column(BOOLEAN, default=False)
 
