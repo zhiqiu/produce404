@@ -1,4 +1,4 @@
-from sqlalchemy import and_
+from sqlalchemy import and_, or_
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.sql.expression import func
@@ -939,7 +939,8 @@ class API():
         findMessages = self.session.query(User, Message, Audio.name, Audio.audio_id).filter(and_(
             Audio.audio_id == Message.audio_id,
             User.openid == Message.msg_src,
-            Message.user_openid == openid
+            or_(Message.user_openid == openid,
+            Message.action == Message.__actionDict__["broadcast"])
         ))
 
         if last_msg_id:

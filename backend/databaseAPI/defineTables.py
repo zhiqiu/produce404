@@ -399,6 +399,7 @@ class Message(Base, Creatable):
         "post comment": 2,
         "follow": 3,
         "reply comment": 4,
+        "broadcast": 5,
     }
 
     msg_id = Column(Integer, primary_key=True, autoincrement=True)
