@@ -114,7 +114,8 @@ medal对象:
 }
 
 {
-    user: user{}
+    user: user{},
+    unread_msg_num: 123
 }
 
 设置用户信息
@@ -330,6 +331,15 @@ msg{}:
 {
     action: 'read_msg',
     msg_id: ''
+}
+{
+    err: 'ok'
+}
+
+觅声_收藏_删除收藏夹
+{
+    action: 'delete_collection',
+    collection_id: ''
 }
 {
     err: 'ok'

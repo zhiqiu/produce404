@@ -1,7 +1,7 @@
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 import time
-from .defineTables import Base, User
+from .defineTables import Base, User, CMSUser
 from .testbench import makeTestDatabase
 from .config import Config
 
@@ -25,6 +25,13 @@ def initializeTables(engine):
                 "country": "China",
                 "avatarUrl": "none",
             }))
+
+        session.add(CMSUser(**{
+            "id": 1,
+            "email": "admin@admin.com",
+            "password": "21232f297a57a5a743894a0e4a801fc3",
+        }))
+
         session.commit()
         if Config.DEBUG:
             makeTestDatabase(session)
