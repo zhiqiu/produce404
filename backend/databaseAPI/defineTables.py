@@ -102,6 +102,7 @@ class Creatable():
 class User(Base, Creatable):
     __tablename__ = tablePrefix + "user"
 
+    user_id = Column(Integer, autoincrement=True)
     openid = Column(String(28), primary_key=True)
     nickName = Column(String(64))
     gender = Column(Integer, default=1)  # Male: 1, Female: 0
