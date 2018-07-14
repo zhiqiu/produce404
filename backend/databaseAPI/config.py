@@ -21,11 +21,6 @@ class Config(object):
     # debug server-client communitation
     DEBUG_COMMUNITATION = False
 
-    # database engine. Use sqlite3 for debug
-    curdir = os.path.abspath(os.path.dirname(__file__))
-    databaseFile = os.path.join(curdir, "..", "foo.db")
-    # engine = create_engine("sqlite:///%s?check_same_thread=False" % databaseFile, echo=False)
-
     # use mysql for production environment.
     engine = create_engine("mysql+pymysql://root:create404mysql@172.16.16.7/produce404?charset=utf8mb4", pool_recycle=3600, echo=False, isolation_level="AUTOCOMMIT")
     # engine = create_engine("mysql+pymysql://dba:create404mysql@ladyrick.com/create404?charset=utf8mb4", pool_recycle=3600, echo=False, isolation_level="AUTOCOMMIT")

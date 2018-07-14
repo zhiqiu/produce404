@@ -62,8 +62,6 @@ class Creatable():
             raise Exception(className + " doesn't exists.")
 
     def toDict(self):
-        if self.__class__.__name__ == "User" and self.openid in ["system", "nobody"]:
-            return {"openid": self.openid}
         returnDict = {}
         for fr in self.__allFields__:
             data = getattr(self, fr)
@@ -147,10 +145,12 @@ class User(Base, Creatable):
             raise DataFormatException("gender must be 1 or 2 for Male/Female")
     
     def toDict(self):
+        if self.openid in ["system", "nobody", "deleted"]:
+            return {"openid": self.openid}
         returnDict = {}
         returnDict["openid"] = self.openid
         returnDict["name"] = self.nickName
-        returnDict["gender"] = ["F", "M"][self.gender]
+        returnDict["gender"] = "M" if self.gender == 1 else "F" if self.gender == 2 else "U"
         returnDict["img"] = self.avatarUrl
         returnDict["address"] = "%s, %s" % (self.city, self.province)
         returnDict["create_time"] = str(self.create_time)
