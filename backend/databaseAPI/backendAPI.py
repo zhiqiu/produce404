@@ -11,6 +11,7 @@ from .utils import DataFormatException, Status, Encrypt, jsonDumps, jsonLoads
 from cam.auth.cam_url import CamUrl
 from .defineMedals import allMedalClasses
 import os
+import math
 
 __all__ = ["API"]
 
@@ -403,12 +404,13 @@ class API():
         msg_src = self.session.query(R_User_Create_Audio.user_openid).filter(and_(
             R_User_Create_Audio.audio_id == audio_id
         )).first()[0]
-
+        print(msg_src)
         # 为audio创建者发送一条提醒消息
         Message(
             user_openid=msg_src,
             msg_src=openid,
             action=Message.__actionDict__["like audio"],
+            sysmsg="",
             audio_id=audio_id,
         ).create(self.session)
 
@@ -515,6 +517,7 @@ class API():
             user_openid=msg_src,
             msg_src=openid,
             action=Message.__actionDict__["post comment"],
+            sysmsg="",
             audio_id=audio_id,
         ).create(self.session)
 
@@ -523,6 +526,7 @@ class API():
             Message(
                 user_openid=replyto,
                 msg_src=openid,
+                sysmsg="",
                 action=Message.__actionDict__["post comment"],
                 audio_id=audio_id,
             ).create(self.session)
