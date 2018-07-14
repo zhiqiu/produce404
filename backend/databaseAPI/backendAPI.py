@@ -949,6 +949,7 @@ class API():
         findMessages = findMessages.order_by(Message.msg_id.desc()).limit(20).all()
 
         msgs = []
+        mad = Message.__actionDict__
         for user, msg, audioName, audio_id in findMessages:
             msg_ = {
                 "msg_id": msg.msg_id,
@@ -956,7 +957,7 @@ class API():
                 "text": msg.getTextFormat().format(user.nickName, audioName),
                 "isread": msg.isread,
                 "deleted": msg.deleted,
-                "audio_id": audio_id, 
+                "audio_id": audio_id if msg.action in [mad["like audio"], mad["post comment"], mad["reply comment"]] else -1
             }
             msgs.append(msg_)
 
