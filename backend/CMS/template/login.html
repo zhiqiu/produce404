@@ -1,0 +1,62 @@
+{% extends "framework.html" %}
+
+{% block style %}
+<style>
+.welcome {
+    margin-bottom: 50px;
+}
+.action {
+    margin-top: 50px;
+}
+.form-row > .text-right > label {
+    padding-top: 6px;
+}
+</style>
+{% endblock %}
+
+{% block main %}
+
+<div class="row text-center welcome">
+    <h1>{{ '欢迎使用声觅CMS' }}</h1>
+</div>
+
+<form method="post" action="{{ 'login' }}">
+ 
+    <div class="row form-row">    
+        <div class="col-md-4"></div>
+        <div class="col-md-1 text-right">
+            <label>{{ '邮箱' }}</label>
+        </div>
+        <div class="col-md-3">
+            <input required="required" type="text" class="form-control form-control-full" name="email"  />
+        </div>
+        <div class="col-md-4"></div>
+    </div>
+
+    <div class="row form-row">    
+        <div class="col-md-4"></div>
+        <div class="col-md-1 text-right">
+             <label>{{ '密码' }}</label>
+        </div>
+        <div class="col-md-3">
+            <input required="required" type="password" class="form-control form-control-full" name="password"  />
+        </div>
+        <div class="col-md-4"></div>
+    </div>
+    
+    <div class="row text-center">
+        <input type="checkbox" name="{{ 'autologin' }}"/>
+        <label>{{ '自动登录' }} |</label>
+        <a href="{{ 'forget' }}" class="forgetpwd">{{ '忘记密码' }}</a>
+    </div>
+    <div class="row text-center action form-row">
+        <input type="submit" value="{{ '登录' }}" class="btn btn-info"/>
+    </div>
+    
+    <div class="row text-center">
+        <label>{{ '没有账号' }}</label>
+        <a href="{{ 'signup' }}">{{ '立即注册' }}</a>
+    </div>
+</form>
+
+{% endblock %}

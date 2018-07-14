@@ -33,7 +33,7 @@ def makeTestDatabase(session):
         Medal(**{
             "name": "name%d"%i,
             "img_url": "img_url%d"%i,
-            "condition": i,
+            "condition": str(i),
         }).create(session)
     
     for i in range(1, 9):
@@ -56,10 +56,10 @@ def makeTestDatabase(session):
             "audio_id": i,
         }).create(session)
 
-    for i in range(1, 10):
+    for i in range(1, 100):
         R_Audio_Has_AudioTag(**{
             "audio_id": i,
-            "audiotag_id": i,
+            "audiotag_id": i % 9 + 1,
         }).create(session)
 
     for i in range(1, 10):

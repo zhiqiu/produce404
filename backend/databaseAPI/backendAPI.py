@@ -9,7 +9,8 @@ from .initializeTables import initializeTables
 from .config import Config
 from .utils import DataFormatException, Status, Encrypt, jsonDumps, jsonLoads
 from cam.auth.cam_url import CamUrl
-
+from .defineMedals import allMedalClasses
+import os
 
 __all__ = ["API"]
 
@@ -19,6 +20,7 @@ class API():
         initializeTables(engine)
         Session = sessionmaker(bind=engine)
         self.session = Session()
+        self.initRecommandSystem()
 
     action2API = {
         "signcos": "signcos",
@@ -143,7 +145,7 @@ class API():
                     originalText = encryptor.decrypt(form["token"])
                     tokenObject = jsonLoads(originalText)
                     form["openid"] = tokenObject["openid"]
-                    form["sessionKeu"] = tokenObject["session_key"]
+                    form["sessionKey"] = tokenObject["session_key"]
                 except Exception as e:
                     return Status.internalError(e, "invalid token.")
             return getattr(self, API.action2API[action])(form)
@@ -153,6 +155,43 @@ class API():
             except Exception as e:
                 return Status.internalError(e)
             return Status.internalError(e)
+
+    def initRecommandSystem(self):
+        '''
+        Audio Vector:
+        {
+            audio_id: [1,2,1,3,4,2,1,3,] # length == len(recTags)
+        }
+
+        User Vector:
+        {
+            user_id: [3,1,2,4,1,2,3,1,] # length == len(recTags)
+        }
+        '''
+        self.audioVec = {}
+        curdir = os.path.dirname(os.path.abspath(__file__))
+        with open(os.path.join(curdir, "audioVector.json"),"r", encoding="utf-8") as f:
+            jsonObj = jsonLoads(f.read())
+
+        recommandTags = jsonObj["recommandTags"]
+        tagsNum = len(recommandTags)
+        for k, v in jsonObj["audioHasTags"].items():
+            self.audioVec[int(k)] = [0] * tagsNum
+            for i in v:
+                self.audioVec[int(k)][i] = 1
+
+        self.userVec = {}
+        users = self.session.query(User).all()
+
+        for u in users:
+            self.userVec[u.openid] = [0] * tagsNum
+            self.session.query()
+
+
+        print(self.audioVec)
+        
+        # openids = self.session.query(User.openid).all()
+
 
 
     #############################   API   #############################
@@ -550,7 +589,9 @@ class API():
         '''
         
         openid = form["openid"]
-        name = form["collection_name"]
+        name = form["collection_name"].strip()
+        if not name:
+            return Status.internalError("Collection name must not be empty.")
         if self.session.query(Collection.collection_id).filter(and_(
             Collection.deleted == False,
             Collection.user_openid == openid,
@@ -755,16 +796,23 @@ class API():
         }
         '''
 
-        openid = form["openid"]
-        medals = self.session.query(Medal).filter(and_(
-            Medal.deleted == False,
-            R_User_Has_Medal.deleted == False,
-            R_User_Has_Medal.user_openid == openid,
-            R_User_Has_Medal.medal_id == Medal.medal_id
-        )).all()
+        user = self.session.query(User).filter(User.openid == form["openid"]).first()
+
+        medals = []
+        for m in allMedalClasses:
+            name = m.__medal_name__
+            img_url = m.__img_url__
+            achieved, text = m.check(user, self.session)
+            medal = {
+                "name": name,
+                "img_url": img_url,
+                "text": text,
+                "achieved": achieved
+            }
+            medals.append(medal)
 
         return Status.success({
-            "medals": [m.toDict() for m in medals]
+            "medals": medals
         })
 
     def setUserInfo(self, form):

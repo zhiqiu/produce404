@@ -6,7 +6,7 @@ __all__ = ["DataFormatException", "Status", "Encrypt", "jsonDumps", "jsonLoads"]
 
 # 自定义的jsonDumps函数
 def jsonDumps(data, **kwargs):
-    return json.dumps(data, ensure_ascii=False, **kwargs)
+    return json.dumps(data, ensure_ascii=False, separators=(',', ':'), **kwargs)
 
 def jsonLoads(string, **kwargs):
     return json.loads(string, encoding="utf-8", **kwargs)

@@ -1,4 +1,4 @@
-  /*“我的”页面*/
+/*“我的”页面*/
 // pages/mine/mine.js
 const c = require('../../utils/c.js')
 const r = c.r;
@@ -12,8 +12,7 @@ Page({
     feeds: [],
     medals: [],
     msg: [],
-    playingIdx: -1,
-    status: 0   //0表示“声音日迹”，1表示“我的勋章”
+    playingIdx: -1
   },
   getData: function(refresh){
     if(refresh){
@@ -65,6 +64,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function(options) {
+    
     this.getData(true);
   },
 
@@ -148,19 +148,7 @@ Page({
     })
   },
 
-  gotoMyFeed: function(){
-    this.setData({
-      status: 0
-    })
-  },
-
-  gotoMyMedal: function(){
-    this.setData({
-      status: 1
-    })
-    wx.navigateTo({
-      url: '/pages/mine/mine_medal'
-    })
-  },
-
+  gotoMine: function(){
+    wx.navigateBack();
+  }
 })
