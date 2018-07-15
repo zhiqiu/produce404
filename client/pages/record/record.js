@@ -2,7 +2,6 @@
 // pages/record/record.js
 
 const COS = require('../../utils/upload');
-
 const c = require('../../utils/c');
 const r = c.r;
 
@@ -18,16 +17,18 @@ Page({
     recordPath: '',
     duration: 0,
     recordingAnimation: {},
-    array: [
-      '风声', '雨声', '读书声'
-    ]
+    comment: '',
+    tagArray : c.tagArray,
+    hasSetTag: false,
+    tag: '',
+    position: ''
   },
 
   /**
    * 生命周期函数--监听页面加载
    */
   onLoad: function(options) {
-    
+
   },
 
   /**
@@ -97,8 +98,6 @@ Page({
         duration: 1000 * 60 * 5,
         format: 'mp3'
       })
-
-
     } else {
       //结束录音
       const recordManager = wx.getRecorderManager()
@@ -106,17 +105,13 @@ Page({
       this.setData({
         onrecord: false
       })
-
-
-
-
     }
   },
   upload: function(e) {
     var Bucket = 'create404-cos-1253746840';
     var Region = 'ap-guangzhou';
+    var that = this
     var cos = new COS({
-
       getAuthorization: function(options, callback) {
         wx.request({
           method: 'GET',
@@ -153,23 +148,23 @@ Page({
         })
       },
 
-        getAuthorization: function (options, callback) {
-          r({
-            data:{
-              action: 'signcos'
-            },
-            success: function(res){
-              var data = res.data.data;
-              // console.log(data)
-              callback({
-                  TmpSecretId: data.credentials && data.credentials.tmpSecretId,
-                  TmpSecretKey: data.credentials && data.credentials.tmpSecretKey,
-                  XCosSecurityToken: data.credentials && data.credentials.sessionToken,
-                  ExpiredTime: data.expiredTime,
-              });
-            }
-          })
-        },
+      getAuthorization: function(options, callback) {
+        r({
+          data: {
+            action: 'signcos'
+          },
+          success: function(res) {
+            var data = res.data.data;
+            // console.log(data)
+            callback({
+              TmpSecretId: data.credentials && data.credentials.tmpSecretId,
+              TmpSecretKey: data.credentials && data.credentials.tmpSecretKey,
+              XCosSecurityToken: data.credentials && data.credentials.sessionToken,
+              ExpiredTime: data.expiredTime,
+            });
+          }
+        })
+      },
     });
 
     var filepath = this.data.recordPath;
@@ -182,12 +177,12 @@ Page({
           url: filename,
           img: 'http://y.gtimg.cn/music/photo_new/T002R300x300M000003rsKF44GyaSk.jpg?max_age=2592000',
           name: 'heiheihei',
-          intro: 'this is intro',
+          intro: that.data.comment,
           location: 'SZ, China',
           duration: parseInt(this.data.duration)
         },
         tags: [{
-          'tagname': 'example'
+          'tagname': that.data.tag
         }]
       },
       success: function(s) {
@@ -227,31 +222,46 @@ Page({
   },
 
   bindPickerChange: function(e) {
-    console.log('picker发送选择改变，携带值为', e.detail.value)
     this.setData({
-      index: e.detail.value
-    })
+      hasSetTag : true,
+      index: e.detail.value,
+      tag: this.data.tagArray[parseInt(e.detail.value)]
+    }) 
   },
 
   getLocation: function() {
+    var that = this
     var qqmapsdk = new QQMapWX({
       key: 'TWHBZ-ELKKI-YMVGS-5VR46-D5WHF-ZFFEL' // 必填
     });
     wx.getLocation({
       type: 'wgs84',
-      success: function (res) {
-        //2、根据坐标获取当前位置名称，显示在顶部:腾讯地图逆地址解析
+      success: function(res) {
         qqmapsdk.reverseGeocoder({
           location: {
             latitude: res.latitude,
             longitude: res.longitude
           },
-          success: function (addressRes) {
+          success: function(addressRes) {
             console.log(addressRes)
-          
+            that.setData({
+              position : addressRes.result.ad_info.province + '·' + addressRes.result.ad_info.city
+            })
+          },
+          fail: function(res)
+          {
+            that.setData({
+              position: '广东省·深圳市'
+            })
           }
         })
       }
     })
-  }
+  },
+
+  bindKeyInput: function(e) {
+    this.setData({
+      comment: e.detail.value
+    })
+  },
 })

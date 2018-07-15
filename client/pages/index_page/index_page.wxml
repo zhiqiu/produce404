@@ -17,8 +17,13 @@
     </view>
   </view>
 
-  <view class="btn-2 " bindtap="showModal">
-    <view class="btn">频道</view>
+  <view class="btn-2">
+    <view class="btn">
+      <picker bindchange="bindPickerChange" placeholder="创建标签" value="{{index}}" range="{{tagArray}}">
+        <view class="picker" wx:if="{{hasSetTag}}">{{tagArray[index]}}</view>
+        <view class="picker" wx:else>频道</view>
+      </picker>
+    </view>
   </view>
 </view>
 

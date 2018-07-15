@@ -3,17 +3,18 @@
     <image wx:if="{{!onrecord}}" src="/image/icon-mac.svg" class="icon-mac" ontap="touch"> </image>
     <image animation="{{recordingAnimation}}" wx:if="{{onrecord}}" src="/image/icon-mac-active.svg" class="icon-mac" ontap="touch"> </image>
   </view>
-  <textarea class="text">请输入文字
-  </textarea>
+  <textarea class="text" placeholder="请输入评论" bindinput="bindKeyInput" />
   <view class="holder">
-    <view class="pos" ontap="getLocation">点击定位</view>
+    <view class="pos" ontap="getLocation">
+      <view class="pos_text" wx:if="{{position}}">{{position}}</view>
+      <view class="pos_text" wx:else>点击定位</view>
+    </view>
     <view class="tag">
-      <picker bindchange="bindPickerChange" value="{{index}}" range="{{array}}">
-        <view class="picker">
-          当前选择：{{array[index]}}
-        </view>
+      <picker bindchange="bindPickerChange" placeholder="创建标签" value="{{index}}" range="{{tagArray}}">
+        <view class="picker" wx:if="{{hasSetTag}}">#{{tag}}</view>
+        <view class="picker" wx:else>创建标签</view>
       </picker>
-    </view> 
+    </view>
   </view>
 
   <view class="submit" ontap="upload">

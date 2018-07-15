@@ -10,7 +10,8 @@ Page({
    */
   data: {
     playingIdx : -1,  //当前播放的feed Id
-    feeds : []
+    feeds : [],
+    feed: {}
   },
   getData: function(refresh){
     if(refresh){
@@ -43,9 +44,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function (options) {
-    
     this.getData(true);
-    
   },
 
   /**
@@ -91,11 +90,10 @@ Page({
   
   },
   
-  gotoDetail: function(feedId, index){
-    console.log(e)
+  gotoDetail: function(feedId){
     var dID = feedId.currentTarget.id;
     wx.navigateTo({
-      url: '/pages/community/detail?feedId='+dID+'&feedIndex='+index
+      url: '/pages/community/detail?feedId='+dID
     })
   },
   

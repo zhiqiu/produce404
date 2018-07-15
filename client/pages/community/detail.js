@@ -12,31 +12,30 @@ Page({
     playing: false
   },
 
-  getData: function(callback) {
+  getData: function(options) {
     var that = this;
-    console.log('that')
-    console.log(that)
+    console.log(options)
     r({
       data: {
         action: 'get_one_feed',
-        audio_id: this.data.audioId
+        audio_id: options.audioId
       },
       success: function(res) {
         console.log(res)
         that.setData({
           feed: res.data.resp.feed
         })
-      }
-    })
-    r({
-      data: {
-        action: 'get_comments',
-        audio_id: this.data.audioId
-      },
-      success: function(res) {
-        console.log(res)
-        that.setData({
-          comments: res.data.resp.comments
+        r({
+          data: {
+            action: 'get_comments',
+            audio_id: that.data.feed.audio.audio_id
+          },
+          success: function (res) {
+            console.log(res)
+            that.setData({
+              comments: res.data.resp.comments
+            })
+          }
         })
       }
     })
@@ -46,9 +45,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function(options) {
-    this.setData({
-      audioId: options.audioId
-    })
+    this.getData(options);
   },
 
   /**
@@ -62,14 +59,15 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function() {
-    this.getData();
   },
 
   /**
    * 生命周期函数--监听页面隐藏
    */
   onHide: function() {
-    app.aData.show = false;
+    getApp().globalData.page.setData({
+
+    })
   },
 
   /**
@@ -115,7 +113,6 @@ Page({
       c.play(this.data.feed.audio, this.data.feed.user)
     }
   },
-
 
   like: function(e) {
     var nowFeed = this.data.feed;
