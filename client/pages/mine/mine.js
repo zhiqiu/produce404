@@ -11,6 +11,7 @@ Page({
     user: {},
     feeds: [],
     medals: [],
+    debug_cnt: 0,
     msg: [],
     playingIdx: -1,
     status: 0   //0表示“声音日迹”，1表示“我的勋章”
@@ -102,6 +103,16 @@ Page({
   onPullDownRefresh: function() {
     this.getData(true);
     wx.stopPullDownRefresh();
+    if(this.data.status === 1){
+      debug_cnt += 1;
+      if(debug_cnt < 5) return;
+      wx.setStorageSync('login');
+      wx.setStorageSync('server_first_time');
+      wx.setStorageSync('token');
+      wx.setStorageSync('userInfo');
+      c.check();
+      c.login();
+    }
   },
 
   /**
