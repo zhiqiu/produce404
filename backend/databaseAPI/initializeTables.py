@@ -23,7 +23,7 @@ def initializeTables(engine):
             "city": "",
             "province": "",
             "country": "",
-            "avatarUrl": "http://create404-cos-1253746840.file.myqcloud.com/system_user_avatar.png",
+            "avatarUrl": "http://cos.ladyrick.com/system_user_avatar.png",
         }))
         session.add(User(**{
             "openid": "deleted",
@@ -33,7 +33,7 @@ def initializeTables(engine):
             "city": "",
             "province": "",
             "country": "",
-            "avatarUrl": "http://create404-cos-1253746840.file.myqcloud.com/deleted_user_avatar.png",
+            "avatarUrl": "http://cos.ladyrick.com/deleted_user_avatar.png",
         }))
         session.add(User(**{
             "openid": "nobody",
@@ -43,7 +43,7 @@ def initializeTables(engine):
             "city": "",
             "province": "",
             "country": "",
-            "avatarUrl": "http://create404-cos-1253746840.file.myqcloud.com/nobody_user_avatar.png",
+            "avatarUrl": "http://cos.ladyrick.com/nobody_user_avatar.png",
         }))
 
         session.add(CMSUser(**{

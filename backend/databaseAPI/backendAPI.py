@@ -370,9 +370,11 @@ class API():
         openid = form["openid"]
         feeds = [self.packFeed(openid, user, audio) for user, audio in randTwoAudios]
 
+        feedlen = len(feeds)
+
         return Status.success({
-            "feed": feeds[0],
-            "feed_next": feeds[1],
+            "feed": feeds[0] if feedlen > 0 else "",
+            "feed_next": feeds[1] if feedlen > 1 else "",
         })
 
     def likeAudio(self, form):
