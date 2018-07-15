@@ -14,11 +14,13 @@
     "pages/index_page/add_comment",
     "pages/index_page/choose_channel",
     "pages/community/add_comment",
-    "pages/index_page/add_collection",
+    "pages/index_page/add_collection", 
+    "pages/mine/my_msg",
     "pages/index/index",
     "pages/logs/logs",
     "pages/mine/my_agreement/my_agreement",
     "pages/player_test/player",
+    "pages/mine/sys_msg",
     "pages/record_test/record_test"
   ],
   "window": {

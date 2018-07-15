@@ -14,15 +14,12 @@ Page({
     feed: {}
   },
   getData: function(refresh){
-    if(refresh){
-      this.setData({
-        feeds: []
-      })
-    }
+    
     var last_audio_id = '';
     if(this.data.feeds.length !== 0){
       last_audio_id =  this.data.feeds[this.data.feeds.length - 1].audio.audio_id;
     }
+    if(refresh) last_audio_id = ''
     var that = this;
     r({
       data: {
@@ -32,6 +29,7 @@ Page({
       success: function(res) {
         console.log(res)
         var newFeeds = that.data.feeds.concat(res.data.resp.feeds);
+        if(refresh) newFeeds = res.data.resp.feeds;
         that.setData({
           feeds: newFeeds
         })
@@ -92,8 +90,27 @@ Page({
   
   gotoDetail: function(feedId){
     var dID = feedId.currentTarget.id;
+    var nowFeed = {};
+    for(var singleFeed of this.data.feeds)
+    {
+      if (singleFeed.audio.audio_id === parseInt(dID))
+      {
+        nowFeed = singleFeed
+        break
+      }
+    }
+    if(nowFeed.audio){
+      this.setData({
+        feed: nowFeed
+      })
+      getApp().globalData.prePage = this
+      wx.navigateTo({
+        url: '/pages/community/detail?audioId=' + dID
+      })
+    }
+
     wx.navigateTo({
-      url: '/pages/community/detail?feedId='+dID
+      url: '/pages/community/detail?audioId='+dID
     })
   },
   

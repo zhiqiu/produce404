@@ -1,6 +1,4 @@
-// pages/login_page/login_page.js
-const c = require('../../utils/c.js');
-const r = c.r;
+// pages/mine/my_msg.js
 Page({
 
   /**
@@ -64,15 +62,5 @@ Page({
    */
   onShareAppMessage: function () {
   
-  },
-  clickLogin: function(res){
-    if(res.detail.userInfo){
-      wx.setStorageSync('userInfo',res.detail.userInfo)
-      wx.navigateTo({
-        url: '/pages/index_page/choose_like'
-      })
-    }else{
-      // 请去设置打开权限
-    }
   }
 })

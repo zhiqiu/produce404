@@ -8,7 +8,7 @@ Page({
    * 页面的初始数据
    */
   data: {
-    feedId: 0,
+    feed: {},
     hiddenmodalput: true,
     //可以通过hidden是否掩藏弹出框的属性，来指定那个弹出框
     collectionFolders: [{
@@ -20,6 +20,7 @@ Page({
 
   getData: function (options) {
     var that = this;
+    console.log(options)
     r({
       data: {
         action: 'get_collections',
@@ -28,9 +29,20 @@ Page({
         console.log(that.data)
         that.setData({
           collectionFolders: res.data.resp.collections,
-          feedId: options
         })
         console.log(that.data)
+      }
+    })
+    r({
+      data: {
+        action: 'get_one_feed',
+        audio_id: options.dID
+      },
+      success: function (res) {
+        console.log(res)
+        that.setData({
+          feed: res.data.resp.feed
+        })
       }
     })
   },
@@ -90,12 +102,6 @@ Page({
 
   },
 
-  gotoAddCollection: function() {
-    wx.navigateTo({
-      url: '/pages/index_page/add_collection?dID'
-    })
-  },
-
   //点击按钮指定的hiddenmodalput弹出框
   modalinput: function() {
     this.setData({
@@ -136,15 +142,24 @@ Page({
   },
 
   addToCollection: function(e){
-    var feedId = this.data.feedId.dID
+    var feedId = this.data.feed.audio.audio_id
+    var that = this
     console.log(e)
     r({
       data: {
         action: 'add_into_collection',
         audio_id: feedId,
-        collection_id: e.currentTarget.id
+        collection_id: e.currentTarget.ids
       },
       complete: function() {
+        var nowFeed = that.data.feed;
+        nowFeed.iscollected = true;
+        that.setData({
+          feed: nowFeed
+        })
+        getApp().globalData.prePage.setData({
+          feed : nowFeed
+        })
         wx.navigateBack({
         })
       }

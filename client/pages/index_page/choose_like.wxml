@@ -13,7 +13,7 @@
       </checkbox-group>
     </view>
 
-    <view class="submit" ontap="upload">
+    <view class="submit" ontap="clickIndex">
       进 入
     </view>
 

@@ -36,22 +36,22 @@
   </view>
   <view class="timeline" wx:if="{{status === 0}}">
       <view wx:for="{{feeds}}">
-      <view class="info" ontap="gotoDetail" id="{{item.audio.audio_id}}">
+      <view class="info" >
         <view class="holder">
           <view class="time">
             {{item.audio.duration}}
           </view>
           <!--当点击的是当前正在播放的feed，-->
-          <view class="audio">
+          <view class="audio" ontap="clickPlay" id="{{index}}">
             <image src="/image/icon-sound.svg" class="audio-icon"></image>
           </view>
         </view>
 
-        <view class="description">
+        <view class="description" ontap="gotoDetail" id="{{item.audio.audio_id}}">
           <text class="content">{{item.audio.intro}}</text>
         </view>
 
-        <view class="tags">
+        <view class="tags" ontap="gotoDetail" id="{{item.audio.audio_id}}">
           <view wx:for="{{item.tags}}">
             <view class="tag">
               <text class="tag-text">#{{item.tagname}}</text>
@@ -59,7 +59,7 @@
           </view>
         </view>
 
-        <view class="holder">
+        <view class="holder" ontap="gotoDetail" id="{{item.audio.audio_id}}">
           <view class="author">
             <text>{{item.user.name}}</text>
           </view>

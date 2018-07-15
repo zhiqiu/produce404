@@ -79,8 +79,6 @@ Page({
    * 生命周期函数--监听页面卸载
    */
   onUnload: function() {
-    console.log(getApp().globalData.prePage.data.feed)
-    console.log(this.data.feed)
     getApp().globalData.prePage.setData({
       feed: this.data.feed
     })
@@ -130,6 +128,32 @@ Page({
     this.setData({
       feed: nowFeed
     })
+    var feeds = getApp().globalData.prePage.data.feeds
+    if (feeds)  //从社区页和我的页面进去
+    {
+      for (var singleFeed of feeds)
+      {
+        if(singleFeed.audio.audio_id === this.data.feed.audio.audio_id){
+          singleFeed = nowFeed
+          console.log(singleFeed)
+          break
+        }
+      }
+      getApp().globalData.prePage.setData({
+        feeds: feeds
+      })
+    }
+    else{
+      getApp().globalData.prePage.setData({
+        feed: nowFeed
+      })
+    }
+    r({
+      data: {
+        action: 'like_audio',
+        audio_id: this.data.feed.audio.audio_id
+      }
+    })
   },
 
   dislike: function(e) {
@@ -147,4 +171,11 @@ Page({
     })
   },
 
+  gotoAddCollection: function (e) {
+    var dID = e.currentTarget.id;
+    getApp().globalData.prePage = this
+    wx.navigateTo({
+      url: '/pages/index_page/add_collection?dID=' + dID
+    })
+  },
 })
