@@ -62,7 +62,7 @@ text-align:center;
   letter-spacing: 0.57px;
   line-height: 20px;
   text-align: left;
-  margin: 10px 20px;
+  padding: 10px 20px;
 }
 
 .audio {
@@ -239,16 +239,6 @@ text-align:center;
   margin-bottom: 30px;
   box-shadow: 5px 5px 0px #ebcc3f;
   overflow: hidden;
-}
-
-.description {
-  font-family: PingFangHK-Regular;
-  font-size: 17px;
-  color: #333;
-  letter-spacing: 0.57px;
-  line-height: 20px;
-  text-align: left;
-  margin: 10px 20px;
 }
 
 /* */

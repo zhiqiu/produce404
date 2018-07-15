@@ -21,7 +21,8 @@ Page({
     tagArray : ['动物植物', '海浪瀑布', '山水林间', '自然气候', '机器轰鸣', '交通工具', '古典艺术', '现代乐器','无'],
     hasSetTag: false,
     tag: '',
-    position: ''
+    position: '',
+    recordstopped: false
   },
 
   /**
@@ -83,16 +84,26 @@ Page({
     if (!this.data.onrecord) {
       //开始录音
       this.setData({
-        onrecord: true
+        onrecord: true,
+        recordstopped: false
       })
       const recordManager = wx.getRecorderManager()
       var that = this;
       recordManager.onStop(function(res) {
         that.setData({
           recordPath: res.tempFilePath,
-          duration: res.duration
+          duration: res.duration,
+          recordstopped: true
         })
         console.log(res);
+        wx.showToast({
+          title: '录制成功,'+(parseInt(that.data.duration/1000)+1)+'"',
+          icon: 'success',
+          duration: 2000
+        })
+        that.setData({
+          onrecord: false
+        })
       })
       recordManager.start({
         duration: 1000 * 60 * 5,
@@ -102,19 +113,27 @@ Page({
       //结束录音
       const recordManager = wx.getRecorderManager()
       recordManager.stop();
-      this.setData({
-        onrecord: false
-      })
-      wx.showToast({
-        title: '录制成功,'+(parseInt(this.data.duration/1000)+1)+'"',
-        icon: 'success',
-        duration: 2000
-      })
+      
+      
     }
   },
   upload: function(e) {
     if(this.data.onrecord){
-      this.touch();
+      
+      wx.showToast({
+        title: '请先结束录音',
+        icon: 'loading',
+        duration: 2000
+      })
+      return;
+    }
+    if(this.data.comment.length === 0){
+      wx.showToast({
+        title: '请输入文字',
+        icon: 'loading',
+        duration: 2000
+      })
+      return;
     }
     var Bucket = 'create404-cos-1253746840';
     var Region = 'ap-guangzhou';
