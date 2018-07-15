@@ -145,7 +145,8 @@ class API():
                     tokenObject = jsonLoads(originalText)
                     form["openid"] = tokenObject["openid"]
                     form["sessionKey"] = tokenObject["session_key"]
-                    User.checkExist(self.session, tokenObject["openid"])
+                    if action != "set_user_info":
+                        User.checkExist(self.session, tokenObject["openid"])
                 except Exception as e:
                     return Status.internalError(e, "invalid token.")
             return getattr(self, API.action2API[action])(form)
