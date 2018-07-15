@@ -1,13 +1,9 @@
 {
   "pages": [
-<<<<<<< HEAD
-        "pages/record/record",
     "pages/index_page/index_page",
     "pages/mine/mine_medal",
-=======
     "pages/mine/my_coll/my_coll",
     "pages/mine/my_coll/single_coll/single_coll",
-    "pages/index_page/index_page",
     "pages/login_page/login_page",
     "pages/mine/mine_msg",
     "pages/record/record",
@@ -15,28 +11,17 @@
     "pages/community/community",
     "pages/community/detail",
     "pages/index_page/choose_like",
->>>>>>> c0ed2b06a8271ef3f477431f0cafb49312b81804
     "pages/index_page/add_comment",
     "pages/index_page/choose_channel",
     "pages/community/add_comment",
     "pages/index_page/add_collection",
-
     "pages/mine/my_msg/my_msg",
-    "pages/community/community",
-    "pages/community/detail",
-    "pages/mine/mine",
-    "pages/login_page/login_page",
     "pages/index/index",
     "pages/logs/logs",
     "pages/mine/my_agreement/my_agreement",
     "pages/player_test/player",
-<<<<<<< HEAD
     "pages/mine/sys_msg/sys_msg",
-    "pages/record_test/record_test",
-    "pages/mine/my_coll/single_coll/single_coll"
-=======
     "pages/record_test/record_test"
->>>>>>> c0ed2b06a8271ef3f477431f0cafb49312b81804
   ],
   "window": {
     "backgroundTextStyle": "light",

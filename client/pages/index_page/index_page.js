@@ -63,10 +63,13 @@ Page({
       },
       success: function(res) {
         console.log(res)
-        that.setData({
-          feed: res.data.resp.feed,
-          dataloaded: true
-        })
+        if(res.data.resp)
+        {
+          that.setData({
+            feed: res.data.resp.feed,
+            dataloaded: true
+          })
+        }
         // TODO: feed_next
         callback();
       }
@@ -79,15 +82,19 @@ Page({
   onLoad: function(options) {
     if (!c.check()) return; // check login
     var that = this;
-    this.getData(function() {
-      c.play(that.data.feed.audio, that.data.feed.user);
-      const player = wx.getBackgroundAudioManager();
-      player.onTimeUpdate(function() {
-        that.setData({
-          audioProgress: parseInt(100 * player.currentTime / player.duration)
+    console.log(that.data.feed.audio)
+    if (that.data.feed.audio)
+    {
+      this.getData(function () {
+        c.play(that.data.feed.audio, that.data.feed.user);
+        const player = wx.getBackgroundAudioManager();
+        player.onTimeUpdate(function () {
+          that.setData({
+            audioProgress: parseInt(100 * player.currentTime / player.duration)
+          })
         })
-      })
-    });
+      });
+    }
     console.log(this)
   },
 
