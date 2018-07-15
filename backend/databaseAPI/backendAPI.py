@@ -883,7 +883,7 @@ class API():
         userObj["openid"] = openid
         user = User(**userObj)
         # 检查有没有默认收藏集。如果没有，则添加一个默认收藏集
-        if self.session.query(Colelction.collection_id).filter(and_(
+        if not self.session.query(Colelction.collection_id).filter(and_(
             Collection.deleted == False,
             Collection.name == Collection.__defaultCollection__,
             Collection.user_openid == openid
