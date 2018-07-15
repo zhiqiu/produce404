@@ -14,6 +14,7 @@ Page({
     debug_cnt: 0,
     msg: [],
     playingIdx: -1,
+    last_index: -1,
     status: 0   //0表示“声音日迹”，1表示“我的勋章”
   },
   getData: function(refresh){
