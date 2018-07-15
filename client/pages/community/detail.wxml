@@ -54,91 +54,96 @@
 						<image wx:if="{{!feed.isliked}}" src="/image/icon-like.svg" class="icon-sm btn-up" ontap="like" Id="{{feed.audio.audio_id}}">1</image>
             <image wx:else src="/image/icon-like-active.svg" class="icon-sm btn-up" ontap="dislike" Id="{{feed.audio.audio_id}}">2</image>
             <view class="btn-num">{{feed.like_num}}</view>
-					</view>
-					<view class="btn-group">
-						<image src="/image/icon-comments.svg" class="icon-sm btn-up">btns</image>
-						<view class="btn-num">{{feed.comment_num}}</view>
-					</view>
-					<view class="btn-group" ontap="gotoAddCollection" id="{{feed.audio.audio_id}}">
-						<image wx:if="{{!feed.iscollected}}" src="/image/icon-collect.svg" class="icon-sm btn-up">btns</image>
-            <image wx:else src="/image/icon-collect-active.svg" class="icon-sm btn-up">btns</image>
-						<!-- <view class="btn-num"> 10</view> -->
-					</view>
-				</view>
-			</view>
-		</view>
-	</view>
+          </view>
+          <view class="btn-group" ontap="modalinput" id="">
+            <image src="/image/icon-comments.svg" class="icon-sm btn-up">btns</image>
+            <view class="btn-num">{{feed.comment_num}}</view>
+          </view>
 
-	<view class="tail-bar">
-					
-		<view class="tail-bar-b">
-			<view class="btn-group">
-				<image wx:if="{{!feed.isliked}}" src="/image/icon-like.svg" class="icon-big btn-up" ontap="like" Id="{{feed.audio.audio_id}}">1</image>
+          <modal wx:if="{{!hiddenmodalput}}" confirm-text="确定" cancel-text="取消" bindcancel="cancel" bindconfirm="confirm">
+            <textarea auto-focus  placeholder="输入你的评论" bindinput="bindKeyInput"/>
+          </modal>
+
+          <view class="btn-group" ontap="gotoAddCollection" id="{{feed.audio.audio_id}}">
+            <image wx:if="{{!feed.iscollected}}" src="/image/icon-collect.svg" class="icon-sm btn-up">btns</image>
+            <image wx:else src="/image/icon-collect-active.svg" class="icon-sm btn-up">btns</image>
+            <!-- <view class="btn-num"> 10</view> -->
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="tail-bar">
+
+    <view class="tail-bar-b">
+      <view class="btn-group">
+        <image wx:if="{{!feed.isliked}}" src="/image/icon-like.svg" class="icon-big btn-up" ontap="like" Id="{{feed.audio.audio_id}}">1</image>
         <image wx:else src="/image/icon-like-active.svg" class="icon-big btn-up" ontap="dislike" Id="{{feed.audio.audio_id}}">2</image>
         赞
-			</view>
-			
-		</view>
-		<view class="tail-bar-b" ontap="gotoComment">
-			<view class="btn-group">
-				<image src="/image/icon-comments.svg" class="icon-big btn-up">btns</image>
-				评论
-			</view>
-			
-		</view>
-		<view class="tail-bar-b">
-			<view class="btn-group" ontap="gotoAddCollection" id="{{feed.audio.audio_id}}">
-				<image wx:if="{{!feed.iscollected}}" src="/image/icon-collect.svg" class="icon-big btn-up">btns</image>
-	      <image wx:else src="/image/icon-collect-active.svg" class="icon-big btn-up">btns</image>
-				<!-- <view class="btn-num"> 10</view> -->
-				收藏
-			</view>
-			
-		</view>
-	</view>
-	<view class="comments">
-		<view wx:for="{{comments}}" wx:key="key" >
-			<view class="info-card-out">
+      </view>
 
-					<view class="info-card">
-						<view class="info-group">
-							<view class="avatar">
-								<image src="{{item.user.img}}" class="avatar-md"></image>
-							</view>
+    </view>
+    <view class="tail-bar-b" ontap="gotoComment" id="">
+      <view class="btn-group">
+        <image src="/image/icon-comments.svg" class="icon-big btn-up">btns</image>
+        评论
+      </view>
 
-							<view class="info-detail-group">
-								<view class="info-name">
-									<text>{{item.user.name}}</text>
-								</view>
-								<view class="info-date">
-									<text>{{item.create_time}}</text>
-								</view>
-							</view>
-						</view>
-						
+    </view>
+    <view class="tail-bar-b">
+      <view class="btn-group" ontap="gotoAddCollection" id="{{feed.audio.audio_id}}">
+        <image wx:if="{{!feed.iscollected}}" src="/image/icon-collect.svg" class="icon-big btn-up">btns</image>
+        <image wx:else src="/image/icon-collect-active.svg" class="icon-big btn-up">btns</image>
+        <!-- <view class="btn-num"> 10</view> -->
+        收藏
+      </view>
 
-						<view class="description">
-							<text class="content">{{item.text}}</text>
-						</view>
+    </view>
+  </view>
+  <view class="comments">
+    <view wx:for="{{comments}}" wx:key="key">
+      <view class="info-card-out">
 
-						<view class="btns">
-							<view class="btn-group">
-								<image wx:if="{{!item.isliked}}" src="/image/icon-like.svg"  class="icon-sm btn-up" ontap="likeComment">btns</image>
-      					<image wx:else src="/image/icon-like-active.svg" class="icon-sm btn-up" ontap="dislikeComment">btns</image>
-								<view class="btn-num"> {{item.like_num}}</view>
-							</view>
-							<view class="btn-group">
-								<image src="/image/icon-comments.svg" class="icon-sm btn-up">btns</image>
-							</view>
-							
-						</view>
-					</view>
-				</view>
-			</view>
-			<view wx:if="{{comments.length === 0}}">
-				<!-- 还没有评论哦！ -->
-			</view>
-	</view>
+        <view class="info-card">
+          <view class="info-group">
+            <view class="avatar">
+              <image src="{{item.user.img}}" class="avatar-md"></image>
+            </view>
+
+            <view class="info-detail-group">
+              <view class="info-name">
+                <text>{{item.user.name}}</text>
+              </view>
+              <view class="info-date">
+                <text>{{item.create_time}}</text>
+              </view>
+            </view>
+          </view>
+
+
+          <view class="description">
+            <text class="content">{{item.text}}</text>
+          </view>
+
+          <view class="btns">
+            <view class="btn-group">
+              <image wx:if="{{!item.isliked}}" src="/image/icon-like.svg" class="icon-sm btn-up" ontap="likeComment">btns</image>
+              <image wx:else src="/image/icon-like-active.svg" class="icon-sm btn-up" ontap="dislikeComment">btns</image>
+              <view class="btn-num"> {{item.like_num}}</view>
+            </view>
+            <view class="btn-group" ontap="gotoComment" id="">
+              <image src="/image/icon-comments.svg" class="icon-sm btn-up">btns</image>
+            </view>
+
+          </view>
+        </view>
+      </view>
+    </view>
+    <view wx:if="{{comments.length === 0}}">
+      <!-- 还没有评论哦！ -->
+    </view>
+  </view>
 
 
 </view>

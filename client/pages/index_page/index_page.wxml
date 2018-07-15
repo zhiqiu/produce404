@@ -66,9 +66,6 @@
     <view class="btn-group">
       <button open-type="share" class="share-btn"></button>
       <image src="/image/icon-share.svg" class="icon-md btn-up">btns</image>
-      
-
-      <!-- <view class="btn-num"> 10</view> -->
     </view>
     
     
