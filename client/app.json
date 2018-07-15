@@ -1,8 +1,9 @@
 {
   "pages": [
+    "pages/index_page/index_page",
+    "pages/mine/mine_medal",
     "pages/mine/my_coll/my_coll",
     "pages/mine/my_coll/single_coll/single_coll",
-    "pages/index_page/index_page",
     "pages/login_page/login_page",
     "pages/mine/mine_msg",
     "pages/record/record",

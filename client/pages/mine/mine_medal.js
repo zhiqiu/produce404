@@ -1,5 +1,4 @@
-/*系统消息页面*/
-// pages/mine/sys_msg/sys_msg.js
+// pages/mine/mine_medal.js
 Page({
 
   /**
