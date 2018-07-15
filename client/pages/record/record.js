@@ -93,11 +93,6 @@ Page({
           duration: res.duration
         })
         console.log(res);
-        wx.showToast({
-          title: '录制成功,'+(parseInt(that.data.duration/1000)+1)+'"',
-          icon: 'success',
-          duration: 2000
-        })
       })
       recordManager.start({
         duration: 1000 * 60 * 5,
@@ -110,7 +105,11 @@ Page({
       this.setData({
         onrecord: false
       })
-      
+      wx.showToast({
+        title: '录制成功,'+(parseInt(this.data.duration/1000)+1)+'"',
+        icon: 'success',
+        duration: 2000
+      })
     }
   },
   upload: function(e) {
@@ -173,22 +172,13 @@ Page({
     }, function(err, data) {
       console.log(err);
       console.log(data);
-      if(err){
-        wx.showToast({
-          title: '提交失败'+err,
-          icon: 'failed',
-          duration: 2000
-        })
-      }else{
-        wx.showToast({
-          title: '提交成功',
-          icon: 'success',
-          duration: 2000
-        })
-        wx.navigateBack();
-      }
 
-      
+      wx.showToast({
+        title: '提交成功',
+        icon: 'success',
+        duration: 2000
+      })
+      wx.navigateBack();
     })
   },
 
