@@ -469,7 +469,7 @@ class R_User_Like_AudioChannel(Base, Creatable):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     channel_id = Column(ForeignKey(tablePrefix + "audiochannel.channel_id"))
-    user_openid = Column(ForeignKey(tablePrefix + "user.user_openid"))
+    user_openid = Column(ForeignKey(tablePrefix + "user.openid"))
 
     __primaryKey__ = ["id"]
     __requiredFields__ = ["channel_id", "user_openid"]
