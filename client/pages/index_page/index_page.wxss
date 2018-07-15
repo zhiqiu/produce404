@@ -52,13 +52,32 @@
   margin-top: 5px;
   /*margin-right:20px;*/
 }
-
+.p-btn-l{
+  position: fixed;
+  bottom: 190px;
+  height: 40px;
+  width: 20px;
+  left: 30px;
+}
+.p-btn-r{
+  position: fixed;
+  bottom: 190px;
+  height: 40px;
+  width: 20px;
+  right: 30px;
+}
 .btn-group {
   display: inline-flex;
   align-items: center;
   /*margin-right:8px;*/
   width: 25%;
   justify-content: center;
+}
+.share-btn{
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  opacity: 0;
 }
 
 .icon-md {
