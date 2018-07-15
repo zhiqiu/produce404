@@ -14,7 +14,7 @@
     "pages/index_page/add_comment",
     "pages/index_page/choose_channel",
     "pages/community/add_comment",
-    "pages/index_page/add_collection",
+    "pages/index_page/add_collection", 
     "pages/mine/my_msg",
     "pages/index/index",
     "pages/logs/logs",
