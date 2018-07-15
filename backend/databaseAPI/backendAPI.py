@@ -877,12 +877,13 @@ class API():
             "err": "ok"
         }
         '''
-
-        print(form)
         openid = form["openid"]
-        user = jsonLoads(form["user"])
-        user["openid"] = openid
-        User(**user).merge(self.session)
+        userObj = jsonLoads(form["user"])
+        userObj["openid"] = openid
+        user = User(**userObj)
+        if not User.checkExist(openid):
+            Collection(user_openid=openid, name="默认收藏集").create(self.session)
+        user.merge(self.session)
 
         return Status.success()
     

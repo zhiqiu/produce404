@@ -145,7 +145,7 @@ class User(Base, Creatable):
             raise DataFormatException("gender must be 0, 1 or 2 for Unset/Male/Female")
     
     def toDict(self):
-        if self.openid in ["system", "nobody", "deleted"]:
+        if self.openid in self.__systemUser__:
             return {"openid": self.openid}
         returnDict = {}
         returnDict["openid"] = self.openid

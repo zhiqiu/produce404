@@ -13,18 +13,37 @@ def initializeTables(engine):
     try:
         Session = sessionmaker(bind=engine)
         session = Session()
-        # create system users
-        for sysuser in User.__systemUser__:
-            session.add(User(**{
-                "openid": sysuser,
-                "nickName": sysuser,
-                "gender": 0,
-                "language": "",
-                "city": "",
-                "province": "",
-                "country": "",
-                "avatarUrl": "",
-            }))
+        # create system users        
+        session.add(User(**{
+            "openid": "system",
+            "nickName": "声小觅",
+            "gender": 2,
+            "language": "",
+            "city": "",
+            "province": "",
+            "country": "",
+            "avatarUrl": "http://create404-cos-1253746840.file.myqcloud.com/system_user_avatar.png",
+        }))
+        session.add(User(**{
+            "openid": "deleted",
+            "nickName": "该用户已注销",
+            "gender": 0,
+            "language": "",
+            "city": "",
+            "province": "",
+            "country": "",
+            "avatarUrl": "http://create404-cos-1253746840.file.myqcloud.com/deleted_user_avatar.png",
+        }))
+        session.add(User(**{
+            "openid": "nobody",
+            "nickName": "非用户",
+            "gender": 0,
+            "language": "",
+            "city": "",
+            "province": "",
+            "country": "",
+            "avatarUrl": "http://create404-cos-1253746840.file.myqcloud.com/nobody_user_avatar.png",
+        }))
 
         session.add(CMSUser(**{
             "id": 1,
