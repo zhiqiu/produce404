@@ -128,8 +128,8 @@
 
           <view class="btns">
             <view class="btn-group" >
-              <image wx:if="{{!item.isliked}}" src="/image/icon-like.svg" class="icon-sm btn-up" ontap="likeComment">btns</image>
-              <image wx:else src="/image/icon-like-active.svg" class="icon-sm btn-up" ontap="dislikeComment">btns</image>
+              <image wx:if="{{!item.isliked}}" src="/image/icon-like.svg" class="icon-sm btn-up" ontap="likeComment" id="{{index}}">btns</image>
+              <image wx:else src="/image/icon-like-active.svg" class="icon-sm btn-up" ontap="dislikeComment" id="{{index}}">btns</image>
               <view class="btn-num"> {{item.like_num}}</view>
             </view>
             <view class="btn-group" ontap="modalinput" id="{{index}}">
