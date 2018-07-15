@@ -24,9 +24,12 @@ __all__ = [
     "R_User_Like_Audio",
     "R_User_Like_Comment",
     "Message",
+    "AudioChannel",
+    "R_Audio_In_AudioChannel",
+    "R_User_Like_AudioChannel",
 ]
 
-tablePrefix = "t50_"
+tablePrefix = "t51_"
 
 # common super class
 
@@ -496,4 +499,7 @@ tables = {
     "r_user_like_audio": R_User_Like_Audio,
     "r_user_like_comment": R_User_Like_Comment,
     "message": Message,
+    "audiochannel": AudioChannel,
+    "r_audio_in_audiochannel": R_Audio_In_AudioChannel,
+    "r_user_like_audiochannel": R_User_Like_AudioChannel,
 }
