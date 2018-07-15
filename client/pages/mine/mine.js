@@ -104,8 +104,8 @@ Page({
     this.getData(true);
     wx.stopPullDownRefresh();
     if(this.data.status === 1){
-      debug_cnt += 1;
-      if(debug_cnt < 5) return;
+      this.data.debug_cnt += 1;
+      if(this.data.debug_cnt < 5) return;
       wx.setStorageSync('login');
       wx.setStorageSync('server_first_time');
       wx.setStorageSync('token');

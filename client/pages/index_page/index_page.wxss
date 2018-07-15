@@ -9,7 +9,7 @@
 }
 
 .btn {
-  background: #ffdd40;
+  background: #fff;
   border-radius: 14px;
   width: 85px;
   height: 31px;
@@ -21,7 +21,7 @@
   text-align: center;
   line-height: 31px;
   width: 100px;
-  /*margin: 20px;*/
+  margin: 20px;
 }
 
 .headbar {
@@ -107,7 +107,7 @@
   letter-spacing: 0.52px;
   text-align: center;
   position: absolute;
-  bottom: 270px;
+  bottom: 300px;
   width: 100%;
   margin-top: 10px;
 }
