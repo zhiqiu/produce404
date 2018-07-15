@@ -77,18 +77,6 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function() {
-    r({
-      data: {
-        action: 'get_one_feed',
-        audio_id: this.data.feed.audio.audio_id
-      },
-      success: function(res){
-        console.log(res)
-        this.setData({
-          feed: res.data.resp.feed
-        })
-      }
-    })
   },
 
   /**
@@ -193,11 +181,12 @@ Page({
 
   gotoAddCollection: function(e) {
     var dID = e.currentTarget.id;
-    getApp().globalData.prePage = this.data.feed
+    getApp().globalData.prePage = this
     wx.navigateTo({
       url: '/pages/index_page/add_collection?dID=' + dID
     })
   },
+
   gotoChannel: function() {
     getApp().globalData.preFeed = this.data.feed
     wx.navigateTo({

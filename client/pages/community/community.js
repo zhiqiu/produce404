@@ -92,9 +92,24 @@ Page({
   
   gotoDetail: function(feedId){
     var dID = feedId.currentTarget.id;
-    wx.navigateTo({
-      url: '/pages/community/detail?feedId='+dID
-    })
+    var nowFeed = {};
+    for(var singleFeed of this.data.feeds)
+    {
+      if (singleFeed.audio.audio_id === parseInt(dID))
+      {
+        nowFeed = singleFeed
+        break
+      }
+    }
+    if(nowFeed.audio){
+      this.setData({
+        feed: nowFeed
+      })
+      getApp().globalData.prePage = this
+      wx.navigateTo({
+        url: '/pages/community/detail?audioId=' + dID
+      })
+    }
   },
   
   gotoRecord: function(e){

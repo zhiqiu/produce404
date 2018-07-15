@@ -6,8 +6,6 @@
     <view wx:if="{{listentype === 'diff'}}" class="btn" ontap="listenDiffToggle">我的喜好</view>
   </view>
 
-
-
   <view class="btn-2">
     <view class="btn">
       <picker bindchange="bindPickerChange" placeholder="创建标签" value="{{index}}" range="{{tagArray}}">
