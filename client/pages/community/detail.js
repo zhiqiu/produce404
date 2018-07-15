@@ -65,8 +65,10 @@ Page({
    * 生命周期函数--监听页面隐藏
    */
   onHide: function() {
+    console.log(getApp().globalData.page.data.feed)
+    console.log(this.data.feed)
     getApp().globalData.page.setData({
-
+      feed : this.data.feed
     })
   },
 
@@ -74,7 +76,11 @@ Page({
    * 生命周期函数--监听页面卸载
    */
   onUnload: function() {
-
+    console.log(getApp().globalData.prePage.data.feed)
+    console.log(this.data.feed)
+    getApp().globalData.prePage.setData({
+      feed: this.data.feed
+    })
   },
 
   /**
@@ -120,26 +126,6 @@ Page({
     nowFeed.like_num += 1;
     this.setData({
       feed: nowFeed
-    })
-    getApp().globalData.prePage.setData({
-      feed: nowFeed
-    })
-    console.log(getApp().globalData.preFeed)
-    r({
-      data: {
-        action: 'like_audio',
-      },
-      success: function() {
-        r({
-          data: {
-            action: 'get_one_feed',
-            audio_id: nowFeed.audio.audio_id
-          },
-          success: function(res) {
-            console.log(res)
-          }
-        })
-      }
     })
   },
 
