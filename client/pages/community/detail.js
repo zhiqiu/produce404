@@ -11,32 +11,31 @@ Page({
     comments: {},
     playing: false
   },
-  
-  getData: function(callback){
+
+  getData: function(options) {
     var that = this;
-    console.log('that')
-    console.log(that)
+    console.log(options)
     r({
       data: {
         action: 'get_one_feed',
-        audio_id: this.data.audioId
+        audio_id: options.audioId
       },
       success: function(res) {
         console.log(res)
         that.setData({
           feed: res.data.resp.feed
         })
-      }
-    })
-    r({
-      data:{
-        action: 'get_comments',
-        audio_id: this.data.audioId
-      },
-      success: function(res){
-        console.log(res)
-        that.setData({
-          comments: res.data.resp.comments
+        r({
+          data: {
+            action: 'get_comments',
+            audio_id: that.data.feed.audio.audio_id
+          },
+          success: function (res) {
+            console.log(res)
+            that.setData({
+              comments: res.data.resp.comments
+            })
+          }
         })
       }
     })
@@ -45,93 +44,109 @@ Page({
   /**
    * 生命周期函数--监听页面加载
    */
-  onLoad: function (options) {
-    this.setData({
-      audioId: options.audioId
-    })
+  onLoad: function(options) {
+    this.getData(options);
   },
 
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
-  onReady: function () {
-  
+  onReady: function() {
+
   },
 
   /**
    * 生命周期函数--监听页面显示
    */
-  onShow: function () {
-    this.getData();
+
+  onShow: function() {
+
   },
 
   /**
    * 生命周期函数--监听页面隐藏
    */
-  onHide: function () {
+
+  onHide: function() {
+    getApp().globalData.page.setData({
+
+    })
   },
 
   /**
    * 生命周期函数--监听页面卸载
    */
-  onUnload: function () {
-  
+  onUnload: function() {
+
   },
 
   /**
    * 页面相关事件处理函数--监听用户下拉动作
    */
-  onPullDownRefresh: function () {
-  
+  onPullDownRefresh: function() {
+
   },
 
   /**
    * 页面上拉触底事件的处理函数
    */
-  onReachBottom: function () {
-  
+  onReachBottom: function() {
+
   },
 
   /**
    * 用户点击右上角分享
    */
-  onShareAppMessage: function () {
-  
+  onShareAppMessage: function() {
+
   },
-  gotoComment: function(){
+  gotoComment: function() {
     var audioId = this.data.audioId;
     wx.navigateTo({
       url: '/pages/index_page/add_comment?audioId=' + audioId
     })
   },
-  clickPlay : function(){
-    if(this.data.playing){
+  clickPlay: function() {
+    if (this.data.playing) {
       c.playorpause();
-    }else{
+    } else {
       this.setData({
         playing: true
       })
-      c.play(this.data.feed.audio,this.data.feed.user)
+      c.play(this.data.feed.audio, this.data.feed.user)
     }
   },
 
-
-  like: function (e) {
+  like: function(e) {
     var nowFeed = this.data.feed;
     nowFeed.isliked = true;
     nowFeed.like_num += 1;
     this.setData({
       feed: nowFeed
     })
+    getApp().globalData.prePage.setData({
+      feed: nowFeed
+    })
+    console.log(getApp().globalData.preFeed)
     r({
       data: {
         action: 'like_audio',
-        audio_id: this.data.feed.audio.audio_id
+      },
+      success: function() {
+        r({
+          data: {
+            action: 'get_one_feed',
+            audio_id: nowFeed.audio.audio_id
+          },
+          success: function(res) {
+            console.log(res)
+          }
+        })
       }
     })
   },
 
-  dislike: function (e) {
+  dislike: function(e) {
     var nowFeed = this.data.feed;
     nowFeed.isliked = false;
     nowFeed.like_num -= 1;

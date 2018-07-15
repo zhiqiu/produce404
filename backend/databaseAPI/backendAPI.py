@@ -1,4 +1,4 @@
-from sqlalchemy import and_
+from sqlalchemy import and_, or_
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.sql.expression import func
@@ -939,7 +939,8 @@ class API():
         findMessages = self.session.query(User, Message, Audio.name, Audio.audio_id).filter(and_(
             Audio.audio_id == Message.audio_id,
             User.openid == Message.msg_src,
-            Message.user_openid == openid
+            or_(Message.user_openid == openid,
+            Message.action == Message.__actionDict__["broadcast"])
         ))
 
         if last_msg_id:
@@ -949,6 +950,7 @@ class API():
         findMessages = findMessages.order_by(Message.msg_id.desc()).limit(20).all()
 
         msgs = []
+        mad = Message.__actionDict__
         for user, msg, audioName, audio_id in findMessages:
             msg_ = {
                 "msg_id": msg.msg_id,
@@ -956,7 +958,7 @@ class API():
                 "text": msg.getTextFormat().format(user.nickName, audioName),
                 "isread": msg.isread,
                 "deleted": msg.deleted,
-                "audio_id": audio_id, 
+                "audio_id": audio_id if msg.action in [mad["like audio"], mad["post comment"], mad["reply comment"]] else -1
             }
             msgs.append(msg_)
 

@@ -62,8 +62,6 @@ class Creatable():
             raise Exception(className + " doesn't exists.")
 
     def toDict(self):
-        if self.__class__.__name__ == "User" and self.openid in ["system", "nobody"]:
-            return {"openid": self.openid}
         returnDict = {}
         for fr in self.__allFields__:
             data = getattr(self, fr)
@@ -143,14 +141,16 @@ class User(Base, Creatable):
 
     def __init__(self, **kwargs):
         self.commonInitClass(**kwargs)
-        if kwargs and self.gender not in [1, 2]:
-            raise DataFormatException("gender must be 1 or 2 for Male/Female")
+        if kwargs and self.gender not in [0, 1, 2]:
+            raise DataFormatException("gender must be 0, 1 or 2 for Unset/Male/Female")
     
     def toDict(self):
+        if self.openid in ["system", "nobody", "deleted"]:
+            return {"openid": self.openid}
         returnDict = {}
         returnDict["openid"] = self.openid
         returnDict["name"] = self.nickName
-        returnDict["gender"] = ["F", "M"][self.gender]
+        returnDict["gender"] = "M" if self.gender == 1 else "F" if self.gender == 2 else "U"
         returnDict["img"] = self.avatarUrl
         returnDict["address"] = "%s, %s" % (self.city, self.province)
         returnDict["create_time"] = str(self.create_time)
@@ -231,9 +231,9 @@ class Comment(Base, Creatable):
     __allFields__ = ["comment_id"] + __requiredFields__ + ["create_time", "deleted"]
 
     def __init__(self, **kwargs):
-        if kwargs and "replyto" not in kwargs or kwargs["replyto"] == "":
-            kwargs["replyto"] = "nobody"
         self.commonInitClass(**kwargs)
+        if kwargs and self.replyto == "":
+            self.replyto = "nobody"
 
 
 class Collection(Base, Creatable):
@@ -399,6 +399,7 @@ class Message(Base, Creatable):
         "post comment": 2,
         "follow": 3,
         "reply comment": 4,
+        "broadcast": 5,
     }
 
     msg_id = Column(Integer, primary_key=True, autoincrement=True)
@@ -416,10 +417,10 @@ class Message(Base, Creatable):
     __allFields__ = ["msg_id"] + __requiredFields__ + ["isread","create_time", "deleted"]
 
     def __init__(self, **kwargs):
-        if kwargs and "action" not in kwargs or kwargs["action"] not in self.__actionDict__.values():
-            raise DataFormatException("action is required. " + jsonDumps(self.__actionDict__))
         self.commonInitClass(**kwargs)
-    
+        if kwargs and self.action not in self.__actionDict__.values():
+            raise DataFormatException("action must be integer for: " + jsonDumps(self.__actionDict__))
+
     def getTextFormat(self):
         return {
             0: self.sysmsg,
@@ -427,6 +428,7 @@ class Message(Base, Creatable):
             2: "{}评论了你发布的声音{}",
             3: "{}关注了你",
             4: "{}回复了你在声音{}下的评论",
+            5: self.sysmsg,
         }[self.action]
 
 

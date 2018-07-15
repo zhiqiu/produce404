@@ -1,6 +1,7 @@
 {
   "pages": [
     "pages/index_page/index_page",
+    "pages/mine/mine_medal",
     "pages/mine/my_coll/my_coll",
     "pages/mine/my_coll/single_coll/single_coll",
     "pages/login_page/login_page",
@@ -14,10 +15,12 @@
     "pages/index_page/choose_channel",
     "pages/community/add_comment",
     "pages/index_page/add_collection",
+    "pages/mine/my_msg/my_msg",
     "pages/index/index",
     "pages/logs/logs",
     "pages/mine/my_agreement/my_agreement",
     "pages/player_test/player",
+    "pages/mine/sys_msg/sys_msg",
     "pages/record_test/record_test"
   ],
   "window": {

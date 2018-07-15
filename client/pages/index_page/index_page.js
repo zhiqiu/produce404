@@ -5,46 +5,14 @@ const r = c.r;
 
 let animationShowHeight = 300;
 Page({
-
-  /**
-   * 页面的初始数据
-   */
   data: {
     feed: {},
     last_feed: {},
     paused: false,
     listentype: 'like', // diff or like
-    channel: wx.getStorageSync('channel') || 'unset', // unset or channelname
+    channel: 'unset', // unset or channelname
     dataloaded: false,
-    tags: [{
-      text: '风声',
-      ischoosen: false
-    }, {
-      text: '雨声',
-      ischoosen: false
-    }, {
-      text: '读书声',
-      ischoosen: false
-    }, {
-      text: '鸟声',
-      ischoosen: false
-    }, {
-      text: '汽笛声',
-      ischoosen: false
-    }, {
-      text: '海浪声',
-      ischoosen: false
-    }, {
-      text: '白噪声',
-      ischoosen: false
-    }, {
-      text: '琴声',
-      ischoosen: false
-    }, {
-      text: '娃娃声',
-      ischoosen: false
-    }],
-
+    tagArray: c.tagArray,
     animationData: "",
     showModalStatus: false,
     imageHeight: 0,
@@ -64,10 +32,13 @@ Page({
       },
       success: function(res) {
         console.log(res)
-        that.setData({
-          feed: res.data.resp.feed,
-          dataloaded: true
-        })
+        if(res.data.resp)
+        {
+          that.setData({
+            feed: res.data.resp.feed,
+            dataloaded: true
+          })
+        }
         // TODO: feed_next
         callback();
       }
@@ -80,10 +51,10 @@ Page({
   onLoad: function(options) {
     if (!c.check()) return; // check login
     var that = this;
-    this.getData(function() {
+    this.getData(function () {
       c.play(that.data.feed.audio, that.data.feed.user);
       const player = wx.getBackgroundAudioManager();
-      player.onTimeUpdate(function() {
+      player.onTimeUpdate(function () {
         that.setData({
           audioProgress: parseInt(100 * player.currentTime / player.duration)
         })
@@ -106,9 +77,6 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function() {
-    this.setData({
-      channel: wx.getStorageSync('channel') || 'unset'
-    })
     r({
       data: {
         action: 'get_one_feed',
@@ -216,19 +184,22 @@ Page({
 
   gotoComments: function() {
     var audioId = this.data.feed.audio.audio_id;
+    console.log(audioId)
+    getApp().globalData.prePage = this
     wx.navigateTo({
       url: '/pages/community/detail?audioId=' + audioId
     })
   },
 
   gotoAddCollection: function(e) {
-    console.log(e)
     var dID = e.currentTarget.id;
+    getApp().globalData.prePage = this.data.feed
     wx.navigateTo({
       url: '/pages/index_page/add_collection?dID=' + dID
     })
   },
   gotoChannel: function() {
+    getApp().globalData.preFeed = this.data.feed
     wx.navigateTo({
       url: '/pages/index_page/choose_channel'
     })
@@ -318,5 +289,13 @@ Page({
     })
   },
 
+  bindPickerChange: function (e) {
+    this.setData({
+      hasSetTag: true,
+      index: e.detail.value,
+      channel : e.detail.value,
+    })
+    this.gotoNext()
+  },
 
 })
