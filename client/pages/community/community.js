@@ -11,7 +11,7 @@ Page({
   data: {
     playingIdx : -1,  //当前播放的feed Id
     feeds : [],
-    feed: {}
+    last_index : -1
   },
   getData: function(refresh){
     
@@ -49,7 +49,22 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function () {
-    console.log("haha")
+    if(this.data.last_index !== -1){
+      var that =this;
+      r({
+        data:{
+          action: 'get_one_feed',
+          audio_id: this.data.feeds[this.data.last_index].audio.audio_id
+        },
+        success: function(res){
+          var newfeed = res.data.resp.feed;
+          that.data.feeds[that.data.last_index] = newfeed;
+          that.setData({
+            feeds : that.data.feeds
+          })
+        }
+      })
+    }
   },
 
   /**
@@ -78,7 +93,6 @@ Page({
    * 页面上拉触底事件的处理函数
    */
   onReachBottom: function () {
-    console.log('下拉刷新')
     this.getData();
   },
 
@@ -89,31 +103,14 @@ Page({
   
   },
   
-  gotoDetail: function(feedId){
-    console.log(feedId)
-    var dID = feedId.currentTarget.id;
-    var nowFeed = {};
-    for(var singleFeed of this.data.feeds)
-    {
-      if (singleFeed.audio.audio_id === parseInt(dID))
-      {
-        nowFeed = singleFeed
-        break
-      }
-    }
-    if(nowFeed.audio){
-      this.setData({
-        feed: nowFeed
-      })
-      getApp().globalData.prePage = this
-      wx.navigateTo({
-        url: '/pages/community/detail?audioId=' + dID
-      })
-    }else{
-      wx.navigateTo({
-        url: '/pages/community/detail?audioId='+dID
-      })
-    }
+  gotoDetail: function(options){
+    var index = parseInt(options.currentTarget.id);
+    var dID = this.data.feeds[index].audio.audio_id;
+    this.data.last_index = index;
+    wx.navigateTo({
+      url: '/pages/community/detail?audioId='+dID
+    })
+    // }
   },
   
   gotoRecord: function(e){

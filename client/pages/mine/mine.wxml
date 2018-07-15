@@ -39,7 +39,7 @@
       <view class="info" >
         <view class="holder">
           <view class="time">
-            {{item.audio.duration}}
+            {{item.audio.duration}}"
           </view>
           <!--当点击的是当前正在播放的feed，-->
           <view class="audio" ontap="clickPlay" id="{{index}}">
