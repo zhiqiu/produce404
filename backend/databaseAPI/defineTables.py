@@ -29,7 +29,7 @@ __all__ = [
     "R_User_Like_AudioChannel",
 ]
 
-tablePrefix = "t53_"
+tablePrefix = "t54_"
 
 # common super class
 
@@ -409,7 +409,7 @@ class Message(Base, Creatable):
     create_time = Column(TIMESTAMP)
     deleted = Column(BOOLEAN, default=False)
 
-    __primaryKey__ = ["msg_id"]
+    __primaryKey__ = "msg_id"
     __requiredFields__ = ["user_openid","msg_src","sysmsg","action","audio_id"]
     __allFields__ = ["msg_id"] + __requiredFields__ + ["isread","create_time", "deleted"]
 
@@ -445,7 +445,7 @@ class AudioChannel(Base, Creatable):
     create_time = Column(TIMESTAMP)
     deleted = Column(BOOLEAN, default=False)
 
-    __primaryKey__ = ["channel_id"]
+    __primaryKey__ = "channel_id"
     __requiredFields__ = ["name"]
     __allFields__ = ["channel_id"] + __requiredFields__ + ["create_time", "deleted"]
 
@@ -459,8 +459,10 @@ class R_Audio_In_AudioChannel(Base, Creatable):
     id = Column(Integer, primary_key=True, autoincrement=True)
     channel_id = Column(ForeignKey(tablePrefix + "audiochannel.channel_id"))
     audio_id = Column(ForeignKey(tablePrefix + "audio.audio_id"))
+    create_time = Column(TIMESTAMP)
+    deleted = Column(BOOLEAN, default=False)
 
-    __primaryKey__ = ["id"]
+    __primaryKey__ = "id"
     __requiredFields__ = ["channel_id", "audio_id"]
     __allFields__ = ["id"] + __requiredFields__ + ["create_time", "deleted"]
 
@@ -473,8 +475,10 @@ class R_User_Like_AudioChannel(Base, Creatable):
     id = Column(Integer, primary_key=True, autoincrement=True)
     channel_id = Column(ForeignKey(tablePrefix + "audiochannel.channel_id"))
     user_openid = Column(ForeignKey(tablePrefix + "user.openid"))
+    create_time = Column(TIMESTAMP)
+    deleted = Column(BOOLEAN, default=False)
 
-    __primaryKey__ = ["id"]
+    __primaryKey__ = "id"
     __requiredFields__ = ["channel_id", "user_openid"]
     __allFields__ = ["id"] + __requiredFields__ + ["create_time", "deleted"]
 
