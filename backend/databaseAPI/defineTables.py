@@ -395,14 +395,6 @@ class R_User_Like_Comment(Base, Creatable):
 
 class Message(Base, Creatable):
     __tablename__ = tablePrefix + "message"
-    __actionDict__ = {
-        "system": 0,
-        "like audio": 1,
-        "post comment": 2,
-        "follow": 3,
-        "reply comment": 4,
-        "broadcast": 5,
-    }
 
     msg_id = Column(Integer, primary_key=True, autoincrement=True)
     user_openid = Column(ForeignKey(tablePrefix + "user.openid"))
@@ -417,6 +409,15 @@ class Message(Base, Creatable):
     __primaryKey__ = ["msg_id"]
     __requiredFields__ = ["user_openid","msg_src","sysmsg","action","audio_id"]
     __allFields__ = ["msg_id"] + __requiredFields__ + ["isread","create_time", "deleted"]
+
+    __actionDict__ = {
+        "system": 0,
+        "like audio": 1,
+        "post comment": 2,
+        "follow": 3,
+        "reply comment": 4,
+        "broadcast": 5,
+    }
 
     def __init__(self, **kwargs):
         self.commonInitClass(**kwargs)
@@ -433,6 +434,49 @@ class Message(Base, Creatable):
             5: self.sysmsg,
         }[self.action]
 
+class AudioChannel(Base, Creatable):
+    __tablename__ = tablePrefix + "audiochannel"
+
+    channel_id = Column(Integer, primary_key=True, autoincrement=True)
+    name = Column(String(8))
+    create_time = Column(TIMESTAMP)
+    deleted = Column(BOOLEAN, default=False)
+
+    __primaryKey__ = ["channel_id"]
+    __requiredFields__ = ["name"]
+    __allFields__ = ["channel_id"] + __requiredFields__ + ["create_time", "deleted"]
+
+    def __init__(self, **kwargs):
+        self.commonInitClass(**kwargs)
+
+
+class R_Audio_In_AudioChannel(Base, Creatable):
+    __tablename__ = tablePrefix + "r_audio_in_audiochannel"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    channel_id = Column(ForeignKey(tablePrefix + "audiochannel.channel_id"))
+    audio_id = Column(ForeignKey(tablePrefix + "audio.audio_id"))
+
+    __primaryKey__ = ["id"]
+    __requiredFields__ = ["channel_id", "audio_id"]
+    __allFields__ = ["id"] + __requiredFields__ + ["create_time", "deleted"]
+
+    def __init__(self, **kwargs):
+        self.commonInitClass(**kwargs)
+
+class R_User_Like_AudioChannel(Base, Creatable):
+    __tablename__ = tablePrefix + "r_user_like_audiochannel"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    channel_id = Column(ForeignKey(tablePrefix + "audiochannel.channel_id"))
+    user_openid = Column(ForeignKey(tablePrefix + "user.user_openid"))
+
+    __primaryKey__ = ["id"]
+    __requiredFields__ = ["channel_id", "user_openid"]
+    __allFields__ = ["id"] + __requiredFields__ + ["create_time", "deleted"]
+
+    def __init__(self, **kwargs):
+        self.commonInitClass(**kwargs)
 
 # all tables dict
 tables = {
