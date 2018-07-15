@@ -11,8 +11,10 @@
           {{item.audio.duration}}"
         </view>
         <!--当点击的是当前正在播放的feed，-->
-        <view class="audio" ontap="clickPlay" id="{{index}}">
-          <image src="/image/icon-sound.svg" class="audio-icon"></image>
+        <view class="audio" ontap="clickPlay" id="{{index}}" >
+          <image wx:if="{{playingIdx+'' !== index+''}}" id="{{playingIdx}}" src="/image/icon-sound.svg" class="audio-icon"></image>
+          <image wx:else  src="/image/icon-sound-active.png" class="audio-icon"></image>
+          
         </view>
       </view>
       <view class="description" > 
