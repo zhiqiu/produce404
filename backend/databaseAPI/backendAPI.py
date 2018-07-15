@@ -498,7 +498,7 @@ class API():
         openid = form["openid"]
         audio_id = form["audio_id"]
         replyto = ""
-        if "reply_to_openid" in form:
+        if "reply_to_user_openid" in form:
             replyto = form["reply_to_user_openid"]
 
         Audio.checkExist(self.session, audio_id)
