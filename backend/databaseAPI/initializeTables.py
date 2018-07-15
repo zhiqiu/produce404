@@ -11,9 +11,10 @@ def initializeTables(engine):
     createTables(engine)
 
     try:
+        # create system users
         Session = sessionmaker(bind=engine)
         session = Session()
-        # create system users        
+      
         session.add(User(**{
             "openid": "system",
             "nickName": "声小觅",
@@ -22,7 +23,7 @@ def initializeTables(engine):
             "city": "",
             "province": "",
             "country": "",
-            "avatarUrl": "http://create404-cos-1253746840.file.myqcloud.com/system_user_avatar.png",
+            "avatarUrl": "http://cos.ladyrick.com/system_user_avatar.png",
         }))
         session.add(User(**{
             "openid": "deleted",
@@ -32,7 +33,7 @@ def initializeTables(engine):
             "city": "",
             "province": "",
             "country": "",
-            "avatarUrl": "http://create404-cos-1253746840.file.myqcloud.com/deleted_user_avatar.png",
+            "avatarUrl": "http://cos.ladyrick.com/deleted_user_avatar.png",
         }))
         session.add(User(**{
             "openid": "nobody",
@@ -42,7 +43,7 @@ def initializeTables(engine):
             "city": "",
             "province": "",
             "country": "",
-            "avatarUrl": "http://create404-cos-1253746840.file.myqcloud.com/nobody_user_avatar.png",
+            "avatarUrl": "http://cos.ladyrick.com/nobody_user_avatar.png",
         }))
 
         session.add(CMSUser(**{
@@ -52,7 +53,7 @@ def initializeTables(engine):
         }))
 
         session.commit()
-        if Config.DEBUG:
+        if Config.DEBUG_MAKETESTDATABASE:
             makeTestDatabase(session)
     except Exception as e:
         if Config.DEBUG:

@@ -79,10 +79,11 @@ class API():
 
             newContent = tableClass(**kwargs)
             newContent.create(self.session)
+            primaryKey = getattr(newContent, tableClass.__primaryKey__)
         except Exception as e:
             return Status.internalError(e)
         else:
-            return Status.success()
+            return Status.success({tableClass.__primaryKey__: primaryKey})
     
 
     def packFeed(self, openid, user, audio):
@@ -369,9 +370,11 @@ class API():
         openid = form["openid"]
         feeds = [self.packFeed(openid, user, audio) for user, audio in randTwoAudios]
 
+        feedlen = len(feeds)
+
         return Status.success({
-            "feed": feeds[0],
-            "feed_next": feeds[1],
+            "feed": feeds[0] if feedlen > 0 else "",
+            "feed_next": feeds[1] if feedlen > 1 else "",
         })
 
     def likeAudio(self, form):
@@ -883,7 +886,7 @@ class API():
         userObj["openid"] = openid
         user = User(**userObj)
         # 检查有没有默认收藏集。如果没有，则添加一个默认收藏集
-        if self.session.query(Colelction.collection_id).filter(and_(
+        if not self.session.query(Collection.collection_id).filter(and_(
             Collection.deleted == False,
             Collection.name == Collection.__defaultCollection__,
             Collection.user_openid == openid
