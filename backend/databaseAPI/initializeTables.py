@@ -18,12 +18,12 @@ def initializeTables(engine):
             session.add(User(**{
                 "openid": sysuser,
                 "nickName": sysuser,
-                "gender": 1,
-                "language": "zh-cn",
-                "city": "Beijing",
-                "province": "Beijing",
-                "country": "China",
-                "avatarUrl": "none",
+                "gender": 0,
+                "language": "",
+                "city": "",
+                "province": "",
+                "country": "",
+                "avatarUrl": "",
             }))
 
         session.add(CMSUser(**{

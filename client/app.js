@@ -11,7 +11,6 @@ App({
   },
 
   globalData: {
-    checkAPI: require('/utils/api_test.js')
     checkAPI: require('/utils/api_test.js'),
     prePage : {}
   }
