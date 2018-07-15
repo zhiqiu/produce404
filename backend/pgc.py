@@ -2,6 +2,7 @@ import requests
 import urllib
 import re
 import json
+import time
 
 # document.querySelectorAll(".item-row .btn_get_url").forEach((u)=>console.log(u.getAttribute("cdnurl")))
 
@@ -28,6 +29,7 @@ def make(urls, img, category):
     print("###############################################")
     print(category)
 
+    time.sleep(0.1)
     res = requests.post(requestURL + "audiochannel", data={"name": category})
     print(res.text)
     channel_id = json.loads(res.text)["resp"]["channel_id"]
@@ -43,9 +45,10 @@ def make(urls, img, category):
             "intro": "",
             "img": img,
             "location": "",
-            "duration": 0,
+            "duration": 9999,
         }
         print(audioname)
+        time.sleep(0.1)
         res = requests.post(requestURL + "audio", data=audio)
         print(res.text)
         
@@ -54,6 +57,7 @@ def make(urls, img, category):
             "user_openid": "system",
             "audio_id": audio_id,
         }
+        time.sleep(0.1)
         res = requests.post(requestURL + "r_user_create_audio", data=usercreateaudio)
         print(res.text)
 
@@ -61,6 +65,7 @@ def make(urls, img, category):
             "audio_id": audio_id,
             "channel_id": channel_id,
         }
+        time.sleep(0.1)
         res = requests.post(requestURL + "r_audio_in_audiochannel", data=audioinaudiochannel)
         print(res.text)
 
