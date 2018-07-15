@@ -1,4 +1,4 @@
-  /*我的页面*/
+  /*“我的”页面*/
 // pages/mine/mine.js
 const c = require('../../utils/c.js')
 const r = c.r;
@@ -14,7 +14,6 @@ Page({
     debug_cnt: 0,
     msg: [],
     playingIdx: -1,
-    last_index: -1,
     status: 0   //0表示“声音日迹”，1表示“我的勋章”
   },
   getData: function(refresh){
@@ -81,7 +80,25 @@ Page({
    * 生命周期函数--监听页面显示
    */
   onShow: function() {
-
+    console.log('on show')
+    console.log(this.data.last_index)
+    if(this.data.last_index !== -1){
+      var that = this;
+      r({
+        data:{
+          action: 'get_one_feed',
+          audio_id: this.data.feeds[this.data.last_index].audio.audio_id
+        },
+        success: function(res){
+          console.log(res)
+          var newfeed = res.data.resp.feed;
+          that.data.feeds[that.data.last_index] = newfeed;
+          that.setData({
+            feeds: that.data.feeds
+          })
+        }
+      })
+    }
   },
 
   /**
@@ -154,7 +171,9 @@ Page({
 
   gotoDetail: function(e){
     console.log(e)
-    var dID = e.currentTarget.id;
+    var idx = e.currentTarget.id;
+    var dID = this.data.feeds[idx].audio.audio_id;
+    this.data.last_index = idx;
     wx.navigateTo({
       url: '/pages/community/detail?audioId=' + dID
     })
@@ -173,6 +192,7 @@ Page({
   },
   clickPlay: function(e){
     var idx = e.currentTarget.id;
+
     if(this.data.playingIdx === idx){
       c.playorpause();
     }else{

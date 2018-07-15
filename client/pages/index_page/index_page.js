@@ -69,6 +69,15 @@ Page({
           paused: false
         })
       })
+      player.onNext(function(){
+        that.gotoNext();
+      })
+      player.onPrev(function(){
+        that.gotoPrevious();
+      })
+      player.onEnded(function(){
+        that.gotoPrevious();
+      })
       that.setData({
         paused: false
       })
