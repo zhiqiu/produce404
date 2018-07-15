@@ -108,6 +108,7 @@ Page({
       hiddenmodalput: !this.data.hiddenmodalput
     })
   },
+  
   //取消按钮
   cancel: function() {
     this.setData({
