@@ -8,8 +8,11 @@ Page({
    */
   data: {
     feed: {},
-    comments: {},
-    playing: false
+    comments: [],
+    playing: false,
+    hiddenmodalput: true,
+    commentTmp: {},
+    commentId: ''
   },
 
   getData: function(options) {
@@ -18,7 +21,7 @@ Page({
     r({
       data: {
         action: 'get_one_feed',
-        audio_id: options.audioId
+        audio_id: options
       },
       success: function(res) {
         console.log(res)
@@ -30,7 +33,7 @@ Page({
             action: 'get_comments',
             audio_id: that.data.feed.audio.audio_id
           },
-          success: function (res) {
+          success: function(res) {
             console.log(res)
             that.setData({
               comments: res.data.resp.comments
@@ -45,7 +48,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function(options) {
-    this.getData(options);
+    this.getData(options.audioId);
   },
 
   /**
@@ -98,12 +101,14 @@ Page({
   onShareAppMessage: function() {
 
   },
+
   gotoComment: function() {
     var audioId = this.data.audioId;
     wx.navigateTo({
       url: '/pages/index_page/add_comment?audioId=' + audioId
     })
   },
+
   clickPlay: function() {
     if (this.data.playing) {
       c.playorpause();
@@ -123,11 +128,10 @@ Page({
       feed: nowFeed
     })
     var feeds = getApp().globalData.prePage.data.feeds
-    if (feeds)  //从社区页和我的页面进去
+    if (feeds) //从社区页和我的页面进去
     {
-      for (var singleFeed of feeds)
-      {
-        if(singleFeed.audio.audio_id === this.data.feed.audio.audio_id){
+      for (var singleFeed of feeds) {
+        if (singleFeed.audio.audio_id === this.data.feed.audio.audio_id) {
           singleFeed = nowFeed
           console.log(singleFeed)
           break
@@ -136,8 +140,7 @@ Page({
       getApp().globalData.prePage.setData({
         feeds: feeds
       })
-    }
-    else{
+    } else {
       getApp().globalData.prePage.setData({
         feed: nowFeed
       })
@@ -165,11 +168,66 @@ Page({
     })
   },
 
-  gotoAddCollection: function (e) {
+  gotoAddCollection: function(e) {
     var dID = e.currentTarget.id;
     getApp().globalData.prePage = this
     wx.navigateTo({
       url: '/pages/index_page/add_collection?dID=' + dID
+    })
+  },
+
+  onShareAppMessage: function(options) {
+    return {
+      title: '声觅',
+      path: '/pages/login_page/login_page',
+      // imageUrl
+    }
+  },
+
+  //点击按钮指定的hiddenmodalput弹出框
+  modalinput: function(options) {
+    this.setData({
+      hiddenmodalput: !this.data.hiddenmodalput,
+      commentId: options.currentTarget.id
+    })
+  },
+
+  //取消按钮
+  cancel: function() {
+    this.setData({
+      hiddenmodalput: true
+    });
+  },
+  
+  //确认
+  confirm: function(res) {
+    this.setData({
+      hiddenmodalput: true
+    })
+    var that = this
+    if (this.data.feed.audio.audio_id && this.data.commentTmp) {
+      r({
+        data: {
+          action: 'post_comment',
+          audio_id: this.data.feed.audio.audio_id,
+          reply_to_user_openid: this.data.commentId, //置为空字符串表示直接回复某个feed
+          text: this.data.commentTmp
+        },
+        success: function(res) {
+          console.log(that.data.feed.audio)
+          if (that.data.feed.audio) {
+            that.getData(that.data.feed.audio.audio_id);
+          }
+        }
+      })
+    }
+
+
+  },
+
+  bindKeyInput: function(e) {
+    this.setData({
+      commentTmp: e.detail.value
     })
   },
 })

@@ -36,7 +36,7 @@ Page({
     r({
       data: {
         action: 'get_one_feed',
-        audio_id: options.dID
+        audio_id: options
       },
       success: function (res) {
         console.log(res)
@@ -50,7 +50,7 @@ Page({
    * 生命周期函数--监听页面加载
    */
   onLoad: function(options) {
-    this.getData(options)
+    this.getData(options.dID)
   },
 
   /**
@@ -108,6 +108,7 @@ Page({
       hiddenmodalput: !this.data.hiddenmodalput
     })
   },
+  
   //取消按钮
   cancel: function() {
     this.setData({
@@ -127,7 +128,7 @@ Page({
       },
       success: function(res) {
         console.log(1122)
-        that.onLoad(that.data.feedId)
+        that.getData(that.data.feed.audio.audio_id)
       },
       fail: function(res){
         console.log(res.errMsg)
