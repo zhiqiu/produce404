@@ -344,3 +344,23 @@ msg{}:
 {
     err: 'ok'
 }
+
+点赞某评论：
+{
+    action: 'like_comment',
+    comment_id: ''
+}
+{
+    err: 'ok'
+}
+
+'''
+取消赞评论：
+{
+    action: 'dislike_comment',
+    comment_id: ''
+}
+{
+    err: 'ok'
+}
+'''
