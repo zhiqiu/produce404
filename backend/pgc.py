@@ -21,7 +21,7 @@ def getFileName(url):
 
 
 res = requests.get(requestURL + "audiochannel")
-if json.loads(res.text)["err"] == "ok":
+if json.loads(res.text)["resp"]:
     raise Exception("already exists.")
 
 

@@ -377,7 +377,7 @@ class API():
             randTwoAudios = randTwoAudios.filter(and_(
                 R_Audio_In_AudioChannel.deleted == False,
                 R_Audio_In_AudioChannel.audio_id == Audio.audio_id,
-                R_Audio_In_AudioChannel.channel_id == audioChannel
+                R_Audio_In_AudioChannel.channel_id == int(audioChannel) + 1
             ))
 
         randTwoAudios = randTwoAudios.order_by(randfunc).limit(2).all()
