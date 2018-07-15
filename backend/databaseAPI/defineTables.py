@@ -29,7 +29,7 @@ __all__ = [
     "R_User_Like_AudioChannel",
 ]
 
-tablePrefix = "t54_"
+tablePrefix = "t55_"
 
 # common super class
 
