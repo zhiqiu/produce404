@@ -241,4 +241,47 @@ Page({
       commentTmp: e.detail.value
     })
   },
+
+  likeComment: function(options){
+    var that = this
+    var index = parseInt(options.currentTarget.id)
+    var commentsTmp = that.data.comments
+    if (index < that.data.comments.length)
+    {
+      commentsTmp[index].isliked = true
+      commentsTmp[index].like_num++
+      that.setData({
+        comments: commentsTmp
+      })
+      r({
+        data: {
+          action: 'like_comment',
+          comment_id: that.data.comments[index].comment_id
+        },
+        seccess: function (res) {
+        }
+      })
+    }
+  },
+
+  dislikeComment: function (options) {
+    var that = this
+    var index = parseInt(options.currentTarget.id)
+    var commentsTmp = this.data.comments
+    if (index < this.data.comments.length) {
+      commentsTmp[index].isliked = false
+      commentsTmp[index].like_num--
+      this.setData({
+        comments: commentsTmp
+      })
+    }
+    r({
+      data: {
+        action: 'dislike_comment',
+        comment_id: that.data.comments[index].comment_id
+      },
+      seccess: function (res) {
+      }
+    })
+  },
 })
