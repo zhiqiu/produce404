@@ -116,6 +116,9 @@ Page({
   gotoDetail: function(e){
     console.log(e)
     var dID = e.currentTarget.id;
+    if(dID === '-1'){
+      return ;
+    }
     wx.navigateTo({
       url: '/pages/community/detail?audioId=' + dID
     })

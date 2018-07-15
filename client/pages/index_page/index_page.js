@@ -12,6 +12,7 @@ Page({
   data: {
     feed: {},
     last_feed: {},
+    paused: false,
     listentype: 'like', // diff or like
     channel: wx.getStorageSync('channel') || 'unset', // unset or channelname
     dataloaded: false,
@@ -87,6 +88,9 @@ Page({
           audioProgress: parseInt(100 * player.currentTime / player.duration)
         })
       })
+      that.setData({
+        paused: false
+      })
     });
     console.log(this)
   },
@@ -159,6 +163,9 @@ Page({
   },
   playorpause: function() {
     c.playorpause();
+    this.setData({
+      paused: !this.data.paused
+    })
   },
   listenDiffToggle: function() {
     this.setData({
@@ -172,6 +179,9 @@ Page({
         that.setData({
           audioProgress: parseInt(100 * player.currentTime / player.duration)
         })
+      })
+      that.setData({
+        paused: false
       })
     });
   },
@@ -233,6 +243,9 @@ Page({
         last_feed: {}
       })
       c.play(that.data.feed.audio, that.data.feed.user)
+      this.setData({
+        paused: false
+      })
     }
   },
 
@@ -245,6 +258,9 @@ Page({
         that.setData({
           audioProgress: parseInt(100 * player.currentTime / player.duration)
         })
+      })
+      that.setData({
+        paused: false
       })
     });
   },

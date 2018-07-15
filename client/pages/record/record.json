@@ -1,1 +1,8 @@
-{}
+{
+	"navigationBarTitleText":"创建录音",
+	"navigationBarBackgroundColor": "#fff",
+	"backgroundColor": "#fff",
+	"navigationBarTextStyle": "black",
+	"enablePullDownRefresh": false,
+	"disableScroll": true
+}

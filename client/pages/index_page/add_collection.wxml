@@ -1,16 +1,3 @@
-<!--pages/collection/add_collection.wxml-->
-<view class="collections">
-
-  
-
-  <view class="myCollections">
-    <view wx:for="{{collectionFolders}}">
-      
-    </view>
-  </view>
-</view>
-
-<!--pages/community/community.wxml-->
 
 <view class="background">
   <view class="add-btn" ontap="modalinput">
