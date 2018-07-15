@@ -21,6 +21,9 @@ class Config(object):
     # debug server-client communitation
     DEBUG_COMMUNITATION = False
 
+    # make test database
+    DEBUG_MAKETESTDATABASE = False
+
     # use mysql for production environment.
     engine = create_engine("mysql+pymysql://root:create404mysql@172.16.16.7/produce404?charset=utf8mb4", pool_recycle=3600, echo=False, isolation_level="AUTOCOMMIT")
     # engine = create_engine("mysql+pymysql://dba:create404mysql@ladyrick.com/create404?charset=utf8mb4", pool_recycle=3600, echo=False, isolation_level="AUTOCOMMIT")

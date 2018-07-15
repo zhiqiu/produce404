@@ -11,9 +11,10 @@ def initializeTables(engine):
     createTables(engine)
 
     try:
+        # create system users
         Session = sessionmaker(bind=engine)
         session = Session()
-        # create system users        
+      
         session.add(User(**{
             "openid": "system",
             "nickName": "声小觅",
@@ -52,7 +53,7 @@ def initializeTables(engine):
         }))
 
         session.commit()
-        if Config.DEBUG:
+        if Config.DEBUG_MAKETESTDATABASE:
             makeTestDatabase(session)
     except Exception as e:
         if Config.DEBUG:
