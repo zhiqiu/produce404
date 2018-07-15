@@ -150,7 +150,7 @@ Page({
       data: {
         action: 'add_into_collection',
         audio_id: feedId,
-        collection_id: e.currentTarget.ids
+        collection_id: e.currentTarget.id
       },
       complete: function() {
         var nowFeed = that.data.feed;

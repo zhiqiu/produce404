@@ -67,7 +67,7 @@ text-align:left;
 
 .submit{
 	background:#ffdd40;
-	margin-top:130px;
+	margin-top:160px;
 border-radius:14px;
 width:143px;
 height:40px;

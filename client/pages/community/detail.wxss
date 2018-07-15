@@ -143,6 +143,13 @@ text-align:center;
   padding-right: 15px;
 }
 
+.share-btn2 {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  opacity: 0;
+}
+
 .info-group {
   overflow: hidden;
   display: inline-flex;
