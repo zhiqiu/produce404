@@ -79,10 +79,11 @@ class API():
 
             newContent = tableClass(**kwargs)
             newContent.create(self.session)
+            primaryKey = getattr(newContent, tableClass.__primaryKey__)
         except Exception as e:
             return Status.internalError(e)
         else:
-            return Status.success()
+            return Status.success({tableClass.__primaryKey__: primaryKey})
     
 
     def packFeed(self, openid, user, audio):
