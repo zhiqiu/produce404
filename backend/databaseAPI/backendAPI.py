@@ -143,8 +143,7 @@ class API():
                     tokenObject = jsonLoads(originalText)
                     form["openid"] = tokenObject["openid"]
                     form["sessionKey"] = tokenObject["session_key"]
-                    if not self.session.query(User.openid).filter(User.openid == tokenObject["openid"]).count():
-                        return Status.internalError("You are not in user table. Please call set_user_info.")
+                    User.checkExist(tokenObject["openid"])
                 except Exception as e:
                     return Status.internalError(e, "invalid token.")
             return getattr(self, API.action2API[action])(form)
