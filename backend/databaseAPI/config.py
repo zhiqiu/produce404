@@ -22,7 +22,7 @@ class Config(object):
     DEBUG_COMMUNITATION = False
 
     # make test database
-    DEBUG_MAKETESTDATABASE = False
+    DEBUG_MAKETESTDATABASE = True
 
     # use mysql for production environment.
     engine = create_engine("mysql+pymysql://root:create404mysql@172.16.16.7/produce404?charset=utf8mb4", pool_recycle=3600, echo=False, isolation_level="AUTOCOMMIT")
