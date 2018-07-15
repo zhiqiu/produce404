@@ -33,7 +33,6 @@ def make(urls, img, category):
     res = requests.post(requestURL + "audiochannel", data={"name": category})
     print(res.text)
     channel_id = json.loads(res.text)["resp"]["channel_id"]
-    channel_id = 1
     img = img.replace("create404-cos-1253746840.file.myqcloud.com","cos.ladyrick.com")
 
     for u in urls:
