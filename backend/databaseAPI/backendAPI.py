@@ -412,7 +412,7 @@ class API():
             user_openid=msg_src,
             msg_src=openid,
             action=Message.__actionDict__["like audio"],
-            sysmsg="",
+            sysmsg="点赞事件",
             audio_id=audio_id,
         ).create(self.session)
 
@@ -915,8 +915,8 @@ class API():
             R_User_Like_Audio.audio_id == audio_id
         )).first()
 
-        # 数据库中必定已存在记录，所以直接修改deleted列即可。
-        like.deleted = False
+        # 数据库中必定已存在记录，所以直接修改deleted列标记已删除即可。
+        like.deleted = True
         like.merge(self.session)
 
         return Status.success()
