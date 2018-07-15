@@ -10,7 +10,7 @@
     <view class="btn">
       <picker bindchange="bindPickerChange" placeholder="创建标签" value="{{index}}" range="{{tagArray}}">
         <view class="picker" wx:if="{{hasSetTag}}">{{tagArray[index]}}</view>
-        <view class="picker" wx:else>频道</view>
+        <view class="picker" wx:else>全部频道</view>
       </picker>
     </view>
   </view>
@@ -21,11 +21,11 @@
 </view>
 
 <view style="width:100%;display: flex;justify-content: center;">
-  <image wx:if="{{!paused}}" class="p-img" src="http://cos.ladyrick.com/img-play-mask.png" ontap="playorpause" style="z-index: 2000;"></image>
+  <image wx:if="{{!paused}}" class="p-img" src="http://cos.ladyrick.com/img-play-mask2.png" ontap="playorpause" style="z-index: 2000;"></image>
 </view>
 
 <view style="width:100%;display: flex;justify-content: center;">
-  <image wx:if="{{paused}}" class="p-img" src="http://cos.ladyrick.com/img-pause-mask.png" ontap="playorpause"  style="z-index: 2000;"></image>
+  <image wx:if="{{paused}}" class="p-img" src="http://cos.ladyrick.com/img-pause-mask2.png" ontap="playorpause"  style="z-index: 2000;"></image>
 </view>
 
 <view style="width:100%;display: flex;justify-content: center;">

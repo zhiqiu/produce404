@@ -89,7 +89,6 @@ Page({
   },
   
   gotoDetail: function(feedId){
-    console.log('aaa');
     console.log(feedId)
     var dID = feedId.currentTarget.id;
     var nowFeed = {};
@@ -109,11 +108,11 @@ Page({
       wx.navigateTo({
         url: '/pages/community/detail?audioId=' + dID
       })
+    }else{
+      wx.navigateTo({
+        url: '/pages/community/detail?audioId='+dID
+      })
     }
-
-    wx.navigateTo({
-      url: '/pages/community/detail?audioId='+dID
-    })
   },
   
   gotoRecord: function(e){

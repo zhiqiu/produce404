@@ -68,20 +68,14 @@ Page({
    */
 
   onHide: function() {
-    console.log(getApp().globalData.page.data.feed)
-    console.log(this.data.feed)
-    getApp().globalData.page.setData({
-      feed : this.data.feed
-    })
+
   },
 
   /**
    * 生命周期函数--监听页面卸载
    */
   onUnload: function() {
-    getApp().globalData.prePage.setData({
-      feed: this.data.feed
-    })
+
   },
 
   /**

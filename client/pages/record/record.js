@@ -18,7 +18,7 @@ Page({
     duration: 0,
     recordingAnimation: {},
     comment: '',
-    tagArray : c.tagArray,
+    tagArray : ['动物植物', '海浪瀑布', '山水林间', '自然气候', '机器轰鸣', '交通工具', '古典艺术', '现代乐器','无'],
     hasSetTag: false,
     tag: '',
     position: ''
@@ -105,57 +105,29 @@ Page({
       this.setData({
         onrecord: false
       })
+      wx.showToast({
+        title: '录制成功,'+(parseInt(this.data.duration/1000)+1)+'"',
+        icon: 'success',
+        duration: 2000
+      })
     }
   },
   upload: function(e) {
+    if(this.data.onrecord){
+      this.touch();
+    }
     var Bucket = 'create404-cos-1253746840';
     var Region = 'ap-guangzhou';
     var that = this
     var cos = new COS({
       getAuthorization: function(options, callback) {
-        wx.request({
-          method: 'GET',
-          url: c.baseUrl + '/sign', // 服务端签名，参考 server 目录下的两个签名例子
-          dataType: 'json',
-          success: function(result) {
-            var data = result.data.data;
-            // console.log(data)
-            callback({
-              TmpSecretId: data.credentials && data.credentials.tmpSecretId,
-              TmpSecretKey: data.credentials && data.credentials.tmpSecretKey,
-              XCosSecurityToken: data.credentials && data.credentials.sessionToken,
-              ExpiredTime: data.expiredTime,
-            });
-          }
-        });
-      },
-
-      getAuthorization: function(options, callback) {
         r({
           data: {
             action: 'signcos'
           },
           success: function(res) {
             var data = res.data.data;
-            // console.log(data)
-            callback({
-              TmpSecretId: data.credentials && data.credentials.tmpSecretId,
-              TmpSecretKey: data.credentials && data.credentials.tmpSecretKey,
-              XCosSecurityToken: data.credentials && data.credentials.sessionToken,
-              ExpiredTime: data.expiredTime,
-            });
-          }
-        })
-      },
 
-      getAuthorization: function(options, callback) {
-        r({
-          data: {
-            action: 'signcos'
-          },
-          success: function(res) {
-            var data = res.data.data;
-            // console.log(data)
             callback({
               TmpSecretId: data.credentials && data.credentials.tmpSecretId,
               TmpSecretKey: data.credentials && data.credentials.tmpSecretKey,
@@ -175,11 +147,11 @@ Page({
         action: 'post_audio',
         audio: {
           url: filename,
-          img: 'http://y.gtimg.cn/music/photo_new/T002R300x300M000003rsKF44GyaSk.jpg?max_age=2592000',
-          name: 'heiheihei',
+          img: 'http://cos.ladyrick.com/img-shengmi.png',
+          name: '用户上传内容',
           intro: that.data.comment,
-          location: 'SZ, China',
-          duration: parseInt(this.data.duration)
+          location: this.data.position,
+          duration: parseInt(this.data.duration/1000)+1
         },
         tags: [{
           'tagname': that.data.tag
@@ -201,23 +173,12 @@ Page({
       console.log(err);
       console.log(data);
 
-      cos.getObjectUrl({
-        Bucket: Bucket,
-        Region: Region,
-        Key: filename,
-        Sign: false
-      }, function(err, data) {
-        console.log('2333')
-        console.log(data)
-        console.log("http://" + data.Url.slice(8, data.Url.length))
-        const player = wx.getBackgroundAudioManager();
-        player.title = '此时此刻'
-        player.epname = '此时此刻'
-        player.singer = '许巍'
-        player.coverImgUrl = 'http://y.gtimg.cn/music/photo_new/T002R300x300M000003rsKF44GyaSk.jpg?max_age=2592000'
-        player.src = "http://" + data.Url.slice(8, data.Url.length);
-
+      wx.showToast({
+        title: '提交成功',
+        icon: 'success',
+        duration: 2000
       })
+      wx.navigateBack();
     })
   },
 
