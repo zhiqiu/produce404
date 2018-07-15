@@ -148,7 +148,6 @@ Page({
         feed: nowFeed
       })
     }
-    console.log(getApp().globalData.prePage.data.feeds)
     r({
       data: {
         action: 'like_audio',

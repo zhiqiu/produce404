@@ -21,28 +21,29 @@
 </view>
 
 <view style="width:100%;display: flex;justify-content: center;">
-  <image wx:if="{{!paused}}" class="p-img" src="http://cos.ladyrick.com/img-play-mask2.png" ontap="playorpause" style="z-index: 2000;"></image>
+  <image wx:if="{{!paused}}" class="p-img" src="http://cos.ladyrick.com/img-play-mask.png" ontap="playorpause" style="z-index: 2000;"></image>
 </view>
 
 <view style="width:100%;display: flex;justify-content: center;">
-  <image wx:if="{{paused}}" class="p-img" src="http://cos.ladyrick.com/img-pause-mask2.png" ontap="playorpause"  style="z-index: 2000;"></image>
+  <image wx:if="{{paused}}" class="p-img" src="http://cos.ladyrick.com/img-pause-mask.png" ontap="playorpause"  style="z-index: 2000;"></image>
+</view>
+
+<view style="width:100%;display: flex;justify-content: center;">
+  <image class="p-btn-l" src="/image/icon-prev.png" ontap="gotoPrevious"  style="z-index: 2000;"></image>
+</view>
+
+<view style="width:100%;display: flex;justify-content: center;">
+  <image class="p-btn-r" src="/image/icon-next.png" ontap="gotoNext"  style="z-index: 2000;"></image>
 </view>
 
 <view class="player">
-  <image mode="widthFix" class="player-img" src="http://cos.ladyrick.com/img-player2.png" ontap="playorpause" style="position: absolute;bottom: 0;"></image>
+  <image mode="widthFix" class="player-img" src="http://cos.ladyrick.com/img-player3.png" style="position: absolute;bottom: 7px;"></image>
 
   <view class="text">
     <view>{{feed.audio.name}}</view>
     <view>{{feed.audio.intro}}</view>
   </view>
-  <!-- <view class="switch">
-    <view class="preFeed" ontap="gotoPrevious">
-      上一首
-    </view>
-    <view class="nextFeed" ontap="gotoNext">
-      下一首
-    </view>
-  </view> -->
+
   <progress percent="{{audioProgress}}"></progress>
 </view>
 
@@ -63,9 +64,9 @@
       <!-- <view class="btn-num"> 10</view> -->
     </view>
     <view class="btn-group">
-      <!-- <button open-type="share"> -->
-        <image src="/image/icon-share.svg" class="icon-md btn-up">btns</image>
-      <!-- </button> -->
+      <button open-type="share" class="share-btn"></button>
+      <image src="/image/icon-share.svg" class="icon-md btn-up">btns</image>
+      
 
       <!-- <view class="btn-num"> 10</view> -->
     </view>

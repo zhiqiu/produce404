@@ -14,15 +14,12 @@ Page({
     feed: {}
   },
   getData: function(refresh){
-    if(refresh){
-      this.setData({
-        feeds: []
-      })
-    }
+    
     var last_audio_id = '';
     if(this.data.feeds.length !== 0){
       last_audio_id =  this.data.feeds[this.data.feeds.length - 1].audio.audio_id;
     }
+    if(refresh) last_audio_id = ''
     var that = this;
     r({
       data: {
@@ -32,6 +29,7 @@ Page({
       success: function(res) {
         console.log(res)
         var newFeeds = that.data.feeds.concat(res.data.resp.feeds);
+        if(refresh) newFeeds = res.data.resp.feeds;
         that.setData({
           feeds: newFeeds
         })
@@ -110,6 +108,10 @@ Page({
         url: '/pages/community/detail?audioId=' + dID
       })
     }
+
+    wx.navigateTo({
+      url: '/pages/community/detail?audioId='+dID
+    })
   },
   
   gotoRecord: function(e){

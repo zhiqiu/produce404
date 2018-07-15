@@ -649,7 +649,8 @@ class API():
         )).first()
         if not collection:
             raise Exception("It's not your collection.")
-        
+        if collection.name == Collection.__defaultCollection__:
+            raise Exception("It's not allowed to delete default collection.")
         collection.deleted = True
         collection.merge(self.session)
         return Status.success()
@@ -877,12 +878,18 @@ class API():
             "err": "ok"
         }
         '''
-
-        print(form)
         openid = form["openid"]
-        user = jsonLoads(form["user"])
-        user["openid"] = openid
-        User(**user).merge(self.session)
+        userObj = jsonLoads(form["user"])
+        userObj["openid"] = openid
+        user = User(**userObj)
+        # 检查有没有默认收藏集。如果没有，则添加一个默认收藏集
+        if self.session.query(Colelction.collection_id).filter(and_(
+            Collection.deleted == False,
+            Collection.name == Collection.__defaultCollection__,
+            Collection.user_openid == openid
+        )).count():
+            Collection(user_openid=openid, name=Collection.__defaultCollection__).create(self.session)
+        user.merge(self.session)
 
         return Status.success()
     

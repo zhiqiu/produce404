@@ -68,8 +68,8 @@ Page({
   clickLogin: function(res){
     if(res.detail.userInfo){
       wx.setStorageSync('userInfo',res.detail.userInfo)
-      wx.switchTab({
-        url: '/pages/index_page/index_page'
+      wx.navigateTo({
+        url: '/pages/index_page/choose_like'
       })
     }else{
       // 请去设置打开权限
