@@ -55,7 +55,7 @@
             <image wx:else src="/image/icon-like-active.svg" class="icon-sm btn-up" ontap="dislike" Id="{{feed.audio.audio_id}}">2</image>
             <view class="btn-num">{{feed.like_num}}</view>
           </view>
-          <view class="btn-group" ontap="modalinput" id="">
+          <view class="btn-group" ontap="modalinput" comment="">
             <image src="/image/icon-comments.svg" class="icon-sm btn-up">btns</image>
             <view class="btn-num">{{feed.comment_num}}</view>
           </view>
@@ -84,7 +84,7 @@
       </view>
 
     </view>
-    <view class="tail-bar-b" ontap="gotoComment" id="">
+    <view class="tail-bar-b" ontap="modalinput" comment="">
       <view class="btn-group">
         <image src="/image/icon-comments.svg" class="icon-big btn-up">btns</image>
         评论
@@ -127,12 +127,12 @@
           </view>
 
           <view class="btns">
-            <view class="btn-group">
+            <view class="btn-group" >
               <image wx:if="{{!item.isliked}}" src="/image/icon-like.svg" class="icon-sm btn-up" ontap="likeComment">btns</image>
               <image wx:else src="/image/icon-like-active.svg" class="icon-sm btn-up" ontap="dislikeComment">btns</image>
               <view class="btn-num"> {{item.like_num}}</view>
             </view>
-            <view class="btn-group" ontap="gotoComment" id="">
+            <view class="btn-group" ontap="modalinput" id="{{index}}">
               <image src="/image/icon-comments.svg" class="icon-sm btn-up">btns</image>
             </view>
 

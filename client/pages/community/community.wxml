@@ -3,9 +3,9 @@
 <view class="background">
 <view class="timeline">
   <image src="/image/icon-add.svg" class="add-btn" ontap="gotoRecord"></image>
-  <view wx:for="{{feeds}}">
+  <view wx:for="{{feeds}}" wx:key="*this">
     <view class="info" >
-      <image class="background-inner" mode="widthFix" src="http://cos.ladyrick.com/img-background{{item.audio.audio_id%16}}.png" width="100%" height="100%" ontap="gotoDetail"  id="{{index}}"></image>
+      <image class="background-inner" mode="widthFix" src="http://cos.ladyrick.com/img-background{{item.audio.audio_id%16}}.png" width="100%" height="100%" ontap="gotoDetail"  id="{{item.audio.audio_id}}"></image>
       <view class="holder">
         <view class="time">
           {{item.audio.duration}}"
@@ -22,7 +22,7 @@
       </view>
 
       <view class="tags">
-        <view wx:for="{{item.tags}}" class="tag">
+        <view wx:for="{{item.tags}}" wx:key="*this" class="tag">
           <text class="tag-text">#{{item.tagname}}</text>
         </view>
       </view>
@@ -34,7 +34,7 @@
 
         <view class="btns">
           <view class="btn-group">
-            <image wx:if="{{!item.isliked}}" src="/image/icon-like.svg" class="icon-sm btn-up" ontap="like" Id="{{item.audio.audio_id}}">1</image>
+            <image wx:if="{{!item.audio.isliked}}" src="/image/icon-like.svg" class="icon-sm btn-up" ontap="like" Id="{{item.audio.audio_id}}">1</image>
             <image wx:else src="/image/icon-like-active.svg" class="icon-sm btn-up" ontap="dislike" Id="{{item.audio.audio_id}}">2</image>
             <view class="btn-num">{{item.like_num}}</view>
           </view>
@@ -43,7 +43,7 @@
             <view class="btn-num">{{item.comment_num}}</view>
           </view>
           <view class="btn-group">
-            <image wx:if="{{item.iscollected}}" src="/image/icon-collect-active.svg" class="icon-sm btn-up">1</image>
+            <image wx:if="{{item.audio.iscollected}}" src="/image/icon-collect.svg" class="icon-sm btn-up">1</image>
             <image wx:else src="/image/icon-collect.svg" class="icon-sm btn-up">2</image>
             <!-- <view class="btn-num"> 10</view> -->
           </view>

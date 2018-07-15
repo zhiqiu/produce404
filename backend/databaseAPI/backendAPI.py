@@ -59,12 +59,9 @@ class API():
 
             filterResult = self.session.query(tableClass).filter_by(**kwargs)
             content = filterResult.all()
+            return Status.success([c.toDict() for c in content])
         except Exception as e:
             return Status.internalError(e)
-        else:
-            if not content:
-                return Status.notFound()
-            return Status.success([c.toDict() for c in content])
 
     def commonAddAPI(self, tableName, **kwargs):
         try:
@@ -80,11 +77,9 @@ class API():
             newContent = tableClass(**kwargs)
             newContent.create(self.session)
             primaryKey = getattr(newContent, tableClass.__primaryKey__)
-        except Exception as e:
-            return Status.internalError(e)
-        else:
             return Status.success({tableClass.__primaryKey__: primaryKey})
-    
+        except Exception as e:
+            return Status.internalError(e)    
 
     def packFeed(self, openid, user, audio):
         audio_id = audio.audio_id
@@ -148,6 +143,7 @@ class API():
                     tokenObject = jsonLoads(originalText)
                     form["openid"] = tokenObject["openid"]
                     form["sessionKey"] = tokenObject["session_key"]
+                    User.checkExist(tokenObject["openid"])
                 except Exception as e:
                     return Status.internalError(e, "invalid token.")
             return getattr(self, API.action2API[action])(form)
@@ -449,9 +445,9 @@ class API():
         detailedComments = []
         for c in comments:
             com = c.toDict()
-            openid = com["user_openid"]
+            user_openid = com["user_openid"]
             del com["user_openid"]
-            user = self.session.query(User).filter(User.openid == openid).first()
+            user = self.session.query(User).filter(User.openid == user_openid).first()
             com["user"] = user.toDict()
 
 

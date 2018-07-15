@@ -1,4 +1,4 @@
-  /*我的页面*/
+  /*“我的”页面*/
 // pages/mine/mine.js
 const c = require('../../utils/c.js')
 const r = c.r;
@@ -14,7 +14,6 @@ Page({
     debug_cnt: 0,
     msg: [],
     playingIdx: -1,
-    last_index: -1,
     status: 0   //0表示“声音日迹”，1表示“我的勋章”
   },
   getData: function(refresh){

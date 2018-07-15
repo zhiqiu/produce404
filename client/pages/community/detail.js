@@ -11,8 +11,9 @@ Page({
     comments: [],
     playing: false,
     hiddenmodalput: true,
-    commentTmp: {},
-    commentId: ''
+    nowCommentUserName: "",
+    nowCommentUserOpenId : "",
+    commentTmp : {}
   },
 
   getData: function(options) {
@@ -102,13 +103,6 @@ Page({
 
   },
 
-  gotoComment: function() {
-    var audioId = this.data.audioId;
-    wx.navigateTo({
-      url: '/pages/index_page/add_comment?audioId=' + audioId
-    })
-  },
-
   clickPlay: function() {
     if (this.data.playing) {
       c.playorpause();
@@ -188,9 +182,17 @@ Page({
 
   //点击按钮指定的hiddenmodalput弹出框
   modalinput: function(options) {
+    var name = ""
+    var id = ""
+    if(options.currentTarget.id !== "")
+    {
+      name = this.data.comments[parseInt(options.currentTarget.id)].user.name
+      id = this.data.comments[parseInt(options.currentTarget.id)].user.openid
+    }
     this.setData({
       hiddenmodalput: !this.data.hiddenmodalput,
-      commentId: options.currentTarget.id
+      nowCommentUserName: name,
+      nowCommentUserOpenId: id
     })
   },
 
@@ -207,13 +209,19 @@ Page({
       hiddenmodalput: true
     })
     var that = this
-    if (this.data.feed.audio.audio_id && this.data.commentTmp) {
+    if (this.data.feed.audio.audio_id) {
+      var textTmp = this.data.commentTmp
+      console.log(this.data.nowCommentUserOpenId)
+      if (this.data.nowCommentUserOpenId !== "")
+      {
+        textTmp = '@' + this.data.nowCommentUserName + ':' + this.data.commentTmp
+      }
       r({
         data: {
           action: 'post_comment',
           audio_id: this.data.feed.audio.audio_id,
-          reply_to_user_openid: this.data.commentId, //置为空字符串表示直接回复某个feed
-          text: this.data.commentTmp
+          reply_to_user_openid: this.data.nowCommentUserOpenId, //置为空字符串表示直接回复某个feed
+          text: textTmp
         },
         success: function(res) {
           console.log(that.data.feed.audio)
@@ -228,6 +236,7 @@ Page({
   },
 
   bindKeyInput: function(e) {
+    console.log(e)
     this.setData({
       commentTmp: e.detail.value
     })

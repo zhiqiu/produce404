@@ -29,7 +29,7 @@ __all__ = [
     "R_User_Like_AudioChannel",
 ]
 
-tablePrefix = "t54_"
+tablePrefix = "t56_"
 
 # common super class
 
@@ -126,13 +126,13 @@ class User(Base, Creatable):
 
     user_id = Column(Integer, autoincrement=True)
     openid = Column(String(28), primary_key=True)
-    nickName = Column(String(64))
+    nickName = Column(String(1000))
     gender = Column(Integer, default=1)  # Male: 1, Female: 2
-    language = Column(String(32), default="zh-cn")
-    city = Column(String(64))
-    province = Column(String(64))
-    country = Column(String(64))
-    avatarUrl = Column(String(512))
+    language = Column(String(1000), default="zh-cn")
+    city = Column(String(1000))
+    province = Column(String(1000))
+    country = Column(String(1000))
+    avatarUrl = Column(String(1000))
     create_time = Column(TIMESTAMP)
     deleted = Column(BOOLEAN, default=False)
 
@@ -165,11 +165,11 @@ class Audio(Base, Creatable):
     __tablename__ = tablePrefix + "audio"
 
     audio_id = Column(Integer, primary_key=True, autoincrement=True)
-    url = Column(String(512))  # oss url
-    name = Column(String(64))
-    intro = Column(String(32))
-    img = Column(String(512))
-    location = Column(String(64))
+    url = Column(String(1000))  # oss url
+    name = Column(String(1000))
+    intro = Column(String(1000))
+    img = Column(String(1000))
+    location = Column(String(1000))
     create_time = Column(TIMESTAMP)
     reviewed = Column(BOOLEAN, default=False)
     deleted = Column(BOOLEAN, default=False)
@@ -187,7 +187,7 @@ class AudioTag(Base, Creatable):
     __tablename__ = tablePrefix + "audiotag"
 
     audiotag_id = Column(Integer, primary_key=True, autoincrement=True)
-    tagname = Column(String(16))
+    tagname = Column(String(1000))
     create_time = Column(TIMESTAMP)
     deleted = Column(BOOLEAN, default=False)
 
@@ -203,9 +203,9 @@ class Medal(Base, Creatable):
     __tablename__ = tablePrefix + "medal"
 
     medal_id = Column(Integer, primary_key=True, autoincrement=True)
-    name = Column(String(64))
-    img_url = Column(String(512))  # oss url
-    condition = Column(String(128))
+    name = Column(String(1000))
+    img_url = Column(String(1000))  # oss url
+    condition = Column(String(1000))
     create_time = Column(TIMESTAMP)
     deleted = Column(BOOLEAN, default=False)
 
@@ -221,7 +221,7 @@ class Comment(Base, Creatable):
     __tablename__ = tablePrefix + "comment"
 
     comment_id = Column(Integer, primary_key=True, autoincrement=True)
-    text = Column(String(128))
+    text = Column(String(1000))
     audio_id = Column(ForeignKey(tablePrefix + "audio.audio_id"))
     # user1 reply to user2, or user1 reply the sound (when user2 == nobody)
     user_openid = Column(ForeignKey(tablePrefix + "user.openid"))
@@ -243,7 +243,7 @@ class Collection(Base, Creatable):
     __tablename__ = tablePrefix + "collection"
 
     collection_id = Column(Integer, primary_key=True, autoincrement=True)
-    name = Column(String(16))
+    name = Column(String(1000))
     user_openid = Column(ForeignKey(tablePrefix + "user.openid"))
     create_time = Column(TIMESTAMP)
     deleted = Column(BOOLEAN, default=False)
@@ -264,7 +264,7 @@ class Forward(Base, Creatable):
     forward_id = Column(Integer, primary_key=True, autoincrement=True)
     user_openid = Column(ForeignKey(tablePrefix + "user.openid"))
     audio_id = Column(ForeignKey(tablePrefix + "audio.audio_id"))
-    destination = Column(String(16))
+    destination = Column(String(1000))
     create_time = Column(TIMESTAMP)
     deleted = Column(BOOLEAN, default=False)
 
@@ -403,7 +403,7 @@ class Message(Base, Creatable):
     user_openid = Column(ForeignKey(tablePrefix + "user.openid"))
     msg_src = Column(ForeignKey(tablePrefix + "user.openid"))
     action = Column(Integer)
-    sysmsg = Column(String(64), default="")
+    sysmsg = Column(String(1000), default="")
     audio_id = Column(ForeignKey(tablePrefix + "audio.audio_id"))
     isread = Column(BOOLEAN, default=False)
     create_time = Column(TIMESTAMP)
@@ -441,7 +441,7 @@ class AudioChannel(Base, Creatable):
     __tablename__ = tablePrefix + "audiochannel"
 
     channel_id = Column(Integer, primary_key=True, autoincrement=True)
-    name = Column(String(8))
+    name = Column(String(1000))
     create_time = Column(TIMESTAMP)
     deleted = Column(BOOLEAN, default=False)
 
