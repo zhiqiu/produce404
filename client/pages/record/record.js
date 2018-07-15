@@ -6,6 +6,8 @@ const COS = require('../../utils/upload');
 const c = require('../../utils/c');
 const r = c.r;
 
+var QQMapWX = require('../../utils/qqmap-wx-jssdk.js');
+
 Page({
 
   /**
@@ -114,7 +116,6 @@ Page({
     var Bucket = 'create404-cos-1253746840';
     var Region = 'ap-guangzhou';
     var cos = new COS({
-<<<<<<< HEAD
       getAuthorization: function(options, callback) {
         wx.request({
           method: 'GET',
@@ -150,7 +151,6 @@ Page({
           }
         })
       },
-=======
         getAuthorization: function (options, callback) {
           r({
             data:{
@@ -168,7 +168,6 @@ Page({
             }
           })
         },
->>>>>>> 2937fe79f6c902a42da428f1c29c7d61834ff35c
     });
 
     var filepath = this.data.recordPath;
@@ -233,6 +232,9 @@ Page({
   },
 
   getLocation: function() {
+    var qqmapsdk = new QQMapWX({
+      key: 'TWHBZ-ELKKI-YMVGS-5VR46-D5WHF-ZFFEL' // 必填
+    });
     wx.getLocation({
       type: 'wgs84',
       success: function (res) {
@@ -243,8 +245,8 @@ Page({
             longitude: res.longitude
           },
           success: function (addressRes) {
-            var address = addressRes.result.formatted_addresses.recommend;
-            console.log(address)
+            console.log(addressRes)
+          
           }
         })
       }

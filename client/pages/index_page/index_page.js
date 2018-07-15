@@ -43,7 +43,7 @@ Page({
       text: '娃娃声',
       ischoosen: false
     }],
-
+    
     animationData: "",
     showModalStatus: false,
     imageHeight: 0,
@@ -206,19 +206,21 @@ Page({
 
   gotoComments: function() {
     var audioId = this.data.feed.audio.audio_id;
+    getApp().globalData.prePage = this
     wx.navigateTo({
       url: '/pages/community/detail?audioId=' + audioId
     })
   },
 
   gotoAddCollection: function(e) {
-    console.log(e)
     var dID = e.currentTarget.id;
+    getApp().globalData.preFeed = this.data.feed
     wx.navigateTo({
       url: '/pages/index_page/add_collection?dID=' + dID
     })
   },
   gotoChannel: function() {
+    getApp().globalData.preFeed = this.data.feed
     wx.navigateTo({
       url: '/pages/index_page/choose_channel'
     })

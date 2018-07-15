@@ -91,11 +91,11 @@ Page({
   
   },
   
-  gotoDetail: function(e){
+  gotoDetail: function(feedId, index){
     console.log(e)
-    var dID = e.currentTarget.id;
+    var dID = feedId.currentTarget.id;
     wx.navigateTo({
-      url: '/pages/community/detail?audioId='+dID
+      url: '/pages/community/detail?feedId='+dID+'&feedIndex='+index
     })
   },
   
