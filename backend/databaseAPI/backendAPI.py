@@ -143,6 +143,8 @@ class API():
                     tokenObject = jsonLoads(originalText)
                     form["openid"] = tokenObject["openid"]
                     form["sessionKey"] = tokenObject["session_key"]
+                    if not self.session.query(User.openid).filter(User.openid == tokenObject["openid"]).count():
+                        return Status.internalError("You are not in user table. Please call set_user_info.")
                 except Exception as e:
                     return Status.internalError(e, "invalid token.")
             return getattr(self, API.action2API[action])(form)
@@ -444,9 +446,9 @@ class API():
         detailedComments = []
         for c in comments:
             com = c.toDict()
-            openid = com["user_openid"]
+            user_openid = com["user_openid"]
             del com["user_openid"]
-            user = self.session.query(User).filter(User.openid == openid).first()
+            user = self.session.query(User).filter(User.openid == user_openid).first()
             com["user"] = user.toDict()
 
 
