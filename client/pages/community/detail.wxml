@@ -20,6 +20,7 @@
 				</view>
 			</view>
 			<view class="share-btn">
+      	<button open-type="share" class="share-btn2"></button>
 				<image src="/image/icon-share.svg" class="icon-sm btn-up">btns</image>
 			</view>
 

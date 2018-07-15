@@ -122,26 +122,26 @@ Page({
     this.setData({
       feed: nowFeed
     })
-    var feeds = getApp().globalData.prePage.data.feeds
-    if (feeds)  //从社区页和我的页面进去
-    {
-      for (var singleFeed of feeds)
-      {
-        if(singleFeed.audio.audio_id === this.data.feed.audio.audio_id){
-          singleFeed = nowFeed
-          console.log(singleFeed)
-          break
-        }
-      }
-      getApp().globalData.prePage.setData({
-        feeds: feeds
-      })
-    }
-    else{
-      getApp().globalData.prePage.setData({
-        feed: nowFeed
-      })
-    }
+    // var feeds = getApp().globalData.prePage.data.feeds
+    // if (feeds)  //从社区页和我的页面进去
+    // {
+    //   for (var singleFeed of feeds)
+    //   {
+    //     if(singleFeed.audio.audio_id === this.data.feed.audio.audio_id){
+    //       singleFeed = nowFeed
+    //       console.log(singleFeed)
+    //       break
+    //     }
+    //   }
+    //   getApp().globalData.prePage.setData({
+    //     feeds: feeds
+    //   })
+    // }
+    // else{
+    //   getApp().globalData.prePage.setData({
+    //     feed: nowFeed
+    //   })
+    // }
     r({
       data: {
         action: 'like_audio',
