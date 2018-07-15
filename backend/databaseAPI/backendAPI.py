@@ -145,7 +145,8 @@ class API():
                     tokenObject = jsonLoads(originalText)
                     form["openid"] = tokenObject["openid"]
                     form["sessionKey"] = tokenObject["session_key"]
-                    User.checkExist(self.session, tokenObject["openid"])
+                    if action != "set_user_info":
+                        User.checkExist(self.session, tokenObject["openid"])
                 except Exception as e:
                     return Status.internalError(e, "invalid token.")
             return getattr(self, API.action2API[action])(form)
@@ -376,7 +377,7 @@ class API():
             randTwoAudios = randTwoAudios.filter(and_(
                 R_Audio_In_AudioChannel.deleted == False,
                 R_Audio_In_AudioChannel.audio_id == Audio.audio_id,
-                R_Audio_In_AudioChannel.channel_id == audioChannel
+                R_Audio_In_AudioChannel.channel_id == int(audioChannel) + 1
             ))
 
         randTwoAudios = randTwoAudios.order_by(randfunc).limit(2).all()

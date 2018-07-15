@@ -18,11 +18,11 @@ class DataFormatException(Exception):
 
 # 用于生成返回值的类
 class Status():
-    def success(resp=None):
-        if resp:
+    def success(*args):
+        if len(args):
             return {
                 "err": "ok",
-                "resp": resp
+                "resp": args[0]
             }
         else:
             return {
