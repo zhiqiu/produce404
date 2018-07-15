@@ -1,5 +1,7 @@
 /* pages/community/community.wxss */
-
+page{
+	background: #ffdd40;
+}
 .timeline{
 	/* Rectangle: */
 background: #FFDD40;

@@ -1,9 +1,0 @@
-<!--pages/mine/sys_msg/sys_msg.wxml-->
-<view class="sys_msg">
-  <view class="1st_msg">
-    <text>我是第一条系统消息</text>
-  </view>
-  <view class="2st_msg">
-    <text>我是第二条系统消息</text>
-  </view>
-</view>

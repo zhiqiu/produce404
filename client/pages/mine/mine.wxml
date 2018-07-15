@@ -1,4 +1,4 @@
-<!--pages/mine/mine.wxml-->
+<!-- pages/mine/mine.wxml -->
 <view class="mine">
   <view class="info-card-out">
     <!-- <image class="background" src="https://enj0.com/example-background2.png" width="100%" height="100%">
@@ -84,21 +84,9 @@
     </view>
   </view>
   <view class="medals" wx:if="{{status === 1}}">
-    <view class="medal">
-      <image class="medal-img" mode="widthFix" src="http://cos.ladyrick.com/medal1.png"></image>
-      <text class="medal-text">获得     /30个赞</text>
-    </view>
-    <view class="medal">
-      <image class="medal-img medal-not" mode="widthFix"  src="http://cos.ladyrick.com/medal1.png"></image>
-      <text class="medal-text">获得     /30个赞</text>
-    </view>
-    <view class="medal">
-      <image class="medal-img" mode="widthFix" src="http://cos.ladyrick.com/medal2.png"></image>
-      <text class="medal-text">获得     /30个赞</text>
-    </view>
-    <view class="medal">
-      <image class="medal-img medal-not" mode="widthFix" src="http://cos.ladyrick.com/medal2.png"></image>
-      <text class="medal-text">获得     /30个赞</text>
+    <view wx:for="{{medals}}" class="medal">
+      <image class="medal-img {{item.achieved?'': 'medal-not'}}" mode="widthFix" src="{{item.img_url}}"></image>
+      <text class="medal-text">{{item.text}}</text>
     </view>
 
   </view>
