@@ -59,6 +59,16 @@ Page({
           audioProgress: parseInt(100 * player.currentTime / player.duration)
         })
       })
+      player.onPause(function(){
+        that.setData({
+          paused: true
+        })
+      })
+      player.onPlay(function(){
+        that.setData({
+          paused: false
+        })
+      })
       that.setData({
         paused: false
       })

@@ -7,9 +7,14 @@
 .btn-2 {
   float: right;
 }
-
+.share-btn{
+  width:30px;
+  height:30px;
+  position:absolute;
+  opacity:0;
+}
 .btn {
-  background: #ffdd40;
+  background: #fff;
   border-radius: 14px;
   width: 85px;
   height: 31px;
@@ -21,6 +26,7 @@
   text-align: center;
   line-height: 31px;
   width: 100px;
+  margin: 20px;
   /*margin: 20px;*/
 }
 
@@ -33,7 +39,7 @@
 
 .player-img {
   position: absolute;
-  bottom: 0;
+  bottom: 0px;
   border-radius: 14px;
   width: 100%;
 }
@@ -88,7 +94,7 @@
   letter-spacing: 0.52px;
   text-align: center;
   position: absolute;
-  bottom: 270px;
+  bottom: 300px;
   width: 100%;
   margin-top: 10px;
 }
@@ -103,6 +109,21 @@
   bottom: 120px;
   height: 200px;
   width: 200px;
+}
+
+.p-btn-l{
+  position: fixed;
+  bottom: 190px;
+  left: 30px;
+  height: 40px;
+  width: 20px;
+}
+.p-btn-r{
+  position: fixed;
+  bottom: 190px;
+  right: 30px;
+  height: 40px;
+  width: 20px;
 }
 
 .buydes-dialog-container {
