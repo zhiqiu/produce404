@@ -245,6 +245,8 @@ class Collection(Base, Creatable):
     create_time = Column(TIMESTAMP)
     deleted = Column(BOOLEAN, default=False)
 
+    __defaultCollection__ = "默认收藏集"
+
     __primaryKey__ = "collection_id"
     __requiredFields__ = ["name", "user_openid"]
     __allFields__ = ["collection_id"] + __requiredFields__ + ["create_time", "deleted"]
