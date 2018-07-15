@@ -43,7 +43,9 @@ class API():
         "get_medal": "getMedal",
         "dislike_audio": "dislikeAudio",
         "get_msg": "getMessage",
-        "read_msg": "readMsg"
+        "read_msg": "readMsg",
+        "like_comment": "likeComment",
+        "dislike_comment": "dislikeComment",
     }
 
     def commonGetAPI(self, tableName, **kwargs):
@@ -405,7 +407,7 @@ class API():
         msg_src = self.session.query(R_User_Create_Audio.user_openid).filter(and_(
             R_User_Create_Audio.audio_id == audio_id
         )).first()[0]
-        print(msg_src)
+
         # 为audio创建者发送一条提醒消息
         Message(
             user_openid=msg_src,
@@ -961,7 +963,7 @@ class API():
             msg_ = {
                 "msg_id": msg.msg_id,
                 "user": user.toDict(),
-                "text": msg.getTextFormat().format(user.nickName, audioName),
+                "text": msg.getTextFormat().format(user.nickName, audioName if len(audioName) <= 10 else (audioName[:7] + "···")),
                 "isread": msg.isread,
                 "deleted": msg.deleted,
                 "audio_id": audio_id if msg.action in [mad["like audio"], mad["post comment"], mad["reply comment"]] else -1
@@ -996,3 +998,76 @@ class API():
             return Status.success()
         else:
             return Status.internalError("It's not your msg or msg doesn't exists.")
+
+    def likeComment(self, form):
+        '''
+        点赞某评论：
+        {
+            action: 'like_comment',
+            comment_id: ''
+        }
+        {
+            err: 'ok'
+        }
+        '''
+
+        openid = form["openid"]
+        comment_id = form["comment_id"]
+
+        Comment.checkExist(self.session, comment_id)
+
+        like = self.session.query(R_User_Like_Comment).filter(and_(
+            R_User_Like_Comment.user_openid == openid,
+            R_User_Like_Comment.comment_id == comment_id
+        )).first()
+
+        if like:
+            # 数据库中已存在记录，只需修改deleted列即可。
+            like.deleted = False
+        else:
+            like = R_User_Like_Comment(user_openid=openid, comment_id=comment_id)
+        like.merge(self.session)
+
+        msg_src = self.session.query(R_User_Create_Audio.user_openid).filter(and_(
+            R_User_Create_Audio.audio_id == Comment.audio_id,
+            Comment.comment_id == comment_id
+        )).first()[0]
+
+        # 为audio创建者发送一条提醒消息
+        Message(
+            user_openid=msg_src,
+            msg_src=openid,
+            action=Message.__actionDict__["like comment"],
+            sysmsg="点赞评论事件",
+            audio_id=audio_id,
+        ).create(self.session)
+
+        return Status.success()
+
+    def dislikeComment(self, form):
+        '''
+        取消赞评论：
+        {
+            action: 'dislike_comment',
+            comment_id: ''
+        }
+        {
+            err: 'ok'
+        }
+        '''
+
+        openid = form["openid"]
+        comment_id = form["comment_id"]
+
+        Comment.checkExist(self.session, comment_id)
+
+        like = self.session.query(R_User_Like_Comment).filter(and_(
+            R_User_Like_Comment.user_openid == openid,
+            R_User_Like_Comment.comment_id == comment_id
+        )).first()
+
+        # 数据库中必定已存在记录，所以直接修改deleted列标记已删除即可。
+        like.deleted = True
+        like.merge(self.session)
+
+        return Status.success()

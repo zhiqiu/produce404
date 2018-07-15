@@ -420,6 +420,7 @@ class Message(Base, Creatable):
         "follow": 3,
         "reply comment": 4,
         "broadcast": 5,
+        "like comment": 6,
     }
 
     def __init__(self, **kwargs):
@@ -430,11 +431,12 @@ class Message(Base, Creatable):
     def getTextFormat(self):
         return {
             0: self.sysmsg,
-            1: "{}点赞了你发布的声音{}",
-            2: "{}评论了你发布的声音{}",
-            3: "{}关注了你",
-            4: "{}回复了你在声音{}下的评论",
+            1: '"{}"点赞了你发布的声音"{}"',
+            2: '"{}"评论了你发布的声音"{}"',
+            3: '"{}"关注了你',
+            4: '"{}"回复了你在声音"{}"下的评论',
             5: self.sysmsg,
+            6: '"{}"点赞了你在声音"{}"下发布的评论',
         }[self.action]
 
 class AudioChannel(Base, Creatable):
