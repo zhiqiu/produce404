@@ -159,5 +159,16 @@ Page({
       status: 1
     })
   },
+  clickPlay: function(e){
+    var idx = e.currentTarget.id;
+    if(this.data.playingIdx === idx){
+      c.playorpause();
+    }else{
+      this.setData({
+        playingIdx: idx
+      })
+      c.play(this.data.feeds[idx].audio,this.data.feeds[idx].user)
+    }
+  },
 
 })

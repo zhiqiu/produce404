@@ -89,6 +89,8 @@ Page({
   },
   
   gotoDetail: function(feedId){
+    console.log('aaa');
+    console.log(feedId)
     var dID = feedId.currentTarget.id;
     var nowFeed = {};
     for(var singleFeed of this.data.feeds)
