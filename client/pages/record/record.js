@@ -119,7 +119,7 @@ Page({
   upload: function(e) {
     if(this.data.onrecord){
       wx.showToast({
-       title: '请先结束录音',
+        title: '请先结束录音',
         icon: 'loading',
         duration: 2000
       })
