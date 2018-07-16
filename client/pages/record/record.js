@@ -18,7 +18,7 @@ Page({
     duration: 0,
     recordingAnimation: {},
     comment: '',
-    tagArray : ['动物植物', '海浪瀑布', '山水林间', '自然气候', '机器轰鸣', '交通工具', '古典艺术', '现代乐器','无'],
+    tagArray: ['动物植物', '海浪瀑布', '山水林间', '自然气候', '机器轰鸣', '交通工具', '古典艺术', '现代乐器', '无'],
     hasSetTag: false,
     tag: '',
     position: '',
@@ -97,7 +97,7 @@ Page({
         })
         console.log(res);
         wx.showToast({
-          title: '录制成功,'+(parseInt(that.data.duration/1000)+1)+'"',
+          title: '录制成功,' + (parseInt(that.data.duration / 1000) + 1) + '"',
           icon: 'success',
           duration: 2000
         })
@@ -116,8 +116,7 @@ Page({
     }
   },
   upload: function(e) {
-    if(this.data.onrecord){
-      
+    if (this.data.onrecord) {
       wx.showToast({
         title: '请先结束录音',
         icon: 'loading',
@@ -125,7 +124,7 @@ Page({
       })
       return;
     }
-    if(this.data.comment.length === 0){
+    if (this.data.comment.length === 0) {
       wx.showToast({
         title: '请输入文字',
         icon: 'loading',
@@ -168,7 +167,7 @@ Page({
           name: that.data.comment,
           intro: that.data.comment,
           location: this.data.position,
-          duration: parseInt(this.data.duration/1000)+1
+          duration: parseInt(this.data.duration / 1000) + 1
         },
         tags: [{
           'tagname': that.data.tag
@@ -201,10 +200,10 @@ Page({
 
   bindPickerChange: function(e) {
     this.setData({
-      hasSetTag : true,
+      hasSetTag: true,
       index: e.detail.value,
       tag: this.data.tagArray[parseInt(e.detail.value)]
-    }) 
+    })
   },
 
   getLocation: function() {
@@ -221,16 +220,15 @@ Page({
             longitude: res.longitude
           },
           success: function(addressRes) {
-            console.log(addressRes)
-            that.setData({
-              position : addressRes.result.ad_info.province + '·' + addressRes.result.ad_info.city
-            })
+            var adInfo = addressRes.result.ad_info
+            if (adInfo) {
+              that.setData({
+                position: adInfo.province + '·' + adInfo.city
+              })
+            }
           },
-          fail: function(res)
-          {
-            that.setData({
-              position: '广东省·深圳市'
-            })
+          fail: function(res) {
+            console.log(res)
           }
         })
       }

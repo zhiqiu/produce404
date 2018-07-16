@@ -7,7 +7,7 @@ import requests
 from .defineTables import *
 from .initializeTables import initializeTables
 from .config import Config
-from .utils import DataFormatException, Status, Encrypt, jsonDumps, jsonLoads
+from .utils import DataFormatException, Status, Encrypt, jsonDumps, jsonLoads, logger
 from cam.auth.cam_url import CamUrl
 from .defineMedals import allMedalClasses
 import os
@@ -17,11 +17,12 @@ __all__ = ["API"]
 
 class API():
     def __init__(self, engine):
+        logger.info("Use engine: " + str(engine))
         self.dbName = engine.name
         initializeTables(engine)
         Session = sessionmaker(bind=engine)
         self.session = Session()
-        self.initRecommandSystem()
+        # self.initRecommandSystem()
 
     action2API = {
         "signcos": "signcos",
@@ -53,6 +54,7 @@ class API():
             if tableName not in tables:
                 return Status.internalError("Table %s doesn't exists." % tableName)
 
+            logger.info("commonGetAPI. table: " + tableName)
             tableClass = tables[tableName]
 
             for field in kwargs:
@@ -70,6 +72,8 @@ class API():
             if tableName not in tables:
                 return Status.internalError("Table %s doesn't exists." % tableName)
 
+            logger.info("commonAddAPI. table: " + tableName)
+            logger.info("commonAddAPI. kwargs: " + jsonDumps(kwargs))
             tableClass = tables[tableName]
 
             for field in kwargs:
@@ -85,6 +89,7 @@ class API():
 
     def packFeed(self, openid, user, audio):
         audio_id = audio.audio_id
+        logger.info("packFeed. audio_id=%d" % audio_id)
 
         tags = self.session.query(AudioTag).filter(and_(
             AudioTag.deleted == False,
@@ -92,23 +97,27 @@ class API():
             AudioTag.audiotag_id == R_Audio_Has_AudioTag.audiotag_id,
             R_Audio_Has_AudioTag.audio_id == audio_id
         )).all()
+        logger.info("packFeed. tags=%d" % jsonDumps([t.toDict() for t in tags]))
 
         like_num = self.session.query(User.openid).filter(and_(
             User.openid == R_User_Like_Audio.user_openid,
             R_User_Like_Audio.deleted == False,
             R_User_Like_Audio.audio_id == audio_id,
             )).count()
+        logger.info("packFeed. like_num=%d" % like_num)
 
         comment_num = self.session.query(Comment.comment_id).filter(and_(
             Comment.deleted == False,
             Comment.audio_id == audio_id
             )).count()
+        logger.info("packFeed. comment_num=%d" % comment_num)
 
         isliked = bool(self.session.query(R_User_Like_Audio.user_openid).filter(and_(
             R_User_Like_Audio.user_openid == openid,
             R_User_Like_Audio.deleted == False,
             R_User_Like_Audio.audio_id == audio_id,
             )).count())
+        logger.info("packFeed. isliked=%d" % isliked)
 
         iscollected = bool(self.session.query(Collection).filter(and_(
             Collection.deleted == False,
@@ -117,6 +126,7 @@ class API():
             Collection.collection_id == R_Audio_In_Collection.collection_id,
             R_Audio_In_Collection.audio_id == audio_id
         )).first())
+        logger.info("packFeed. iscollected=%d" % iscollected)
 
         return {
             "user": user.toDict(),
@@ -133,6 +143,7 @@ class API():
             return Status.internalError("Missing form data")
         try:
             action = form["action"]
+            logger.info("postCallAPI. action: " + action)
             if action not in API.action2API:
                 return Status.internalError("invalid action: " + action)
             if Config.DEBUG_COMMUNITATION:
@@ -145,6 +156,9 @@ class API():
                     tokenObject = jsonLoads(originalText)
                     form["openid"] = tokenObject["openid"]
                     form["sessionKey"] = tokenObject["session_key"]
+                    logger.info("openid = " + form["openid"])
+                    logger.info("sessionKey = " + form["sessionKey"])
+                    logger.info("form = " + jsonDumps(form))
                     if action != "set_user_info":
                         User.checkExist(self.session, tokenObject["openid"])
                 except Exception as e:
@@ -192,18 +206,10 @@ class API():
                     R_User_Like_Audio.audio_id == audio_id,
                     R_User_Like_Audio.deleted == False
                 )).all()]
-                print(users)
 
                 for user in users:
                     self.userVec[user] = [0] * tagsNum
                     likedVideos = []
-
-
-
-        print(self.audioVec)
-        
-        # openids = self.session.query(User.openid).all()
-
 
 
     #############################   API   #############################
@@ -221,7 +227,7 @@ class API():
         duration = Config.DURATION_SECOND
         url_generator = CamUrl(policy, duration, secret_id, secret_key)
         real_url = url_generator.url()
-        print(real_url)
+        logger.info("signcos. real_url = %s" % real_url)
         proxy_handler = urllib.request.ProxyHandler({'https': '10.14.87.100:8080'})
         opener = urllib.request.build_opener()
         r = opener.open(real_url)
@@ -243,12 +249,15 @@ class API():
             User.deleted == False,
             User.openid == openid
         )).first()
+        logger.info("user: " + jsonDumps(user.toDict()))
 
         unread_msg_num = self.session.query(Message.msg_id).filter(and_(
             Message.user_openid == openid,
             Message.isread == False,
             Message.deleted == False
         )).count()
+
+        logger.info("unread_msg_num: %d" % unread_msg_num)
 
         if user:
             return Status.success({
@@ -311,6 +320,7 @@ class API():
 
         try:
             res = requests.get(url, params=params)
+            logger.info("login. res.text = " + res.text)
             resJson = jsonLoads(res.text)
             openid = resJson["openid"]
             sessionKey = resJson["session_key"]
@@ -326,6 +336,7 @@ class API():
         firstTime = False
         if not self.session.query(User.openid).filter(User.openid == openid).count():
             firstTime = True
+        logger.info("login. first_time = %s" % firstTime)
 
         return Status.success({
             "token": token,
@@ -356,6 +367,8 @@ class API():
         # 目前有8个分类，用0-7代表，因此暂定channel为8也返回全部频道。
         if audioChannel == "8":
             audioChannel = ""
+
+        logger.info("getIndex. audioChannel = %s" % audioChannel)
 
         # 不同的数据库类型有不同的随机查询方式
         if self.dbName == "sqlite":
