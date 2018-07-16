@@ -104,6 +104,6 @@ if DEBUG:
 if __name__ == "__main__":
 
     logger.info("Debug API %sabled." % "en" if DEBUG else "dis")
-    logger.info("Flask server: %s:port" % ("0.0.0.0", PORT))
+    logger.info("Flask server: %s:%d" % ("0.0.0.0", PORT))
 
     app.run(host="0.0.0.0", port=PORT)

@@ -8,22 +8,19 @@ import os
 __all__ = ["DataFormatException", "Status", "Encrypt", "jsonDumps", "jsonLoads", "logger"]
 
 
-def customizeLogger():
-    logger = logging.getLogger("create404")
-    try:
-        os.mkdir("log")
-    except:
-        pass
-    handler = logging.FileHandler("log\\log_%s.txt" % datetime.now().strftime("%Y-%m-%d_%H_%M_%S"), encoding="utf-8")
-    handler.setLevel(logging.INFO)
-    fmt = "[%(asctime)s.%(msecs)03d] %(filename)s[line:%(lineno)d] [processID:%(process)d] [%(levelname)s] %(message)s"
-    datefmt = "%Y-%m-%d %H:%M:%S"
-    formatter = logging.Formatter(fmt=fmt, datefmt=datefmt)
-    handler.setFormatter(formatter)
-    logger.addHandler(handler)
-    logger.setLevel(logging.INFO)
-
-logger = customizeLogger()
+logger = logging.getLogger("create404")
+try:
+    os.mkdir("log")
+except:
+    pass
+handler = logging.FileHandler("log\\log_%s.txt" % datetime.now().strftime("%Y-%m-%d_%H_%M_%S"), encoding="utf-8")
+handler.setLevel(logging.INFO)
+fmt = "[%(asctime)s.%(msecs)03d] %(filename)s[line:%(lineno)d] [processID:%(process)d] [%(levelname)s] %(message)s"
+datefmt = "%Y-%m-%d %H:%M:%S"
+formatter = logging.Formatter(fmt=fmt, datefmt=datefmt)
+handler.setFormatter(formatter)
+logger.addHandler(handler)
+logger.setLevel(logging.INFO)
 
 
 # 自定义的jsonDumps函数
