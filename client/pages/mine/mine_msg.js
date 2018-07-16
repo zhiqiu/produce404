@@ -26,7 +26,6 @@ Page({
         last_msg_id: last_msg_id
       },
       success: function(res) {
-        console.log(res)
         var newMsg = that.data.msg.concat(res.data.resp.msgs);
         that.setData({
           msg: newMsg

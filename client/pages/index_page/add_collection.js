@@ -9,28 +9,21 @@ Page({
    */
   data: {
     feed: {},
-    hiddenmodalput: true,
-    //可以通过hidden是否掩藏弹出框的属性，来指定那个弹出框
-    collectionFolders: [{
-      collectionId: '',
-      name: ''
-    }],
+    hiddenmodalput: true,	
+    collectionFolders: [{collectionId: '', name: ''}],
     input: ''
   },
 
   getData: function (options) {
     var that = this;
-    console.log(options)
     r({
       data: {
         action: 'get_collections',
       },
       success: function(res) {
-        console.log(that.data)
         that.setData({
           collectionFolders: res.data.resp.collections,
         })
-        console.log(that.data)
       }
     })
     r({
@@ -39,7 +32,6 @@ Page({
         audio_id: options
       },
       success: function (res) {
-        console.log(res)
         that.setData({
           feed: res.data.resp.feed
         })
@@ -127,7 +119,6 @@ Page({
         collection_name: this.data.input
       },
       success: function(res) {
-        console.log(1122)
         that.getData(that.data.feed.audio.audio_id)
       },
       fail: function(res){

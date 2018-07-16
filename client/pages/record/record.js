@@ -113,8 +113,6 @@ Page({
       //结束录音
       const recordManager = wx.getRecorderManager()
       recordManager.stop();
-      
-      
     }
   },
   upload: function(e) {
@@ -167,7 +165,7 @@ Page({
         audio: {
           url: filename,
           img: 'http://cos.ladyrick.com/img-shengmi.png',
-          name: '用户上传内容',
+          name: that.data.comment,
           intro: that.data.comment,
           location: this.data.position,
           duration: parseInt(this.data.duration/1000)+1

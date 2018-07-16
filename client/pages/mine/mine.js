@@ -54,7 +54,6 @@ Page({
         last_audio_id: last_audio_id
       },
       success: function(res) {
-        console.log(res)
         var newFeeds = that.data.feeds.concat(res.data.resp.feeds);
         that.setData({
           feeds: newFeeds
@@ -152,7 +151,6 @@ Page({
   },
 
   gotoDetail: function(e){
-    console.log(e)
     var dID = e.currentTarget.id;
     wx.navigateTo({
       url: '/pages/community/detail?audioId=' + dID

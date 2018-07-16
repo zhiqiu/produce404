@@ -9,7 +9,7 @@ Page({
     feed: {},
     last_feed: {},
     paused: false,
-    listentype: 'like', // diff or like
+    listentype: 'like',
     channel: 'unset', // unset or channelname
     dataloaded: false,
     tagArray: c.tagArray,
@@ -212,7 +212,6 @@ Page({
 
   gotoComments: function() {
     var audioId = this.data.feed.audio.audio_id;
-    console.log(audioId)
     getApp().globalData.prePage = this
     wx.navigateTo({
       url: '/pages/community/detail?audioId=' + audioId
@@ -237,7 +236,6 @@ Page({
   gotoPrevious: function() {
     var that = this
     if (this.data.last_feed.audio) {
-      console.log(this.data.feed)
       this.setData({
         feed: that.data.last_feed,
         last_feed: {}

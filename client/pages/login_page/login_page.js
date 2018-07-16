@@ -65,6 +65,7 @@ Page({
   onShareAppMessage: function () {
   
   },
+  
   clickLogin: function(res){
     if(res.detail.userInfo){
       wx.setStorageSync('userInfo',res.detail.userInfo)

@@ -11,20 +11,20 @@ Page({
   data: {
     playingIdx : -1,  //当前播放的feed Id
     feeds : [],
-    last_index : -1
+    lastIndex : -1
   },
   getData: function(refresh){
     
-    var last_audio_id = '';
+    var lastAudioId = '';
     if(this.data.feeds.length !== 0){
-      last_audio_id =  this.data.feeds[this.data.feeds.length - 1].audio.audio_id;
+      lastAudioId =  this.data.feeds[this.data.feeds.length - 1].audio.audio_id;
     }
-    if(refresh) last_audio_id = ''
+    if(refresh) lastAudioId = ''
     var that = this;
     r({
       data: {
         action: 'get_explore',
-        last_audio_id: last_audio_id
+        lastAudioId: lastAudioId
       },
       success: function(res) {
         console.log(res)
@@ -50,16 +50,16 @@ Page({
    */
   onShow: function () {
     this.data.playingIdx = -1;
-    if(this.data.last_index !== -1){
+    if(this.data.lastIndex !== -1){
       var that =this;
       r({
         data:{
           action: 'get_one_feed',
-          audio_id: this.data.feeds[this.data.last_index].audio.audio_id
+          audio_id: this.data.feeds[this.data.lastIndex].audio.audio_id
         },
         success: function(res){
           var newfeed = res.data.resp.feed;
-          that.data.feeds[that.data.last_index] = newfeed;
+          that.data.feeds[that.data.lastIndex] = newfeed;
           that.setData({
             feeds : that.data.feeds
           })
@@ -107,7 +107,7 @@ Page({
   gotoDetail: function(options){
     var index = parseInt(options.currentTarget.id);
     var dID = this.data.feeds[index].audio.audio_id;
-    this.data.last_index = index;
+    this.data.lastIndex = index;
     wx.navigateTo({
       url: '/pages/community/detail?audioId='+dID
     })
