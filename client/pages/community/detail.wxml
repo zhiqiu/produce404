@@ -34,7 +34,7 @@
 			</view>
 
 			<view class="description">
-				<text class="content">{{feed.audio.intro}}</text>
+				<view class="content">{{feed.audio.intro}}</view>
 			</view>
 
 			<view class="tags">
@@ -123,7 +123,7 @@
 
 
           <view class="description">
-            <text class="content">{{item.text}}</text>
+            <view class="content">{{item.text}}</view>
           </view>
 
           <view class="btns">
