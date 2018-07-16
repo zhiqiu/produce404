@@ -32,7 +32,7 @@ api = API(Config.engine)
 # so that you can start the server in any working folder
 curdir = os.path.abspath(os.path.dirname(__file__))
 template_folder = os.path.join(curdir, "template")
-print(template_folder)
+
 static_folder = os.path.join(curdir, "static")
 
 app = Flask("create404", template_folder=template_folder, static_folder=static_folder)
@@ -128,12 +128,11 @@ def index():
         return render_template('login.html')
     else:
         login = request.form.to_dict()
-        #print(login)
+
         md5 = hashlib.md5()
         md5.update(login['password'].encode('utf-8'))
         md5password = md5.hexdigest()
-        #print(md5password)
-        print(login['email'], md5password)
+
         # check user existence
         user = session.query(CMSUser).filter(and_(
             CMSUser.email == login['email'],

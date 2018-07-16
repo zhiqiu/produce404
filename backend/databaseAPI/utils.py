@@ -1,8 +1,30 @@
 from .config import Config
 import platform
 import json
+import logging
+from datetime import datetime
+import os
 
-__all__ = ["DataFormatException", "Status", "Encrypt", "jsonDumps", "jsonLoads"]
+__all__ = ["DataFormatException", "Status", "Encrypt", "jsonDumps", "jsonLoads", "logger"]
+
+
+def customizeLogger():
+    logger = logging.getLogger("create404")
+    try:
+        os.mkdir("log")
+    except:
+        pass
+    handler = logging.FileHandler("log\\log_%s.txt" % datetime.now().strftime("%Y-%m-%d_%H_%M_%S"), encoding="utf-8")
+    handler.setLevel(logging.INFO)
+    fmt = "[%(asctime)s.%(msecs)03d] %(filename)s[line:%(lineno)d] [processID:%(process)d] [%(levelname)s] %(message)s"
+    datefmt = "%Y-%m-%d %H:%M:%S"
+    formatter = logging.Formatter(fmt=fmt, datefmt=datefmt)
+    handler.setFormatter(formatter)
+    logger.addHandler(handler)
+    logger.setLevel(logging.INFO)
+
+logger = customizeLogger()
+
 
 # 自定义的jsonDumps函数
 def jsonDumps(data, **kwargs):
@@ -20,16 +42,20 @@ class DataFormatException(Exception):
 class Status():
     def success(*args):
         if len(args):
-            return {
+            returnDict = {
                 "err": "ok",
                 "resp": args[0]
             }
         else:
-            return {
+            returnDict = {
                 "err": "ok"
             }
+        logger.info("Success. return = " + jsonDumps(returnDict))
+        return returnDict
+
 
     def notFound():
+        logger.info("Not found.")
         return {
             "err": "not found"
         }
@@ -45,7 +71,10 @@ class Status():
             exception = ""
             errormsg = args[0]
 
+        logger.warning("Internal error. %s %s" %(errormsg. str(exception)))
+
         errormsg = errormsg or "internal error occured."
+        
 
         if Config.DEBUG or isinstance(exception, DataFormatException):
             return {
