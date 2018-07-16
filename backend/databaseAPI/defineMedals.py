@@ -49,7 +49,7 @@ def medalmeta(cls, bases, attrs):
 
 # class AllMedals(metaclass=medalmeta):
 
-class Medal1(metaclass=medalmeta):
+class MedalFirstLike(metaclass=medalmeta):
     # 获得首个点赞
     __medal_name__ = "获得首个点赞"
     __img_url__ = "http://cos.ladyrick.com/medal1.png"
@@ -63,7 +63,7 @@ class Medal1(metaclass=medalmeta):
         return state, text
 
 
-class Medal2(metaclass=medalmeta):
+class Medal30Like(metaclass=medalmeta):
     # 点赞数达到30
     __medal_name__ = "获得30个点赞"
     __img_url__ = "http://cos.ladyrick.com/medal2.png"
@@ -77,7 +77,7 @@ class Medal2(metaclass=medalmeta):
         return state, text
 
 
-class Medal3(metaclass=medalmeta):
+class Medal100Like(metaclass=medalmeta):
     # 点赞数达到100
     __medal_name__ = "获得100个点赞"
     __img_url__ = "http://cos.ladyrick.com/medal3.png"
@@ -91,7 +91,7 @@ class Medal3(metaclass=medalmeta):
         return state, text
 
 
-class Medal4(metaclass=medalmeta):
+class Medal500Like(metaclass=medalmeta):
     # 点赞数达到500
     __medal_name__ = "获得500个点赞"
     __img_url__ = "http://cos.ladyrick.com/medal4.png"
@@ -105,7 +105,7 @@ class Medal4(metaclass=medalmeta):
         return state, text
 
 
-class Medal5(metaclass=medalmeta):
+class MedalFirstComment(metaclass=medalmeta):
     # 获得首条评论
     __medal_name__ = "获得首条评论"
     __img_url__ = "http://cos.ladyrick.com/medal5.png"
@@ -119,7 +119,7 @@ class Medal5(metaclass=medalmeta):
         return state, text
 
 
-class Medal6(metaclass=medalmeta):
+class Medal30Comment(metaclass=medalmeta):
     # 获得30条评论
     __medal_name__ = "获得30条评论"
     __img_url__ = "http://cos.ladyrick.com/medal6.png"
