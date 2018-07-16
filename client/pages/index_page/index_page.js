@@ -76,7 +76,7 @@ Page({
         that.gotoPrevious();
       })
       player.onEnded(function(){
-        that.gotoPrevious();
+        that.gotoNext();
       })
       that.setData({
         paused: false
@@ -97,6 +97,10 @@ Page({
    */
   onShow: function() {
     var that = this;
+    var player = wx.getBackgroundAudioManager();
+    player.onEnded(function(){
+      that.gotoNext();
+    })
     if(this.data.feed.audio){
       r({
         data:{

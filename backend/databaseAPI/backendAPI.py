@@ -145,7 +145,8 @@ class API():
                     tokenObject = jsonLoads(originalText)
                     form["openid"] = tokenObject["openid"]
                     form["sessionKey"] = tokenObject["session_key"]
-                    User.checkExist(self.session, tokenObject["openid"])
+                    if action != "set_user_info":
+                        User.checkExist(self.session, tokenObject["openid"])
                 except Exception as e:
                     return Status.internalError(e, "invalid token.")
             return getattr(self, API.action2API[action])(form)
@@ -347,6 +348,15 @@ class API():
         // 上一首由前端记录
         '''
 
+        audioChannel = form["channel"]
+
+        if audioChannel == "unset":
+            audioChannel = ""
+
+        # 目前有8个分类，用0-7代表，因此暂定channel为8也返回全部频道。
+        if audioChannel == "8":
+            audioChannel = ""
+
         # 不同的数据库类型有不同的随机查询方式
         if self.dbName == "sqlite":
             randfunc = func.random()
@@ -356,14 +366,22 @@ class API():
 
         # 随机查询两个audio
         randTwoAudios = self.session.query(User, Audio).filter(and_(
-            User.deleted == False,
+            User.openid == "system", # index 页只显示PGC
             Audio.deleted == False,
             R_User_Create_Audio.deleted == False,
             User.openid == R_User_Create_Audio.user_openid,
             R_User_Create_Audio.audio_id == Audio.audio_id
-        )).order_by(randfunc).limit(2).all()
+        ))
 
-        print(randTwoAudios)
+        if audioChannel:
+            randTwoAudios = randTwoAudios.filter(and_(
+                R_Audio_In_AudioChannel.deleted == False,
+                R_Audio_In_AudioChannel.audio_id == Audio.audio_id,
+                R_Audio_In_AudioChannel.channel_id == int(audioChannel) + 1
+            ))
+
+        randTwoAudios = randTwoAudios.order_by(randfunc).limit(2).all()
+
         # 查询对应的user，tag，以及其他信息，组装成feed
         openid = form["openid"]
         feeds = [self.packFeed(openid, user, audio) for user, audio in randTwoAudios]

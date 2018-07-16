@@ -13,7 +13,6 @@
     "pages/index_page/choose_like",
     "pages/index_page/add_comment",
     "pages/index_page/choose_channel",
-    "pages/community/add_comment",
     "pages/index_page/add_collection",
     "pages/index/index",
     "pages/logs/logs",
