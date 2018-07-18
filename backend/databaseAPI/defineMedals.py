@@ -5,6 +5,7 @@ __all__ = ["allMedalClasses"]
 
 allMedalClasses = []
 
+
 def getUserLikeNum(session, user):
     if not hasattr(user, "likenum"):
         videolikednum = session.query(User.openid).filter(and_(
@@ -30,6 +31,7 @@ def getUserLikeNum(session, user):
         user.likenum = videolikednum + commentlikednum
     return user.likenum
 
+
 def getUserCommentNum(session, user):
     if not hasattr(user, "commentnum"):
         user.commentnum = session.query(Comment.comment_id).filter(and_(
@@ -42,12 +44,14 @@ def getUserCommentNum(session, user):
         )).count()
     return user.commentnum
 
+
 def medalmeta(cls, bases, attrs):
     newclass = type(cls, bases, attrs)
     allMedalClasses.append(newclass)
     return newclass
 
 # class AllMedals(metaclass=medalmeta):
+
 
 class MedalFirstLike(metaclass=medalmeta):
     # 获得首个点赞
@@ -59,7 +63,7 @@ class MedalFirstLike(metaclass=medalmeta):
         requiredNum = 1
         likenum = getUserLikeNum(session, user)
         state = likenum >= requiredNum
-        text = cls.__medal_name__ if state else "获得%d/%d个点赞"%(likenum,requiredNum)
+        text = cls.__medal_name__ if state else "获得%d/%d个点赞" % (likenum, requiredNum)
         return state, text
 
 
@@ -73,7 +77,7 @@ class Medal30Like(metaclass=medalmeta):
         requiredNum = 30
         likenum = getUserLikeNum(session, user)
         state = likenum >= requiredNum
-        text = cls.__medal_name__ if state else "获得%d/%d个点赞"%(likenum,requiredNum)
+        text = cls.__medal_name__ if state else "获得%d/%d个点赞" % (likenum, requiredNum)
         return state, text
 
 
@@ -87,7 +91,7 @@ class Medal100Like(metaclass=medalmeta):
         requiredNum = 100
         likenum = getUserLikeNum(session, user)
         state = likenum >= requiredNum
-        text = cls.__medal_name__ if state else "获得%d/%d个点赞"%(likenum,requiredNum)
+        text = cls.__medal_name__ if state else "获得%d/%d个点赞" % (likenum, requiredNum)
         return state, text
 
 
@@ -101,7 +105,7 @@ class Medal500Like(metaclass=medalmeta):
         requiredNum = 500
         likenum = getUserLikeNum(session, user)
         state = likenum >= requiredNum
-        text = cls.__medal_name__ if state else "获得%d/%d个点赞"%(likenum,requiredNum)
+        text = cls.__medal_name__ if state else "获得%d/%d个点赞" % (likenum, requiredNum)
         return state, text
 
 
@@ -115,7 +119,7 @@ class MedalFirstComment(metaclass=medalmeta):
         requiredNum = 1
         commentnum = getUserCommentNum(session, user)
         state = commentnum >= requiredNum
-        text = cls.__medal_name__ if state else "获得%d/%d条评论"%(commentnum, requiredNum)
+        text = cls.__medal_name__ if state else "获得%d/%d条评论" % (commentnum, requiredNum)
         return state, text
 
 
@@ -129,5 +133,5 @@ class Medal30Comment(metaclass=medalmeta):
         requiredNum = 30
         commentnum = getUserCommentNum(session, user)
         state = commentnum >= requiredNum
-        text = cls.__medal_name__ if state else "获得%d/%d条评论"%(commentnum, requiredNum)
+        text = cls.__medal_name__ if state else "获得%d/%d条评论" % (commentnum, requiredNum)
         return state, text

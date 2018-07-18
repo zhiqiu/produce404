@@ -5,23 +5,26 @@ from .config import Config
 url = "http://127.0.0.1:%d/api" % Config.PORT
 debugurl = "http://127.0.0.1:%d/debugapi/" % Config.PORT
 
+
 def test(params):
-    print("#"*100)
+    print("#" * 100)
     print("\naction:", params["action"])
     print("\n\nparams:\n\n", params)
     res = requests.get(url, params=params)
     jsonRes = jsonLoads(res.text)
     print("\n\nresponse:\n\n", jsonDumps(jsonRes, indent=2))
-    print("\n" + "#"*100)
+    print("\n" + "#" * 100)
+
 
 def debugtest(table, params):
-    print("#"*100)
+    print("#" * 100)
     print("\ntable name:", table.lower())
     print("\n\nparams:\n\n", params)
-    res = requests.get(debugurl+table, params=params)
+    res = requests.get(debugurl + table, params=params)
     jsonRes = jsonLoads(res.text)
     print("\n\nresponse:\n\n", jsonDumps(jsonRes, indent=2))
-    print("\n" + "#"*100)
+    print("\n" + "#" * 100)
+
 
 test({
     "action": "get_user_info",
@@ -62,7 +65,7 @@ test({
     "audio_id": 2
 })
 
-debugtest("r_user_like_audio",{
+debugtest("r_user_like_audio", {
     "user_openid": "openid1"
 })
 
@@ -135,13 +138,13 @@ test({
 test({
     "action": "post_audio",
     "audio": jsonDumps({
-            "url": "http://ws.stream.qqmusic.qq.com/M500001VfvsJ21xFqb.mp3?guid=ffffffff82def4af4b12b3cd9337d5e7&uin=346897220&vkey=6292F51E1E384E061FF02C31F716658E5C81F5594D561F2E88B854E81CAAB7806D5E4F103E55D33C16F3FAC506D1AB172DE8600B37E43FAD&fromtag=46",
-            "name": "testaudio",
-            "intro": "testintro",
-            "img": "http://y.gtimg.cn/music/photo_new/T002R300x300M000003rsKF44GyaSk.jpg?max_age=2592000",
-            "location": "test location",
-            "duration": "10",
-        }),
+        "url": "http://ws.stream.qqmusic.qq.com/M500001VfvsJ21xFqb.mp3?guid=ffffffff82def4af4b12b3cd9337d5e7&uin=346897220&vkey=6292F51E1E384E061FF02C31F716658E5C81F5594D561F2E88B854E81CAAB7806D5E4F103E55D33C16F3FAC506D1AB172DE8600B37E43FAD&fromtag=46",
+        "name": "testaudio",
+        "intro": "testintro",
+        "img": "http://y.gtimg.cn/music/photo_new/T002R300x300M000003rsKF44GyaSk.jpg?max_age=2592000",
+        "location": "test location",
+        "duration": "10",
+    }),
     "tags": jsonDumps([
         {
             "tagname": "testtag"

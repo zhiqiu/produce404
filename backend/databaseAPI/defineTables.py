@@ -35,6 +35,7 @@ tablePrefix = "t57_"
 
 Base = declarative_base()
 
+
 class Creatable():
     def create(self, session):
         self.create_time = datetime.utcnow()
@@ -77,7 +78,6 @@ class Creatable():
     def __str__(self):
         return jsonDumps(self.toDict())
 
-
     def commonInitClass(self, **kwargs):
         if not kwargs:
             return
@@ -104,9 +104,9 @@ class Creatable():
 # entity tables:
 
 class CMSUser(Base, Creatable):
-    __tablename__ =  tablePrefix + "cmsuser"
+    __tablename__ = tablePrefix + "cmsuser"
 
-    id = Column(Integer, primary_key = True)
+    id = Column(Integer, primary_key=True)
     email = Column(String(0x100))
     password = Column(String(0x100))
     is_authenticated = True
@@ -137,7 +137,7 @@ class User(Base, Creatable):
     deleted = Column(BOOLEAN, default=False)
 
     __primaryKey__ = "openid"
-    __requiredFields__ = ["openid","nickName","gender","language","city","province","country","avatarUrl"]
+    __requiredFields__ = ["openid", "nickName", "gender", "language", "city", "province", "country", "avatarUrl"]
     __allFields__ = ["user_id"] + __requiredFields__ + ["create_time", "deleted"]
 
     __systemUser__ = ["system", "nobody", "deleted"]
@@ -146,7 +146,7 @@ class User(Base, Creatable):
         self.commonInitClass(**kwargs)
         if kwargs and self.gender not in [0, 1, 2]:
             raise DataFormatException("gender must be 0, 1 or 2 for Unset/Male/Female")
-    
+
     def toDict(self):
         if self.openid in self.__systemUser__:
             return {"openid": self.openid}
@@ -277,6 +277,7 @@ class Forward(Base, Creatable):
 
 # relationship tables:
 
+
 class R_User_Create_Audio(Base, Creatable):
     __tablename__ = tablePrefix + "r_user_create_audio"
 
@@ -309,6 +310,7 @@ class R_Audio_Has_AudioTag(Base, Creatable):
 
     def __init__(self, **kwargs):
         self.commonInitClass(**kwargs)
+
 
 class R_User_Has_Medal(Base, Creatable):
     __tablename__ = tablePrefix + "r_user_has_medal"
@@ -410,8 +412,8 @@ class Message(Base, Creatable):
     deleted = Column(BOOLEAN, default=False)
 
     __primaryKey__ = "msg_id"
-    __requiredFields__ = ["user_openid","msg_src","sysmsg","action","audio_id"]
-    __allFields__ = ["msg_id"] + __requiredFields__ + ["isread","create_time", "deleted"]
+    __requiredFields__ = ["user_openid", "msg_src", "sysmsg", "action", "audio_id"]
+    __allFields__ = ["msg_id"] + __requiredFields__ + ["isread", "create_time", "deleted"]
 
     __actionDict__ = {
         "system": 0,
@@ -438,6 +440,7 @@ class Message(Base, Creatable):
             5: self.sysmsg,
             6: '"{}"点赞了你在声音"{}"下发布的评论',
         }[self.action]
+
 
 class AudioChannel(Base, Creatable):
     __tablename__ = tablePrefix + "audiochannel"
@@ -471,6 +474,7 @@ class R_Audio_In_AudioChannel(Base, Creatable):
     def __init__(self, **kwargs):
         self.commonInitClass(**kwargs)
 
+
 class R_User_Like_AudioChannel(Base, Creatable):
     __tablename__ = tablePrefix + "r_user_like_audiochannel"
 
@@ -486,6 +490,7 @@ class R_User_Like_AudioChannel(Base, Creatable):
 
     def __init__(self, **kwargs):
         self.commonInitClass(**kwargs)
+
 
 # all tables dict
 tables = {

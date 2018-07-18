@@ -23,9 +23,11 @@ static_folder = os.path.join(curdir, "static")
 
 app = Flask("create404", template_folder=template_folder, static_folder=static_folder)
 
+
 @app.errorhandler(404)
 def page_not_found(_):
     return "Page not found.", 404
+
 
 @app.route("/", methods=["GET"])
 def getIndex():
@@ -54,6 +56,7 @@ def dealRequests():
     result = api.postCallAPI(form)
     return jsonDumps(result)
 
+
 if DEBUG:
     # all debug interface
     @app.route("/debugapi/", methods=["GET", "POST"])
@@ -63,7 +66,7 @@ if DEBUG:
 
     @app.route("/debugapi/<table>", methods=["GET", "POST"])
     def queryAPI(table):
-        logger.info("Request: %s /debugapi/%s" % (request.method,table))
+        logger.info("Request: %s /debugapi/%s" % (request.method, table))
         tableName = table.lower()
         if request.method == "GET":
             getArgs = request.args.to_dict()
@@ -88,7 +91,7 @@ if DEBUG:
 
     @app.route("/debug/<table>")
     def debugPage(table):
-        logger.info("Request: %s /debug/%s" % (request.method,table))
+        logger.info("Request: %s /debug/%s" % (request.method, table))
         tableName = table.lower()
         if tableName not in tables:
             logger.warning("Table %s not found." % tableName)

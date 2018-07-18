@@ -7,6 +7,7 @@ from .config import Config
 
 __all__ = ["initializeTables"]
 
+
 def initializeTables(engine):
     createTables(engine)
 
@@ -14,7 +15,7 @@ def initializeTables(engine):
         # create system users
         Session = sessionmaker(bind=engine)
         session = Session()
-      
+
         session.add(User(**{
             "openid": "system",
             "nickName": "声小觅",
@@ -59,6 +60,7 @@ def initializeTables(engine):
         if Config.DEBUG:
             print(e)
         session.rollback()
+
 
 def createTables(engine):
     try:

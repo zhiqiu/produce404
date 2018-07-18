@@ -27,10 +27,13 @@ logger.setLevel(logging.INFO)
 def jsonDumps(data, **kwargs):
     return json.dumps(data, ensure_ascii=False, separators=(',', ':'), **kwargs)
 
+
 def jsonLoads(string, **kwargs):
     return json.loads(string, encoding="utf-8", **kwargs)
 
 # 自定义数据格式错误Exception
+
+
 class DataFormatException(Exception):
     pass
 
@@ -50,7 +53,6 @@ class Status():
         logger.info("Success. return = " + jsonDumps(returnDict))
         return returnDict
 
-
     def notFound():
         logger.info("Not found.")
         return {
@@ -68,10 +70,9 @@ class Status():
             exception = ""
             errormsg = args[0]
 
-        logger.warning("Internal error. %s %s" %(errormsg. str(exception)))
+        logger.warning("Internal error. %s %s" % (errormsg. str(exception)))
 
         errormsg = errormsg or "internal error occured."
-        
 
         if Config.DEBUG or isinstance(exception, DataFormatException):
             return {
@@ -88,14 +89,17 @@ if platform.system() == "Windows" and Config.DEBUG:
         # in order to keep the same call format.
         def __init__(self, key):
             pass
+
         def encrypt(self, text):
             return text
+
         def decrypt(self, cipherText):
             return cipherText
 else:
     from Crypto.Cipher import AES
     import base64
     # 加密工具: AES-CBC-128
+
     class PlatformEncrypt():
         def __init__(self, key):
             self.mode = AES.MODE_CBC
@@ -115,12 +119,12 @@ else:
             # 因为AES加密时候得到的字符串不一定是ascii字符集的，输出到终端或者保存时候可能存在问题
             # 所以这里统一把加密后的字符串转化为16进制字符串
             cipherText = base64.b64encode(cipherBytes).decode("utf-8")
-            cipherText = cipherText.replace("+","-").replace("/","_")
+            cipherText = cipherText.replace("+", "-").replace("/", "_")
             return cipherText
 
         # 解密后，去掉补足的空格用strip() 去掉
         def decrypt(self, cipherText):
-            cipherText = cipherText.replace("_","/").replace("-","+")
+            cipherText = cipherText.replace("_", "/").replace("-", "+")
             cipherBytes = base64.b64decode(cipherText.encode("utf-8"))
             textBytes = AES.new(self.key, self.mode, self.key).decrypt(cipherBytes)
             text = textBytes.rstrip(b'\0').decode("utf-8")

@@ -3,6 +3,7 @@ import os
 
 __all__ = ["Config"]
 
+
 # config for app key
 class Config(object):
     def __init__(self):
@@ -32,4 +33,3 @@ class Config(object):
     appID = "wx19f70940784cb04e"
 
     appSecret = "d397d9df1ed61029259668a26b5172b8"
-

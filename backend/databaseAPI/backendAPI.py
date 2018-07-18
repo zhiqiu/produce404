@@ -15,6 +15,7 @@ import math
 
 __all__ = ["API"]
 
+
 class API():
     def __init__(self, engine):
         logger.info("Use engine: " + str(engine))
@@ -85,7 +86,7 @@ class API():
             primaryKey = getattr(newContent, tableClass.__primaryKey__)
             return Status.success({tableClass.__primaryKey__: primaryKey})
         except Exception as e:
-            return Status.internalError(e)    
+            return Status.internalError(e)
 
     def packFeed(self, openid, user, audio):
         audio_id = audio.audio_id
@@ -103,20 +104,20 @@ class API():
             User.openid == R_User_Like_Audio.user_openid,
             R_User_Like_Audio.deleted == False,
             R_User_Like_Audio.audio_id == audio_id,
-            )).count()
+        )).count()
         logger.info("packFeed. like_num=%d" % like_num)
 
         comment_num = self.session.query(Comment.comment_id).filter(and_(
             Comment.deleted == False,
             Comment.audio_id == audio_id
-            )).count()
+        )).count()
         logger.info("packFeed. comment_num=%d" % comment_num)
 
         isliked = bool(self.session.query(R_User_Like_Audio.user_openid).filter(and_(
             R_User_Like_Audio.user_openid == openid,
             R_User_Like_Audio.deleted == False,
             R_User_Like_Audio.audio_id == audio_id,
-            )).count())
+        )).count())
         logger.info("packFeed. isliked=%d" % isliked)
 
         iscollected = bool(self.session.query(Collection).filter(and_(
@@ -186,7 +187,7 @@ class API():
         self.audioVec = {}
         self.userVec = {}
         curdir = os.path.dirname(os.path.abspath(__file__))
-        with open(os.path.join(curdir, "audioVector.json"),"r", encoding="utf-8") as f:
+        with open(os.path.join(curdir, "audioVector.json"), "r", encoding="utf-8") as f:
             jsonObj = jsonLoads(f.read())
 
         recommandTags = jsonObj["recommandTags"]
@@ -196,8 +197,7 @@ class API():
             self.audioVec[int(k)] = [0] * tagsNum
             sumsquare = math.sqrt(len(v))
             for i in v:
-                self.audioVec[int(k)][i] = 1/sumsquare
-
+                self.audioVec[int(k)][i] = 1 / sumsquare
 
         for i in range(10):
             # 查询点赞用户
@@ -210,7 +210,6 @@ class API():
                 for user in users:
                     self.userVec[user] = [0] * tagsNum
                     likedVideos = []
-
 
     #############################   API   #############################
 
@@ -263,7 +262,7 @@ class API():
             return Status.success({
                 "user": user.toDict(),
                 "unread_msg_num": unread_msg_num
-                })
+            })
         else:
             raise Exception("User does't exists.")
 
@@ -304,9 +303,9 @@ class API():
 
         if Config.DEBUG_COMMUNITATION:
             return Status.success({
-            "token": "iamtoken",
-            "first_time": True
-        })
+                "token": "iamtoken",
+                "first_time": True
+            })
 
         jsCode = form["code"]
 
@@ -379,7 +378,7 @@ class API():
 
         # 随机查询两个audio
         randTwoAudios = self.session.query(User, Audio).filter(and_(
-            User.openid == "system", # index 页只显示PGC
+            User.openid == "system",  # index 页只显示PGC
             Audio.deleted == False,
             R_User_Create_Audio.deleted == False,
             User.openid == R_User_Create_Audio.user_openid,
@@ -449,7 +448,7 @@ class API():
         ).create(self.session)
 
         return Status.success()
-    
+
     def getComments(self, form):
         '''
         觅声_获取评论
@@ -482,7 +481,6 @@ class API():
             del com["user_openid"]
             user = self.session.query(User).filter(User.openid == user_openid).first()
             com["user"] = user.toDict()
-
 
             reply_to_openid = com["replyto"]
             user = self.session.query(User).filter(User.openid == reply_to_openid).first()
@@ -531,7 +529,7 @@ class API():
             replyto = form["reply_to_user_openid"]
 
         Audio.checkExist(self.session, audio_id)
-        
+
         if replyto:
             User.checkExist(self.session, replyto)
 
@@ -540,7 +538,6 @@ class API():
                 replyto=replyto,
                 text=form["text"]
                 ).create(self.session)
-
 
         msg_src = self.session.query(R_User_Create_Audio.user_openid).filter(and_(
             R_User_Create_Audio.audio_id == audio_id
@@ -566,7 +563,7 @@ class API():
             ).create(self.session)
 
         return Status.success()
-    
+
     def getCollections(self, form):
         '''
         觅声_收藏_显示所有收藏夹
@@ -644,7 +641,7 @@ class API():
             err: 'ok'
         }
         '''
-        
+
         openid = form["openid"]
         name = form["collection_name"].strip()
         if not name:
@@ -656,7 +653,7 @@ class API():
         )).count():
             return Status.internalError("Collection already exists.")
 
-        Collection(user_openid=openid,name=name).create(self.session)
+        Collection(user_openid=openid, name=name).create(self.session)
 
         return Status.success()
 
@@ -699,7 +696,7 @@ class API():
             err: 'ok'
         }
         '''
-        
+
         openid = form["openid"]
         audio_id = form["audio_id"]
         Audio.checkExist(self.session, audio_id)
@@ -759,7 +756,7 @@ class API():
         findAudios = findAudios.order_by(Audio.audio_id.desc()).limit(10).all()
 
         feeds = [self.packFeed(openid, user, audio) for user, audio in findAudios]
-        
+
         return Status.success({
             "feeds": feeds
         })
@@ -775,7 +772,7 @@ class API():
             feed: feed{}
         }
         '''
-        
+
         openid = form["openid"]
         audio_id = form["audio_id"]
 
@@ -795,8 +792,8 @@ class API():
         return Status.success({
             "feed": feed
         })
-    
-    def getMyFeeds(self,form):
+
+    def getMyFeeds(self, form):
         '''
         按用户获取feeds
         {
@@ -834,7 +831,7 @@ class API():
         findAudios = findAudios.order_by(Audio.audio_id.desc()).limit(10).all()
 
         feeds = [self.packFeed(openid, user, audio) for user, audio in findAudios]
-        
+
         return Status.success({
             "feeds": feeds
         })
@@ -862,7 +859,7 @@ class API():
             tagObj = AudioTag(**tag)
             tagObj.create(self.session)
             R_Audio_Has_AudioTag(audio_id=audioObj.audio_id,
-                audiotag_id=tagObj.audiotag_id).create(self.session)
+                                 audiotag_id=tagObj.audiotag_id).create(self.session)
 
         return Status.success()
 
@@ -924,7 +921,7 @@ class API():
         user.merge(self.session)
 
         return Status.success()
-    
+
     def dislikeAudio(self, form):
         '''
         取消赞：
@@ -979,7 +976,7 @@ class API():
             Audio.audio_id == Message.audio_id,
             User.openid == Message.msg_src,
             or_(Message.user_openid == openid,
-            Message.action == Message.__actionDict__["broadcast"])
+                Message.action == Message.__actionDict__["broadcast"])
         ))
 
         if last_msg_id:
@@ -1004,7 +1001,7 @@ class API():
         return Status.success({
             "msgs": msgs
         })
-    
+
     def readMsg(self, form):
         '''
         消息标记为已读
