@@ -1,7 +1,7 @@
 'use strict'
 
-const baseUrl = 'https://404.ladyrick.com/';
-const COSBase = 'https://cos.ladyrick.com/';
+const baseUrl = 'http://404.ladyrick.com/';
+const COSBase = 'http://produce404-1257046746.cos.ap-guangzhou.myqcloud.com';
 var token = wx.getStorageSync('token') || '';
 
 var tagArray = ['动物植物', '海浪瀑布', '山水林间', '自然气候', '机器轰鸣', '交通工具', '古典艺术', '现代乐器','全部频道']

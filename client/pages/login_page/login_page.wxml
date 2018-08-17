@@ -1,6 +1,6 @@
 
 <view class="wholepage">
-<image class="img" src="http://cos.ladyrick.com/img-login.png" mode="aspectFill"></image>
+<image class="img" src="{{COSBase}}/img-login.png" mode="aspectFill"></image>
 <button open-type="getUserInfo" bindgetuserinfo="clickLogin" class="btn">欢迎加入</button>
 
 </view>

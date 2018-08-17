@@ -1,4 +1,4 @@
-<!-- <image class="background" mode="widthFix" src="http://cos.ladyrick.com/background.png"></image> -->
+<!-- <image class="background" mode="widthFix" src="{{COSBase}}/background.png"></image> -->
 
 <view class="background">
   <view class="show">

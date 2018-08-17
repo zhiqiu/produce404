@@ -21,11 +21,11 @@
 </view>
 
 <view style="width:100%;display: flex;justify-content: center;">
-  <image wx:if="{{!paused}}" class="p-img" src="http://cos.ladyrick.com/img-play-mask2.png" ontap="playorpause" style="z-index: 2000;"></image>
+  <image wx:if="{{!paused}}" class="p-img" src="{{COSBase}}/img-play-mask2.png" ontap="playorpause" style="z-index: 2000;"></image>
 </view>
 
 <view style="width:100%;display: flex;justify-content: center;">
-  <image wx:if="{{paused}}" class="p-img" src="http://cos.ladyrick.com/img-pause-mask2.png" ontap="playorpause"  style="z-index: 2000;"></image>
+  <image wx:if="{{paused}}" class="p-img" src="{{COSBase}}/img-pause-mask2.png" ontap="playorpause"  style="z-index: 2000;"></image>
 </view>
 
 <view style="width:100%;display: flex;justify-content: center;">
@@ -37,7 +37,7 @@
 </view>
 
 <view class="player">
-  <image mode="widthFix" class="player-img" src="http://cos.ladyrick.com/img-player3.png" style="position: absolute;bottom: 7px;"></image>
+  <image mode="widthFix" class="player-img" src="{{COSBase}}/img-player3.png" style="position: absolute;bottom: 7px;"></image>
 
   <view class="text">
     <view>{{feed.audio.name}}</view>

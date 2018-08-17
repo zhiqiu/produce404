@@ -1,7 +1,7 @@
 /* pages/record/record.wxss */
 
 .background{
-	background-image: url(http://cos.ladyrick.com/background.png);
+	background-image: url(http://produce404-1257046746.cos.ap-guangzhou.myqcloud.com/background.png);
 	position: absolute;
 	top: 0;
 	bottom: 0;

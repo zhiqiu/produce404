@@ -13,7 +13,8 @@ Page({
     hiddenmodalput: true,
     nowCommentUserName: "",
     nowCommentUserOpenId : "",
-    commentTmp : {}
+    commentTmp : {},
+    COSBase: c.COSBase,
   },
 
   getData: function(options) {

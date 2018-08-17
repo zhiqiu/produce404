@@ -1,7 +1,6 @@
 /*录音页面*/
 // pages/record/record.js
 
-const COS = require('../../utils/upload');
 
 const c = require('../../utils/c');
 const r = c.r;
@@ -24,7 +23,8 @@ Page({
       {name: '5', value: '交通工具'},
       {name: '6', value: '古典艺术'},
       {name: '7', value: '现代乐器'},
-    ]
+    ],
+    COSBase: c.COSBase,
   },
 
   /**

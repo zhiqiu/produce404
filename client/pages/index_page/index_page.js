@@ -17,6 +17,7 @@ Page({
     showModalStatus: false,
     imageHeight: 0,
     imageWidth: 0,
+    COSBase : c.COSBase,
   },
 
   getData: function(callback) {

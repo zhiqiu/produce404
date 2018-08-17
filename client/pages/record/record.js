@@ -1,7 +1,7 @@
 /*录音页面*/
 // pages/record/record.js
 
-const COS = require('../../utils/upload');
+const COS = require('../../utils/cos-wx-sdk-v5');
 const c = require('../../utils/c');
 const r = c.r;
 
@@ -22,7 +22,8 @@ Page({
     hasSetTag: false,
     tag: '',
     position: '',
-    recordstopped: false
+    recordstopped: false,
+    COSBase: c.COSBase,
   },
 
   /**
@@ -132,7 +133,7 @@ Page({
       })
       return;
     }
-    var Bucket = 'create404-cos-1253746840';
+    var Bucket = 'produce404-1257046746';
     var Region = 'ap-guangzhou';
     var that = this
     var cos = new COS({
@@ -163,7 +164,7 @@ Page({
         action: 'post_audio',
         audio: {
           url: filename,
-          img: 'http://cos.ladyrick.com/img-shengmi.png',
+          img: COSBase + '/img-shengmi.png',
           name: that.data.comment,
           intro: that.data.comment,
           location: this.data.position,

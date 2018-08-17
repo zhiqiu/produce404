@@ -13,7 +13,7 @@ border: 1px solid #FFDD40;
 	z-index: 1000;
 }
 .background{
-	background-image: url(http://cos.ladyrick.com/background.png);
+	background-image: url(https://produce404-1257046746.cos.ap-guangzhou.myqcloud.com/background.png);
 	background-repeat: repeat-y;
 	background-size: 100% auto;
 }

@@ -11,7 +11,8 @@ Page({
   data: {
     playingIdx : -1,  //当前播放的feed Id
     feeds : [],
-    lastIndex : -1
+    lastIndex : -1,
+    COSBase: c.COSBase,
   },
   getData: function(refresh){
     
