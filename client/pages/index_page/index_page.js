@@ -152,11 +152,11 @@ Page({
    * 用户点击右上角分享
    */
   onShareAppMessage: function(options) {
-    return {
-      title: '声觅',
-      path: '/pages/login_page/login_page',
-      // imageUrl
-    }
+    // return {
+    //   title: '声觅',
+    //   path: '/pages/login_page/login_page',
+    //   // imageUrl
+    // }
   },
   playorpause: function() {
     c.playorpause();

@@ -164,7 +164,7 @@ Page({
         action: 'post_audio',
         audio: {
           url: filename,
-          img: COSBase + '/img-shengmi.png',
+          img: that.data.COSBase + '/img-shengmi.png',
           name: that.data.comment,
           intro: that.data.comment,
           location: this.data.position,

@@ -200,7 +200,9 @@ Page({
       this.setData({
         playingIdx: idx
       })
-      c.play(this.data.feeds[idx].audio,this.data.feeds[idx].user)
+      console.log("play" )
+      console.log(this.data.feeds[idx].audio)
+      c.play(this.data.feeds[idx].audio, this.data.feeds[idx].user)
     }
   },
 

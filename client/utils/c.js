@@ -1,7 +1,7 @@
 'use strict'
 
-const baseUrl = 'http://404.ladyrick.com/';
-const COSBase = 'http://produce404-1257046746.cos.ap-guangzhou.myqcloud.com';
+const baseUrl = 'https://404.ladyrick.com/';
+const COSBase = 'https://produce404-1257046746.cos.ap-guangzhou.myqcloud.com';
 var token = wx.getStorageSync('token') || '';
 
 var tagArray = ['动物植物', '海浪瀑布', '山水林间', '自然气候', '机器轰鸣', '交通工具', '古典艺术', '现代乐器','全部频道']
@@ -52,10 +52,11 @@ const fixUrl = function(s){
 	if(s.startsWith('http')){
 		return s;
 	}else{
-		return COSBase + s;
+		return COSBase + '/'+ s;
 	}
 }
 const play = function(audio,user){
+  console.log(fixUrl(audio.url))
 	const player = wx.getBackgroundAudioManager();
 	player.title = audio.name
 	player.epname = audio.intro
